@@ -1,0 +1,44 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+sysinfo.txt
+추가된 파일들 무시 적용
+이미 커밋된 항목은 .gitignore만 추가해도 무시되지 않습니다. 이전에 커밋된 항목을 무시하려면 다음 명령어를 실행하세요:
+
+bash
+복사
+편집
+git rm -r --cached .
+git add .
+git commit -m "Apply Unity .gitignore"
+이 작업은 로컬 파일을 삭제하지 않고, Git의 추적만 제거하고 .gitignore를 적용해줍니다.
+
+필요하다면 .gitignore 템플릿 전체 붙여드릴게요.
+
+
+
+
+
+
+
