@@ -1,0 +1,175 @@
+fileFormatVersion: 2
+guid: 2f4f64341e848b44fbd760224015a1b0
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Bone037
+    100002: Bone04_s01
+    100004: Bone04_s02
+    100006: Bone04_s03
+    100008: Bone04_s04
+    100010: Bone04_s05
+    100012: Bone04_s06
+    100014: Bone04_s07
+    100016: Bone04_s08
+    100018: Rod_spining_04
+    100020: //RootNode
+    100022: spin_04_Reelpoint_01
+    100024: spin_04_Reelpoint_02
+    100026: spin_04_Reelpoint_03
+    100028: spin_04_Reelpoint_04
+    100030: spin_04_Reelpoint_05
+    100032: spin_04_Reelpoint_06
+    100034: spin_04_Reelpoint_07
+    100036: Ree4_Spool
+    100038: Reeel4_Handle_end_L
+    100040: Reeel4_Handle_end_R
+    100042: reel4_bail
+    100044: Reel4_Body
+    100046: Reel4_Handle knob_L
+    100048: Reel4_Handle knob_R
+    100050: Reel4_Roter
+    400000: Bone037
+    400002: Bone04_s01
+    400004: Bone04_s02
+    400006: Bone04_s03
+    400008: Bone04_s04
+    400010: Bone04_s05
+    400012: Bone04_s06
+    400014: Bone04_s07
+    400016: Bone04_s08
+    400018: Rod_spining_04
+    400020: //RootNode
+    400022: spin_04_Reelpoint_01
+    400024: spin_04_Reelpoint_02
+    400026: spin_04_Reelpoint_03
+    400028: spin_04_Reelpoint_04
+    400030: spin_04_Reelpoint_05
+    400032: spin_04_Reelpoint_06
+    400034: spin_04_Reelpoint_07
+    400036: Ree4_Spool
+    400038: Reeel4_Handle_end_L
+    400040: Reeel4_Handle_end_R
+    400042: reel4_bail
+    400044: Reel4_Body
+    400046: Reel4_Handle knob_L
+    400048: Reel4_Handle knob_R
+    400050: Reel4_Roter
+    2100000: Rod_spining_04
+    2100002: Rod_bait_04
+    2100004: Reel_spining_04
+    2300000: Ree4_Spool
+    2300002: Reeel4_Handle_end_L
+    2300004: Reeel4_Handle_end_R
+    2300006: reel4_bail
+    2300008: Reel4_Body
+    2300010: Reel4_Handle knob_L
+    2300012: Reel4_Handle knob_R
+    2300014: Reel4_Roter
+    3300000: Ree4_Spool
+    3300002: Reeel4_Handle_end_L
+    3300004: Reeel4_Handle_end_R
+    3300006: reel4_bail
+    3300008: Reel4_Body
+    3300010: Reel4_Handle knob_L
+    3300012: Reel4_Handle knob_R
+    3300014: Reel4_Roter
+    4300000: Rod_spining_04
+    4300002: Reel4_Body
+    4300004: Reel4_Roter
+    4300006: reel4_bail
+    4300008: Ree4_Spool
+    4300010: Reel4_Handle knob_L
+    4300012: Reeel4_Handle_end_L
+    4300014: Reel4_Handle knob_R
+    4300016: Reeel4_Handle_end_R
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Rod_spining_04
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 1
+    tangentImportMode: 1
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
