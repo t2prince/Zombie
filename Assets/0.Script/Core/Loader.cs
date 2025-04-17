@@ -6,22 +6,14 @@ namespace Jamcat.Core
     {
         public enum ResourceType        //이게 맞나?
         {
-            Tackles,
             Avatars,
-            Props,
-            Materials,
-            Houses,
+            Items,
             Maps,
-            Fishes
         }
         
-        private const string MasterDataFilePath = "";
-        private const string TackleResourceFilePath = "Prefabs/Tackles";
         private const string AvatarResourceFilePath = "Prefabs/Avatars";
-        private const string PropResourceFilePath = "Prefabs/Props";
-        private const string FishResourceFilePath = "Prefabs/Fishes";
+        private const string ItemResourceFilePath = "Prefabs/Items";
         private const string MapResourceFilePath = "Prefabs/Environments";
-        private const string MaterialResourceFilePath = "Materials";
         
         public static T Load<T>(ResourceType resourceType, string name) where T : MonoBehaviour
         {
@@ -74,12 +66,9 @@ namespace Jamcat.Core
         {
             return resourceType switch
             {
-                ResourceType.Tackles => $"{TackleResourceFilePath}/{name}",
                 ResourceType.Avatars => $"{AvatarResourceFilePath}/{name}",
-                ResourceType.Props => $"{PropResourceFilePath}/{name}",
-                ResourceType.Fishes => $"{FishResourceFilePath}/{name}",
+                ResourceType.Items => $"{ItemResourceFilePath}/{name}",
                 ResourceType.Maps => $"{MapResourceFilePath}/{name}",
-                ResourceType.Materials => $"{MaterialResourceFilePath}/{name}",
                 _ => string.Empty
             };
         }
