@@ -11,6 +11,8 @@ namespace Jamcat.Ingame
     public class MapController : MonoBehaviour
     {
         private List<Transform> _avatarSpawnPoints;
+        private List<Transform> _itemSpawnPoints;
+        public List<Transform> ItemSpawnPoints => _itemSpawnPoints;
         
         public Transform GetSpawnPosition(int index)
         {
@@ -24,6 +26,7 @@ namespace Jamcat.Ingame
             
             var spawnPoints = GetComponentsInChildren<Attacher>();
             _avatarSpawnPoints = GetSpawnPoints(spawnPoints, Attacher.SpawnPointType.Character);
+            _itemSpawnPoints = GetSpawnPoints(spawnPoints, Attacher.SpawnPointType.Character);
         }
 
         private List<Transform> GetSpawnPoints(IEnumerable<Attacher> spawnPoints, Attacher.SpawnPointType type)

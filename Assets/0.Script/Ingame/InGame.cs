@@ -1,3 +1,4 @@
+using System.Linq;
 using Fusion;
 using Fusion.XR.Shared.Rig;
 using Jamcat.Core;
@@ -36,6 +37,7 @@ namespace Jamcat.Ingame
                 
             LoadController();
             SpawnPlayer();
+            SpawnItems();
             
             EffectController.Instance.fadeInOut.FadeIn();
         }
@@ -65,7 +67,11 @@ namespace Jamcat.Ingame
 
         private void SpawnItems()
         {
-            
+            var prefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Items, "Cube");
+            foreach (var item in _mapController.ItemSpawnPoints.Select(spawnPoint => Runner.Spawn(prefab,spawnPoint.position,spawnPoint.rotation).GetComponent<Item>()))
+            {
+                item.Init();
+            }
         }
 
         private void LoadController()
