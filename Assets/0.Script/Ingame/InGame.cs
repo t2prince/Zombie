@@ -68,8 +68,11 @@ namespace Jamcat.Ingame
         private void SpawnItems()
         {
             var prefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Items, "Cube");
-            foreach (var item in _mapController.ItemSpawnPoints.Select(spawnPoint => Runner.Spawn(prefab,spawnPoint.position,spawnPoint.rotation).GetComponent<Item>()))
+            
+            foreach (var point in _mapController.ItemSpawnPoints)
             {
+                var item = Runner.Spawn(prefab,point.position,point.rotation).GetComponent<Item>();
+                item.transform.position = point.position;
                 item.Init();
             }
         }

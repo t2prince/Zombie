@@ -26,7 +26,7 @@ namespace Jamcat.Ingame
             
             var spawnPoints = GetComponentsInChildren<Attacher>();
             _avatarSpawnPoints = GetSpawnPoints(spawnPoints, Attacher.SpawnPointType.Character);
-            _itemSpawnPoints = GetSpawnPoints(spawnPoints, Attacher.SpawnPointType.Character);
+            _itemSpawnPoints = GetSpawnPoints(spawnPoints, Attacher.SpawnPointType.Item);
         }
 
         private List<Transform> GetSpawnPoints(IEnumerable<Attacher> spawnPoints, Attacher.SpawnPointType type)
