@@ -96,7 +96,7 @@ public static class MetaIAPManager
         var error = msg.GetError();
         Debug.LogError($"[IAP Error] {error.Code}: {error.Message}");
 #if !UNITY_EDITOR
-        Application.Quit();
+        UnityEngine.Application.Quit();
 #endif
     }
 }

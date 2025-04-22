@@ -8,6 +8,7 @@ namespace Jamcat.Ingame.Controllers.Component
         {
             Character,
             Item,
+            Monster,
         }
 
         public SpawnPointType type;

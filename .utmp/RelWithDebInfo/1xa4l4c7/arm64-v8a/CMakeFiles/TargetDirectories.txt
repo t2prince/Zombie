@@ -1,0 +1,5 @@
+C:/Users/t2pri/Zombie/.utmp/RelWithDebInfo/1xa4l4c7/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/t2pri/Zombie/.utmp/RelWithDebInfo/1xa4l4c7/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/t2pri/Zombie/.utmp/RelWithDebInfo/1xa4l4c7/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/t2pri/Zombie/.utmp/RelWithDebInfo/1xa4l4c7/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/t2pri/Zombie/.utmp/RelWithDebInfo/1xa4l4c7/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

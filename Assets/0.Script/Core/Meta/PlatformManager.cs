@@ -1,8 +1,9 @@
+using Oculus.Platform;
+using UnityEngine;
+
 namespace Jamcat.Core.Meta
 {
-    using Oculus.Platform;
-    using Oculus.Platform.Models;
-    using UnityEngine;
+    
 
 /// <summary>
 /// Platform SDK 초기화 및 에러 처리, 권한 확인(Entitlement Check)을 담당하는 유틸리티 클래스
@@ -21,14 +22,14 @@ namespace Jamcat.Core.Meta
 
             try
             {
-                Core.Initialize(); // 앱 ID는 AndroidManifest에 설정되어 있어야 함
+                Oculus.Platform.Core.Initialize(); // 앱 ID는 AndroidManifest에 설정되어 있어야 함
                 Entitlements.IsUserEntitledToApplication().OnComplete(OnEntitlementCheckComplete);
             }
             catch (System.Exception e)
             {
                 Debug.LogError("Platform initialization failed: " + e.Message);
     #if !UNITY_EDITOR
-                Application.Quit();
+                UnityEngine.Application.Quit();
     #endif
             }
 
@@ -46,7 +47,7 @@ namespace Jamcat.Core.Meta
                 var error = msg.GetError();
                 Debug.LogErrorFormat("Error {0}: {1}", error.Code, error.Message);
     #if !UNITY_EDITOR
-                Application.Quit();
+                UnityEngine.Application.Quit();
     #endif
             }
             else
@@ -64,7 +65,7 @@ namespace Jamcat.Core.Meta
             {
                 Debug.LogError("Platform SDK Error: " + msg.GetError().Message);
     #if !UNITY_EDITOR
-                Application.Quit();
+                UnityEngine.Application.Quit();
     #endif
             }
         }
@@ -78,7 +79,7 @@ namespace Jamcat.Core.Meta
             {
                 Debug.LogError("Platform SDK Error: " + msg.GetError().Message);
     #if !UNITY_EDITOR
-                Application.Quit();
+                UnityEngine.Application.Quit();
     #endif
             }
         }

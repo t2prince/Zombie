@@ -185,10 +185,10 @@ MonoBehaviour:
   velocityHistorySize: 8
   maxArmLength: 1.5
   unStickDistance: 1
-  velocityLimit: 0.6
-  maxJumpSpeed: 6.5
-  jumpMultiplier: 1.1
-  minimumRaycastDistance: 0.02
+  velocityLimit: 1.2
+  maxJumpSpeed: 10
+  jumpMultiplier: 2
+  minimumRaycastDistance: 0.03
   defaultSlideFactor: 0.03
   defaultPrecision: 0.995
   rightHandOffset: {x: 0, y: 0, z: 0}
