@@ -400,7 +400,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5444644178905104621}
-  - component: {fileID: 2121036940759554711}
   m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
@@ -427,28 +426,6 @@ Transform:
   - {fileID: 8079045268323144617}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &2121036940759554711
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4667017447498963543}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: d30efc7878893a1478eba526a1ec7cdc, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7b2c0a458761f3a4d83e7c1ef0452164, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5114557682481283138
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,10 +1,14 @@
+using System;
+using UnityEngine;
+
 namespace Jamcat.Core
 {
     public partial class Player
     {
-        public int currentRodId;
-        public int currentReelId;
-        public int currentBaitId;
-        public int currentBobberId;
+        [Serializable]
+        public class Wallet
+        {
+            
+        }
     }
 }
