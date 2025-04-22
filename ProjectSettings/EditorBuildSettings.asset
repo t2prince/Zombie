@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1.Scenes/Ingame.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/1.Scenes/Stages/city.unity
+    guid: 793447b0695719a4e9e1a3a2cb41b603
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 256bb7b1c670741e9a1dce103c377362, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: a44e976cd012845e6bcb4b4298f3770a, type: 2}

@@ -593,7 +593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentMode: 0
-  _mapName: GorillaTest
+  _mapName: city
 --- !u!114 &42559812
 MonoBehaviour:
   m_ObjectHideFlags: 0
