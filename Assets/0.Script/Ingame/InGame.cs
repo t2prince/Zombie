@@ -56,13 +56,17 @@ namespace Jamcat.Ingame
             var rig =  Runner.Spawn(rigPrefab,spot.position,spot.rotation);
             var body = Runner.Spawn(bodyPrefab,spot.position,spot.rotation);
             
-            //플레이어 body를 따라오는 카메라
+            //플레이어 body를 따라오는 카메라 및 HardwareRig
+            //TODO: 이 구조 나중에 한번 바꾸고 정리해야 한다 
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+            var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
             playerCamera.Init(body.GetComponent<PlayerBody>().Body);
             
             //body의 로코모션에 컨트롤러 정보 전달
             var locomotion = body.GetComponent<Locomotion.Locomotion>();
-            locomotion.Init(rig.GetComponent<NetworkRig>());
+            locomotion.Init(rig.GetComponent<NetworkRig>(), hardwareRig);
+            
+            
         }
 
         private void SpawnItems()

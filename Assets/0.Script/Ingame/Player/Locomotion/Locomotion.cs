@@ -24,12 +24,11 @@ namespace Jamcat.Locomotion
         public bool wasLeftHandTouching;
         public bool wasRightHandTouching;
         
-        public void Init(NetworkRig rig)
+        public void Init(NetworkRig rig, HardwareRig hardwareRig)
         {
             leftHandFollower = rig.leftHand.transform;
             rightHandFollower = rig.rightHand.transform;
 
-            var hardwareRig = FindAnyObjectByType<HardwareRig>();
             leftHandTransform = hardwareRig.leftHand.transform;
             rightHandTransform = hardwareRig.rightHand.transform;
             
