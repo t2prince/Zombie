@@ -62,7 +62,12 @@ public class HandController : NetworkBehaviour
     public InputAction rightThumbstickAction;
     
     public event Action<bool> OnRightTriggerPressed;
+    public event Action OnRightPrimaryButtonPressed;
     public event Action OnRightSecondaryButtonPressed;
+    
+    public event Action<bool> OnLeftTriggerPressed;
+    public event Action OnLeftPrimaryButtonPressed;
+    public event Action OnLeftSecondaryButtonPressed;
 
     private void Start()
     {
@@ -87,6 +92,11 @@ public class HandController : NetworkBehaviour
             leftSecondaryButtonAction = InputSystem.actions.FindAction("LeftHand/SecondaryButton");
             leftSecondaryTouchAction = InputSystem.actions.FindAction("LeftHand/SecondaryTouch");
             leftThumbstickAction = InputSystem.actions.FindAction("LeftHand/Primary2DAxis");
+            
+            leftTriggerPressAction.started += _ => { OnLeftTriggerPressed?.Invoke(true); };
+            leftTriggerPressAction.canceled += _ => { OnLeftTriggerPressed?.Invoke(false); };
+            leftPrimaryButtonAction.started += _ => { OnLeftPrimaryButtonPressed?.Invoke(); };
+            leftSecondaryButtonAction.started += _ => { OnLeftSecondaryButtonPressed?.Invoke(); };
         }
         if (handedness == Handedness.Right)
         {
@@ -101,6 +111,7 @@ public class HandController : NetworkBehaviour
             
             rightTriggerPressAction.started += _ => { OnRightTriggerPressed?.Invoke(true); };
             rightTriggerPressAction.canceled += _ => { OnRightTriggerPressed?.Invoke(false); };
+            rightPrimaryButtonAction.started += _ => { OnRightPrimaryButtonPressed?.Invoke(); };
             rightSecondaryButtonAction.started += _ => { OnRightSecondaryButtonPressed?.Invoke(); };
             rightThumbstickAction = InputSystem.actions.FindAction("RightHand/Primary2DAxis");
         }
@@ -196,7 +207,7 @@ public class HandController : NetworkBehaviour
         }
         else
         {
-            anyPressed = rightPrimaryButtonAction?.IsPressed()  ?? false;;
+            anyPressed = rightPrimaryButtonAction?.IsPressed()  ?? false;
             anyPressed = anyPressed || (rightSecondaryButtonAction?.IsPressed() ?? false);
             touchValue = Mathf.Max(touchValue, rightPrimaryTouchAction?.ReadValue<float>() ?? 0);
             touchValue = Mathf.Max(touchValue, rightSecondaryTouchAction?.ReadValue<float>() ?? 0);
