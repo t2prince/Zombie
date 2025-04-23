@@ -10,5 +10,10 @@ namespace Jamcat.Ingame.Character
         [SerializeField] private float currentHp;
         [SerializeField] private float energy;
         [SerializeField] private float currentEnergy;
+
+        public void TakeDamage(BaseCharacter attacher, float damage)
+        {
+            
+        }
     }
 }

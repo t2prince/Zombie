@@ -1058,6 +1058,7 @@ GameObject:
   - component: {fileID: 5504443361769362175}
   - component: {fileID: 7670792121532142495}
   - component: {fileID: 686309721350291634}
+  - component: {fileID: 8178593860637095489}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -1203,6 +1204,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8178593860637095489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8722406446184680064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388bf79eb3c0440cbeeebcf3659ae24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 4143064322489161111, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
 --- !u!1001 &629633027106633977
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1322,6 +1336,10 @@ PrefabInstance:
     - target: {fileID: 4667017447498963543, guid: cd3d16ab2747b264b9c7564e193cde6b, type: 3}
       propertyPath: m_Name
       value: LeftArm
+      objectReference: {fileID: 0}
+    - target: {fileID: 4667017447498963543, guid: cd3d16ab2747b264b9c7564e193cde6b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5444644178905104621, guid: cd3d16ab2747b264b9c7564e193cde6b, type: 3}
       propertyPath: m_LocalScale.x

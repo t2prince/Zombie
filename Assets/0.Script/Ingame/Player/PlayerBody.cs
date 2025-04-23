@@ -1,4 +1,5 @@
 using Fusion.XR.Shared.Rig;
+using Jamcat.Ingame.Character;
 using Jamcat.Ingame.Equipment;
 using UnityEngine;
 
@@ -16,9 +17,23 @@ namespace Jamcat.Ingame.Player
         private Melee currentMelee;
         private Barrier currentBarrier;
         private Booster currentBooster;
-        public void Init(HardwareRig rig)
+        
+        public void Init(HardwareRig rig, NetworkRig networkRig)
         {
-            //TODO: Left, Right 컨트롤러 얻어서 각 무기의 실행 함수 연결
+            var leftHand = networkRig.leftHand;
+            var rightHand = networkRig.rightHand;
+
+            var leftController = rig.leftHand.GetComponentInChildren<HandController>();
+            var rightController = rig.rightHand.GetComponentInChildren<HandController>();
+            
+            //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
+            //왼손 / 오른손 바꿀 수 있게끔 해줄 필요 있음
+            var gun = leftHand.gameObject.AddComponent<Gun>();
+            var melee = rightController.gameObject.AddComponent<Melee>();
+            var character = GetComponent<BaseCharacter>();
+
+            gun.Init(character, leftController);
+            melee.Init(character, rightController);
         }
     }
 }

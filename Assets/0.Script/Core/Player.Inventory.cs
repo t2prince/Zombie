@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Jamcat.Core
 {
-    public partial class Player
+    public partial class User
     {
         [Serializable]
         public class Wallet

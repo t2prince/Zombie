@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Jamcat.Ingame
 {
-    public class InGame : SimulationBehaviour, IPlayerJoined
+    public partial class InGame : SimulationBehaviour, IPlayerJoined
     {
         public static InGame Instance;
 
@@ -61,6 +61,7 @@ namespace Jamcat.Ingame
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
             var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
             playerCamera.Init(body.GetComponent<PlayerBody>().Body);
+            
             
             //body의 로코모션에 컨트롤러 정보 전달
             var locomotion = body.GetComponent<Locomotion.Locomotion>();
