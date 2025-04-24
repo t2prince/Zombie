@@ -19,7 +19,7 @@ namespace Jamcat.Ingame
         }
         
         [SerializeField] private GameMode _currentMode = GameMode.Tag;
-        [SerializeField] private string _mapName = "Env_GER02_KleineAlster";
+        [SerializeField] private string _mapName = "city";
         public static string MapName => Instance._mapName;
         private MapController _mapController;
         

@@ -1,3 +1,4 @@
+using Jamcat.Ingame.Equipment;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Character
@@ -6,14 +7,27 @@ namespace Jamcat.Ingame.Character
     {
         private int level;
         
-        [SerializeField] private float hp;
-        [SerializeField] private float currentHp;
+        [SerializeField] protected float hp;
+        private float currentHp { get; set; }
         [SerializeField] private float energy;
-        [SerializeField] private float currentEnergy;
+        private float currentEnergy { get; set; }
+        
+        private Barrier _barrier;
 
-        public void TakeDamage(BaseCharacter attacher, float damage)
+        private void Start()
         {
-            
+            currentHp = hp;
+            currentEnergy = energy;
+        }
+
+        public virtual void TakeDamage(BaseCharacter attacher, float damage)
+        {
+            hp -= damage;
+        }
+
+        private void Die()
+        {
+            //사망 애니메이션
         }
     }
 }
