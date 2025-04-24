@@ -11,6 +11,7 @@ namespace Jamcat.Ingame.Equipment
         private float _speed;
         public Action onHit;
         private Vector3 moveDirection;
+        private GameObject effect;
         
         private BaseCharacter _owner;
         public void Init(BaseCharacter owner, float bulletSpeed, float bulletDamage)

@@ -31,6 +31,7 @@ namespace Jamcat.Ingame.Player
             var gun = leftHand.gameObject.AddComponent<Gun>();
             var melee = rightController.gameObject.AddComponent<Melee>();
             var character = GetComponent<BaseCharacter>();
+            var booster = gameObject.AddComponent<Booster>();
 
             gun.Init(character, leftController);
             melee.Init(character, rightController);

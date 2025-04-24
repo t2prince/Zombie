@@ -22,14 +22,13 @@ namespace Jamcat.Ingame.Equipment
                 bulletObj.SetActive(false);
                 
                 var bullet = bulletObj.GetComponent<Bullet>();
-                bullet.Init(_owner,bulletSpeed,bulletDamage);
-                
                 return bullet;
             });
         }
 
         public void Init(BaseCharacter owner, HandController controller)
         {
+            _owner = owner;
             controller.OnLeftPrimaryButtonPressed += Fire;
         }
         
@@ -37,6 +36,7 @@ namespace Jamcat.Ingame.Equipment
         {
             var bullet = _bulletPool.Pop();
             bullet.gameObject.SetActive(true);
+            bullet.Init(_owner,bulletSpeed,bulletDamage);
             bullet.transform.position = firePoint.position;
             bullet.Fire(leftController.forward);
             bullet.onHit = () =>
