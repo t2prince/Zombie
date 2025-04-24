@@ -22,12 +22,26 @@ namespace Jamcat.Ingame.Character
 
         public virtual void TakeDamage(BaseCharacter attacher, float damage)
         {
-            hp -= damage;
+            currentHp -= damage;
+            if(currentHp <= 0)
+                Die();
+        }
+
+        public void Heal(float heal)
+        {
+            currentHp += heal;
         }
 
         private void Die()
         {
             //사망 애니메이션
+            //30초 후 부활?
+            Util.Coroutine.DelayedAction(Respawn,30f);
+        }
+
+        private void Respawn()
+        {
+            //스타트 지점에서 부활
         }
     }
 }
