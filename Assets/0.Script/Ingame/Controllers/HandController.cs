@@ -30,6 +30,7 @@ public class HandController : NetworkBehaviour
     public Handedness handedness;
     private RayInteractor rayInteractor;
     private GrabInteractor grabInteractor;
+    public Transform shootPosition;
 
     
     public Handedness mainHand = Handedness.Right; // TODO: 다른 곳에서 X손잡이 설정

@@ -1,4 +1,3 @@
-using System.Linq;
 using Fusion;
 using Fusion.XR.Shared.Rig;
 using Jamcat.Core;
@@ -30,12 +29,17 @@ namespace Jamcat.Ingame
             Instance = this;
         }
 
+        private void Start()
+        {
+            LoadController();
+        }
+
         public void PlayerJoined(PlayerRef player)
         {
             if (player != Runner.LocalPlayer) return;
             playerID = Runner.LocalPlayer.PlayerId - 1;
                 
-            LoadController();
+            
             SpawnPlayer();
             SpawnItems();
             
@@ -53,20 +57,23 @@ namespace Jamcat.Ingame
             var spot = _mapController.GetSpawnPosition(playerID);
             
             //rig 및 body 스폰
-            var rig =  Runner.Spawn(rigPrefab,spot.position,spot.rotation);
-            var body = Runner.Spawn(bodyPrefab,spot.position,spot.rotation);
+            var networkRig =  Runner.Spawn(rigPrefab,spot.position,spot.rotation).GetComponent<NetworkRig>();
+            var body = Runner.Spawn(bodyPrefab,spot.position,spot.rotation).GetComponent<PlayerBody>();
             
             //플레이어 body를 따라오는 카메라 및 HardwareRig
             //TODO: 이 구조 나중에 한번 바꾸고 정리해야 한다 
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
             var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-            playerCamera.Init(body.GetComponent<PlayerBody>().Body);
+            
+            body.Init(hardwareRig,networkRig);
+            playerCamera.Init(body.Body);
             
             
             //body의 로코모션에 컨트롤러 정보 전달
             var locomotion = body.GetComponent<Locomotion.Locomotion>();
-            locomotion.Init(rig.GetComponent<NetworkRig>(), hardwareRig);
+            locomotion.Init(networkRig, hardwareRig);
             
+            body.
             
         }
 
@@ -76,7 +83,7 @@ namespace Jamcat.Ingame
             
             foreach (var point in _mapController.ItemSpawnPoints)
             {
-                var item = Runner.Spawn(prefab,point.position,point.rotation).GetComponent<Item>();
+                var item = Runner.Spawn(prefab,point.position,point.rotation).GetComponent<Item.Item>();
                 item.transform.position = point.position;
                 item.Init();
             }

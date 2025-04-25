@@ -189,7 +189,7 @@ MonoBehaviour:
   velocityLimit: 1.2
   maxJumpSpeed: 10
   jumpMultiplier: 2
-  minimumRaycastDistance: 0.03
+  minimumRaycastDistance: 0.3
   defaultSlideFactor: 0.03
   defaultPrecision: 0.995
   rightHandOffset: {x: 0, y: 0, z: 0}
@@ -225,9 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 0
-  currentHp: 0
   energy: 0
-  currentEnergy: 0
 --- !u!1 &9213647574550066701
 GameObject:
   m_ObjectHideFlags: 0
