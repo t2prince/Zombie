@@ -5,10 +5,10 @@ namespace Jamcat.Ingame.Equipment
 {
     public class Gun : MonoBehaviour
     {
-        [SerializeField] float bulletDamage;
+        [SerializeField] float bulletDamage = 5f;
         [SerializeField] float bulletSpeed = 20f;
-        private Transform firePoint;
-        private Transform leftController;
+        private Transform _firePoint;
+        private Transform _leftController;
         private BaseCharacter _owner;
         
         [SerializeField] private GameObject bulletPrefab;
@@ -22,23 +22,25 @@ namespace Jamcat.Ingame.Equipment
                 bulletObj.SetActive(false);
                 
                 var bullet = bulletObj.GetComponent<Bullet>();
-                bullet.Init(_owner,bulletSpeed,bulletDamage);
-                
                 return bullet;
             });
         }
 
         public void Init(BaseCharacter owner, HandController controller)
         {
+            _owner = owner;
+            _leftController = controller.transform;
             controller.OnLeftPrimaryButtonPressed += Fire;
+            _firePoint = controller.shootPosition;
         }
         
         private void Fire()
         {
             var bullet = _bulletPool.Pop();
             bullet.gameObject.SetActive(true);
-            bullet.transform.position = firePoint.position;
-            bullet.Fire(leftController.forward);
+            bullet.Init(_owner,bulletSpeed,bulletDamage);
+            bullet.transform.position = _firePoint.position;
+            bullet.Fire(_leftController.forward);
             bullet.onHit = () =>
             {
                 bullet.gameObject.SetActive(false);
