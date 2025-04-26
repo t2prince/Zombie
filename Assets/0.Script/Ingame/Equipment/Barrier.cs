@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Jamcat.Ingame.Equipment
 {
-    public class Barrier
+    public class Barrier : Weapon
     {
         [SerializeField] private float energy;
 

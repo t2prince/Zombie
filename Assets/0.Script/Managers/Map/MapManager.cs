@@ -1,4 +1,4 @@
-namespace _0.Script.Managers.Map
+namespace Jamcat.Managers.Map
 {
     public static class MapManager
     {
