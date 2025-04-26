@@ -4,7 +4,7 @@ namespace Jamcat.Managers.Data
 {
     public class BaseData : ScriptableObject
     {
-        public string id;
+        public int id;
         public string desc;
     }
 }

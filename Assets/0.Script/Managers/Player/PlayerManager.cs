@@ -12,5 +12,29 @@ namespace Jamcat.Managers.Player
         {
             
         }
+<<<<<<< HEAD
+=======
+
+        private static void LoadPlayer()
+        {
+            
+        }
+
+        public static void SaveAll()
+        {
+            SaveWallet();
+            SaveInventory();
+        }
+
+        public static void SaveWallet()
+        {
+            
+        }
+
+        public static void SaveInventory()
+        {
+            
+        }
+>>>>>>> 27151ea (플레이어 데이터 저장 로직 추가, 데이터 암호화 추가)
     }
 }

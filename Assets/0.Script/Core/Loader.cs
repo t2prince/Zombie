@@ -1,6 +1,9 @@
+using System;
 using System.IO;
 using Jamcat.Managers.Data;
+using Rpg.Sys.Secure;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Jamcat.Core
 {
@@ -80,5 +83,51 @@ namespace Jamcat.Core
         {
             return (T) Resources.Load(Path.Combine(MasterDataRoot, name ?? typeof(T).Name));
         } 
+        
+        public static void SaveFile(string fileName, string fileString, bool isServerUpdate = false, Action<bool> callback = null)
+        {
+            try
+            {
+                var persistentFilePath = Path.Combine(Application.persistentDataPath, $"{fileName}.json");
+
+                var cipheredTable = fileString.ToCipheredTable();
+                File.WriteAllBytes(persistentFilePath,cipheredTable);
+                callback?.Invoke(true);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"{fileName}\n"+ e.Message);
+                callback?.Invoke(false);
+            }
+        }
+
+        public static string LoadFile(string fileName)
+        {
+            try
+            {
+                var path = Path.Combine(Application.persistentDataPath, $"{fileName}.json");
+                return FileToString(path);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"{fileName} Load Fail\n{e.Message}" );
+                return null;
+            }
+        }
+        
+        private static string FileToString(string path)
+        {
+            var fileBytes = File.ReadAllBytes(path);
+            try
+            {
+                var text = fileBytes.ToPlainTable();
+                return text;
+            }
+            catch
+            {
+                Debug.LogError($"Table Load Fail : {path}");
+                return string.Empty;					
+            }
+        }
     }
 }
