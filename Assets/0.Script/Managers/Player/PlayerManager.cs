@@ -10,16 +10,23 @@ namespace Jamcat.Managers.Player
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
-            
+            LoadPlayer();
         }
-<<<<<<< HEAD
-=======
 
+        public static Player.Wallet GetWallet()
+        {
+            return _player.wallet;
+        }
+
+        public static Player.Weapons GetWeapons()
+        {
+            return _player.weapons;
+        }
         private static void LoadPlayer()
         {
-            
+            _player = new Player();
         }
-
+        
         public static void SaveAll()
         {
             SaveWallet();
@@ -35,6 +42,5 @@ namespace Jamcat.Managers.Player
         {
             
         }
->>>>>>> 27151ea (플레이어 데이터 저장 로직 추가, 데이터 암호화 추가)
     }
 }

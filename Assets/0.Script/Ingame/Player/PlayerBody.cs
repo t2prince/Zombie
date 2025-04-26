@@ -1,6 +1,7 @@
 using Fusion.XR.Shared.Rig;
 using Jamcat.Ingame.Character;
 using Jamcat.Ingame.Equipment;
+using Jamcat.Managers.Weapon;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Player
@@ -28,13 +29,11 @@ namespace Jamcat.Ingame.Player
             
             //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
             //왼손 / 오른손 바꿀 수 있게끔 해줄 필요 있음
-            var gun = leftHand.gameObject.AddComponent<Gun>();
-            var melee = rightController.gameObject.AddComponent<Melee>();
             var character = GetComponent<BaseCharacter>();
-            var booster = gameObject.AddComponent<Booster>();
 
+            var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
+            var gun = Instantiate(gunData.weaponPrefab, leftHand.transform).GetComponent<Gun>();
             gun.Init(character, leftController);
-            melee.Init(character, rightController);
         }
     }
 }

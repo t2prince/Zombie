@@ -1,8 +1,7 @@
-<<<<<<< HEAD
-=======
+using System;
 using System.Linq;
->>>>>>> 27151ea (플레이어 데이터 저장 로직 추가, 데이터 암호화 추가)
 using Jamcat.Core;
+using Jamcat.Managers.Player;
 using UnityEngine;
 
 namespace Jamcat.Managers.Weapon
@@ -16,14 +15,28 @@ namespace Jamcat.Managers.Weapon
         public static void Init()
         {
             _data = Loader.LoadMasterData<WeaponMasterData>();
-<<<<<<< HEAD
-=======
+        }
+
+        public static WeaponData GetCurrentWeaponData(WeaponData.WeaponType type)
+        {
+            switch (type)
+            {
+                case WeaponData.WeaponType.Gun:
+                    return GetWeaponData(type, PlayerManager.GetWeapons().gunId);
+                case WeaponData.WeaponType.Melee:
+                    return GetWeaponData(type, PlayerManager.GetWeapons().meleeId);
+                case WeaponData.WeaponType.Barrier:
+                    return GetWeaponData(type, PlayerManager.GetWeapons().barrierId);
+                case WeaponData.WeaponType.Booster:
+                    return GetWeaponData(type, PlayerManager.GetWeapons().boosterId);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
         }
 
         public static WeaponData GetWeaponData(WeaponData.WeaponType type, int id)
         {
             return _data.DataList.First(d => d.type == type && d.id == id);
->>>>>>> 27151ea (플레이어 데이터 저장 로직 추가, 데이터 암호화 추가)
         }
     }
 }
