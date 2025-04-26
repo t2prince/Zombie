@@ -1,4 +1,4 @@
-using _0.Script.Managers.Map;
+using Jamcat.Core;
 using UnityEngine;
 
 namespace Jamcat.Managers.Weapon
@@ -8,9 +8,10 @@ namespace Jamcat.Managers.Weapon
     {
         private static WeaponMasterData _data;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Init()
         {
-            
+            _data = Loader.LoadMasterData<WeaponMasterData>();
         }
     }
 }

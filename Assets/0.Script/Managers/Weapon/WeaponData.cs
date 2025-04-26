@@ -1,6 +1,6 @@
 using Jamcat.Managers.Data;
 
-namespace Jamcat.Managers.Map
+namespace Jamcat.Managers.Weapon
 {
     public class WeaponData : BaseData
     {
