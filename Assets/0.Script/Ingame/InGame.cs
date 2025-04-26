@@ -72,9 +72,6 @@ namespace Jamcat.Ingame
             //body의 로코모션에 컨트롤러 정보 전달
             var locomotion = body.GetComponent<Locomotion.Locomotion>();
             locomotion.Init(networkRig, hardwareRig);
-            
-            body.
-            
         }
 
         private void SpawnItems()

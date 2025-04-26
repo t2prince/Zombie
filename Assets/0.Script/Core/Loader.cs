@@ -1,3 +1,5 @@
+using System.IO;
+using Jamcat.Managers.Data;
 using UnityEngine;
 
 namespace Jamcat.Core
@@ -14,6 +16,7 @@ namespace Jamcat.Core
         private const string AvatarResourceFilePath = "Prefabs/Avatars";
         private const string ItemResourceFilePath = "Prefabs/Items";
         private const string MapResourceFilePath = "Prefabs/Environments";
+        const string MasterDataRoot = "MasterData/";
         
         public static T Load<T>(ResourceType resourceType, string name) where T : MonoBehaviour
         {
@@ -72,5 +75,10 @@ namespace Jamcat.Core
                 _ => string.Empty
             };
         }
+        
+        public static T LoadMasterData<T>(string name = null) where T : ScriptableObject
+        {
+            return (T) Resources.Load(Path.Combine(MasterDataRoot, name ?? typeof(T).Name));
+        } 
     }
 }

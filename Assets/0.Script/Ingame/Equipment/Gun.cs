@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Jamcat.Ingame.Equipment
 {
-    public class Gun : MonoBehaviour
+    public class Gun : Weapon
     {
         [SerializeField] float bulletDamage = 5f;
         [SerializeField] float bulletSpeed = 20f;
