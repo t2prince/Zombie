@@ -11,8 +11,6 @@ namespace Jamcat.Ingame.Character
         private float currentHp { get; set; }
         [SerializeField] private float energy;
         private float currentEnergy { get; set; }
-        
-        private Barrier _barrier;
 
         private void Start()
         {
