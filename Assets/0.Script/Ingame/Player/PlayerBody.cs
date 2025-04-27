@@ -24,8 +24,8 @@ namespace Jamcat.Ingame.Player
             var leftHand = networkRig.leftHand;
             var rightHand = networkRig.rightHand;
 
-            var leftController = rig.leftHand.GetComponentInChildren<HandController>();
-            var rightController = rig.rightHand.GetComponentInChildren<HandController>();
+            var leftController = leftHand.GetComponentInChildren<HandController>();
+            var rightController = rightHand.GetComponentInChildren<HandController>();
             
             //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
             //왼손 / 오른손 바꿀 수 있게끔 해줄 필요 있음
@@ -34,6 +34,7 @@ namespace Jamcat.Ingame.Player
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
             var gun = Instantiate(gunData.weaponPrefab, leftHand.transform).GetComponent<Gun>();
             gun.Init(character, leftController);
+            gun.transform.SetParent(leftHand.transform);
         }
     }
 }

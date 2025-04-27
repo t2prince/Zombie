@@ -1181,7 +1181,7 @@ MonoBehaviour:
   AutoClients: 1
   ClientStartDelay: 0.1
   ServerPort: 0
-  DefaultRoomName: DUGTest
+  DefaultRoomName: Jamcat
   InitialScenePath: Assets/1.Scenes/Ingame.unity
   _currentStage: 0
   AutoConnectVirtualInstances: 1
@@ -67944,63 +67944,6 @@ Transform:
   - {fileID: 8177949520494999727}
   m_Father: {fileID: 2613128672703719256}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &6562630391006495022
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.5999999
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2698222705082851248, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4143064322489161111, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
-      propertyPath: m_Name
-      value: Sphere
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
 --- !u!4 &6562679608973603937
 Transform:
   m_ObjectHideFlags: 0
@@ -87993,4 +87936,3 @@ SceneRoots:
   - {fileID: 252625825}
   - {fileID: 750334282}
   - {fileID: 1762727576}
-  - {fileID: 6562630391006495022}

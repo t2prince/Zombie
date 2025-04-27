@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cf2bb39a6e24ecea347e71e097e1c6b, type: 3}
-  m_Name: WeaponGunData
+  m_Name: WeaponData
   m_EditorClassIdentifier: 
-  id: 
-  desc: 
+  id: 0
+  desc: "\uAE30\uBCF8 \uCD1D"
   type: 0
-  weaponPrefab: {fileID: 0}
+  weaponPrefab: {fileID: -2066673488109389013, guid: 3260a1e28f156ee458991f6b9e6dbf9b, type: 3}
   grade: 0

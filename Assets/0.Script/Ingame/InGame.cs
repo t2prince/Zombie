@@ -66,7 +66,7 @@ namespace Jamcat.Ingame
             var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
             
             body.Init(hardwareRig,networkRig);
-            playerCamera.Init(body.Body);
+            playerCamera.Init(body.Head);
             
             
             //body의 로코모션에 컨트롤러 정보 전달

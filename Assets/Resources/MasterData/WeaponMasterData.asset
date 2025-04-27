@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd8113f64f24688978ffa2c4af264c3, type: 3}
   m_Name: WeaponMasterData
   m_EditorClassIdentifier: 
-  DataList: []
+  DataList:
+  - {fileID: 11400000, guid: e06460326577b0242865f05671072fe5, type: 2}
