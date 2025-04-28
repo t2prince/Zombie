@@ -64,6 +64,7 @@ public class HandController : NetworkBehaviour
     
     public event Action<bool> OnRightTriggerPressed;
     public event Action OnRightPrimaryButtonPressed;
+    public event Action OnRightPrimaryButtonReleased;
     public event Action OnRightSecondaryButtonPressed;
     
     public event Action<bool> OnLeftTriggerPressed;
@@ -113,6 +114,8 @@ public class HandController : NetworkBehaviour
             rightTriggerPressAction.started += _ => { OnRightTriggerPressed?.Invoke(true); };
             rightTriggerPressAction.canceled += _ => { OnRightTriggerPressed?.Invoke(false); };
             rightPrimaryButtonAction.started += _ => { OnRightPrimaryButtonPressed?.Invoke(); };
+            rightPrimaryButtonAction.canceled += _ => { OnRightPrimaryButtonReleased?.Invoke(); };
+            
             rightSecondaryButtonAction.started += _ => { OnRightSecondaryButtonPressed?.Invoke(); };
             rightThumbstickAction = InputSystem.actions.FindAction("RightHand/Primary2DAxis");
         }

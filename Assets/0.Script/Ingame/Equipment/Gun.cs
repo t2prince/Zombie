@@ -5,7 +5,6 @@ namespace Jamcat.Ingame.Equipment
 {
     public class Gun : Weapon
     {
-        [SerializeField] float bulletDamage = 5f;
         [SerializeField] float bulletSpeed = 20f;
         [SerializeField] private Transform _firePoint;
         private Transform _leftController;
@@ -31,21 +30,30 @@ namespace Jamcat.Ingame.Equipment
             _owner = owner;
             _leftController = controller.transform;
             controller.OnLeftPrimaryButtonPressed += Fire;
+            transform.SetParent(controller.transform);
         }
         
         private void Fire()
         {
             var bullet = _bulletPool.Pop();
             bullet.gameObject.SetActive(true);
-            bullet.Init(_owner,bulletSpeed,bulletDamage);
+            bullet.Init(_owner,bulletSpeed,_damage);
             bullet.transform.position = _firePoint.position;
             bullet.Fire(_leftController.forward);
             bullet.transform.SetParent(null);
             bullet.onHit = () =>
             {
-                bullet.gameObject.SetActive(false);
-                _bulletPool.Push(bullet);
+                CollectBullet(bullet);
             };
+            
+            Util.Coroutine.DelayedAction(() => CollectBullet(bullet), 5.0f);
+        }
+
+        private void CollectBullet(Bullet bullet)
+        {
+            if(!bullet.isActiveAndEnabled) return;
+            bullet.gameObject.SetActive(false);
+            _bulletPool.Push(bullet);
         }
     }
 }

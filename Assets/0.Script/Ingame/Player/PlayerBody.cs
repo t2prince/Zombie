@@ -34,7 +34,10 @@ namespace Jamcat.Ingame.Player
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
             var gun = Instantiate(gunData.weaponPrefab, leftHand.transform).GetComponent<Gun>();
             gun.Init(character, leftController);
-            gun.transform.SetParent(leftHand.transform);
+            
+            var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
+            var meleeWeapon = Instantiate(meleeData.weaponPrefab, rightHand.transform).GetComponent<Melee>();
+            meleeWeapon.Init(character, rightController);
         }
     }
 }
