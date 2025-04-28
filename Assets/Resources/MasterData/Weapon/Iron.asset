@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cf2bb39a6e24ecea347e71e097e1c6b, type: 3}
-  m_Name: WeaponData
+  m_Name: Iron
   m_EditorClassIdentifier: 
   id: 0
-  desc: "\uAE30\uBCF8 \uCD1D"
-  type: 0
-  weaponPrefab: {fileID: -2066673488109389013, guid: 3260a1e28f156ee458991f6b9e6dbf9b, type: 3}
+  desc: "\uAE30\uBCF8 \uAC80"
+  type: 1
+  weaponPrefab: {fileID: 1908795411310738674, guid: 8a4b421f2b4d1ef438f870d76e97d214, type: 3}
   grade: 0
