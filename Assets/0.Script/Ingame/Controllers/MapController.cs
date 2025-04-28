@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Jamcat.Ingame.Controllers.Component;
@@ -12,6 +13,11 @@ namespace Jamcat.Ingame
         public List<Transform> ItemSpawnPoints { get; private set; }
 
         public List<MonsterAttacher> MonsterSpawnPoints { get; private set; }
+        
+        private const float dayTime = 300.0f;
+        private const float nightTime = 240.0f;
+        private int waveCounte = 0;
+        private int currentWave = 0;
 
         public Transform GetSpawnPosition(int index)
         {
@@ -47,6 +53,20 @@ namespace Jamcat.Ingame
                 .Where(point => point.type == type)
                 .Select(p => p.transform)
                 .ToList();
+        }
+
+        private IEnumerator StartDays()
+        {
+            var count = 0;
+            while (++count < waveCounte)
+            {
+                yield return new WaitForSeconds(dayTime);    
+            }
+        }
+
+        private void StartSpawnMonsters()
+        {
+            
         }
     }
 }
