@@ -42,3 +42,4 @@ git commit -m "Apply Unity .gitignore"
 
 
 
+.utmp/RelWithDebInfo/1xa4l4c7/arm64-v8a/configure_fingerprint.bin

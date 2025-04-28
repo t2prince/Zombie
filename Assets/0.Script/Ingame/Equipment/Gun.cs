@@ -7,7 +7,7 @@ namespace Jamcat.Ingame.Equipment
     {
         [SerializeField] float bulletDamage = 5f;
         [SerializeField] float bulletSpeed = 20f;
-        private Transform _firePoint;
+        [SerializeField] private Transform _firePoint;
         private Transform _leftController;
         private BaseCharacter _owner;
         
@@ -31,7 +31,6 @@ namespace Jamcat.Ingame.Equipment
             _owner = owner;
             _leftController = controller.transform;
             controller.OnLeftPrimaryButtonPressed += Fire;
-            _firePoint = controller.shootPosition;
         }
         
         private void Fire()
@@ -41,6 +40,7 @@ namespace Jamcat.Ingame.Equipment
             bullet.Init(_owner,bulletSpeed,bulletDamage);
             bullet.transform.position = _firePoint.position;
             bullet.Fire(_leftController.forward);
+            bullet.transform.SetParent(null);
             bullet.onHit = () =>
             {
                 bullet.gameObject.SetActive(false);

@@ -205,6 +205,7 @@ public class HandController : NetworkBehaviour
             anyPressed = anyPressed || (leftSecondaryButtonAction?.IsPressed() ?? false);
             touchValue = Mathf.Max(touchValue, leftPrimaryTouchAction?.ReadValue<float>() ?? 0);
             touchValue = Mathf.Max(touchValue, leftSecondaryTouchAction?.ReadValue<float>() ?? 0);
+            
         }
         else
         {
