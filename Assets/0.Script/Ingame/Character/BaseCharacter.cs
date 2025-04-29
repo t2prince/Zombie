@@ -30,16 +30,11 @@ namespace Jamcat.Ingame.Character
             currentHp += heal;
         }
 
-        private void Die()
+        protected virtual void Die()
         {
-            //사망 애니메이션
-            //30초 후 부활?
-            Util.Coroutine.DelayedAction(Respawn,30f);
+        
         }
 
-        private void Respawn()
-        {
-            //스타트 지점에서 부활
-        }
+        
     }
 }
