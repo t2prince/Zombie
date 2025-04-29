@@ -23,6 +23,9 @@ namespace Jamcat.Ingame
         private MapController _mapController;
         private MonsterController _monsterController;
         
+        public static MapController Map => Instance._mapController;
+        public static MonsterController Monster => Instance._monsterController;
+        
         public static int playerID;
 
         private void Awake()

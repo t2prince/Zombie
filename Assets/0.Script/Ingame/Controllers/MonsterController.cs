@@ -23,12 +23,29 @@ namespace Jamcat.Ingame
                     monster.transform.localRotation = Quaternion.identity;
                     monster.transform.localScale = Vector3.one;
                     monster.gameObject.SetActive(false);
+                    monster.id = monsterData.id;
 
                     return monster;
                 });
                 
                 _monsterPoolList.Add(pool);
             }
+        }
+
+        public Monster GetMonster(int id, int level)
+        {
+            var pool = _monsterPoolList[id];
+            var monster = pool.Pop();
+            monster.Level = level;
+            monster.Spawn();
+
+            return monster;
+        }
+
+        public void CollectMonster(Monster monster)
+        {
+            monster.gameObject.SetActive(false);
+            var pool = _monsterPoolList[monster.id];
         }
     }
 }

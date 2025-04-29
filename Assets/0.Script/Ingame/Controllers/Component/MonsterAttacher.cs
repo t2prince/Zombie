@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,15 +28,33 @@ namespace Jamcat.Ingame.Controllers.Component
                 
         }
 
-        private void SpawnMonster()
+        public void SpawnMonster()
         {
             currentWaveNumber++;
 
             if (waveStartNumber > currentWaveNumber ||
                 waveEndNumber < currentWaveNumber)
                 return;
+
+            StartCoroutine(StartWave());
+        }
+        public void StopWave()
+        {
+            StopAllCoroutines();
+        }
+
+        private IEnumerator StartWave()
+        {
+            if (waveInfos.Count <= 0 || waveInfos.Count >= waveEndNumber) yield break;
+            var currentWave = waveInfos[currentWaveNumber];
+            while (true)
+            {
+                yield return Util.Coroutine.WaitForSeconds(currentWave.startDelay);
+                var monster = InGame.Monster.GetMonster(currentWave.monsterId, currentWave.level);
+                
+                monster.SetTarget(InGame.Map.Camp);
+            }
             
-            //TODO: 몬스터 정보 얻어와 스폰하기
         }
         
     }

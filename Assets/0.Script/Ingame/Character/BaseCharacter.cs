@@ -12,15 +12,8 @@ namespace Jamcat.Ingame.Character
         [SerializeField] private float energy;
         private float currentEnergy { get; set; }
 
-        public int Level
-        {
-            get { return level; }
-            set
-            {
-                level = value;
-                currentHp += 10 * level;
-            }
-        }
+        public int Level { get { return level; } set { level = value; } }
+        
 
         private void Start()
         {
@@ -28,11 +21,16 @@ namespace Jamcat.Ingame.Character
             currentEnergy = energy;
         }
 
-        public virtual void TakeDamage(BaseCharacter attacher, float damage)
+        public virtual void TakeDamage(BaseCharacter attacker, float damage)
         {
             currentHp -= damage;
             if(currentHp <= 0)
                 Die();
+        }
+
+        public void Spawn()
+        {
+            currentHp = hp + 10 * level;
         }
 
         public void Heal(float heal)
@@ -44,7 +42,5 @@ namespace Jamcat.Ingame.Character
         {
         
         }
-
-        
     }
 }
