@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bbc71ecea49bdb144bd757141366b0a1
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Animations/AC_Generator.controller
+  uploadId: 705200

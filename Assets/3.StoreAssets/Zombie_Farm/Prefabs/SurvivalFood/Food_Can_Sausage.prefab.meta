@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 62228d7ca16df0645ae2d847963a3dd1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalFood/Food_Can_Sausage.prefab
+  uploadId: 705200

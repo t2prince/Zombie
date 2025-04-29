@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 93f3555ce17cb6348a9e1656090ccb1f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalFood/Food_Can_Fish.prefab
+  uploadId: 705200

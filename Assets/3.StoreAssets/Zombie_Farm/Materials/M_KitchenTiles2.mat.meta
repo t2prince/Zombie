@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 29418d6cbfacea94594278b552449030
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_KitchenTiles2.mat
+  uploadId: 705200

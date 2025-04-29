@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b4b8af970659ca545ab3d5945706bd65
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Animations/AC_Tractor.controller
+  uploadId: 705200

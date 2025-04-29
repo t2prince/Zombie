@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 465d5d208bf21304caa98a2bdeda005c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/House/Floors/Floor_3mx6m.prefab
+  uploadId: 705200

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 647afebcc82af334e9932a0447b07689
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/WoodenFence.prefab
+  uploadId: 705200

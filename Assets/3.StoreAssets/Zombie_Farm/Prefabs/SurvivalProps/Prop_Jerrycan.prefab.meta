@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0ca47a248d65b24459da443740ad2a25
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalProps/Prop_Jerrycan.prefab
+  uploadId: 705200

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5edea700138f86e4aaac1e56c6ad3402
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Weapons/Weapon_SMG.prefab
+  uploadId: 705200

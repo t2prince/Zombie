@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 09db81b0387ce1e4aaae1dd9358a1d5b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Textures/Terrain/Terrain_Light.terrainlayer
+  uploadId: 705200

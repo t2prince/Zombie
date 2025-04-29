@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 78ce06ad42e8d3942b289e06828a9cf4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Animations/Anim_Tractor.anim
+  uploadId: 705200

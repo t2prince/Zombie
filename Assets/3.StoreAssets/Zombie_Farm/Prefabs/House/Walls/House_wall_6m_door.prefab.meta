@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4cd4838932275f3469012e245f402820
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/House/Walls/House_wall_6m_door.prefab
+  uploadId: 705200

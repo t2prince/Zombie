@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: fc7373264912e7942b87aab7dd84f721
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Appliences/Sink.prefab
+  uploadId: 705200

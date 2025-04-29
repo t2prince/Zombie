@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1df660345719a614c96fc8c074181d83
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_FacadeWood.mat
+  uploadId: 705200

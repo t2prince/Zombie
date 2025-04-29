@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 8cd57bd349a1c97458fbe963dc6c986f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/House/Doors/HouseDoors.prefab
+  uploadId: 705200

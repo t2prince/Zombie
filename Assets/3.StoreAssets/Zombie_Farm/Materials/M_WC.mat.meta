@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7718ccf3144b7ee4f8028dbd925fad15
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_WC.mat
+  uploadId: 705200

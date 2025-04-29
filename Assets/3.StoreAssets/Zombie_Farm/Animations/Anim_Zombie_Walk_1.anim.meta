@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4b2b146eb20e1254eb2e5163c1750b9a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Animations/Anim_Zombie_Walk_1.anim
+  uploadId: 705200

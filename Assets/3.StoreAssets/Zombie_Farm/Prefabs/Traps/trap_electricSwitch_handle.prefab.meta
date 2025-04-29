@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 335741cfec744804c9ab434a39ea7370
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Traps/trap_electricSwitch_handle.prefab
+  uploadId: 705200

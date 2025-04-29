@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 981d067716a928841a0412ef760dc81d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_Brick.mat
+  uploadId: 705200

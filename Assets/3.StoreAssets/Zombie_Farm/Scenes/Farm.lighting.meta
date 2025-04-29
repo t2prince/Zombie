@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 27e019953a80c1941b65c68aba7d1875
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Scenes/Farm.lighting
+  uploadId: 705200

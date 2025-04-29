@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7a2d625c863db3f4981ea7b9eace2e52
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_SMG.mat
+  uploadId: 705200

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c3cddc02cb2af094287e0062f11b9137
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/House/Roof/farmhouse_roof.prefab
+  uploadId: 705200

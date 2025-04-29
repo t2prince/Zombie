@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b0584e217abd80c4f937231d9bc445be
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/House/FarmhouseRailing.prefab
+  uploadId: 705200

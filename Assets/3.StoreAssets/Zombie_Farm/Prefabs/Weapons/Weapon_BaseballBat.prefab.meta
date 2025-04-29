@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 241d8fef2f0102a44828f565f2207e0f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Weapons/Weapon_BaseballBat.prefab
+  uploadId: 705200

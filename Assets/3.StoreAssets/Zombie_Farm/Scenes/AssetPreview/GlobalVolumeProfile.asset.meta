@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a2a6969e88d13544ab7ceefe051e851d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Scenes/AssetPreview/GlobalVolumeProfile.asset
+  uploadId: 705200

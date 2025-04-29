@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 06393614b7d42234ea131b5f5ad00712
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalFood/Food_Medkit.prefab
+  uploadId: 705200

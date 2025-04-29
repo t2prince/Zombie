@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 351fc641c2e019d4a8a7cd39761d6efc
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Appliences/Stove.prefab
+  uploadId: 705200

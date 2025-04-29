@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 422a0b5e48948874b94f69a01b228234
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Weapons/Weapon_Shotgun.prefab
+  uploadId: 705200

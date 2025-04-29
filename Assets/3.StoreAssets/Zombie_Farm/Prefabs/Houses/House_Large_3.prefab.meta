@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 52f197c57924cba46ac5db252d26a978
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Houses/House_Large_3.prefab
+  uploadId: 705200

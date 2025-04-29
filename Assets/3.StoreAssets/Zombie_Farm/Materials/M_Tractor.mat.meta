@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7e7830a4e4d31d444842008660dac515
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_Tractor.mat
+  uploadId: 705200

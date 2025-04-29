@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ed6fcedb926de7e49b21785e38c17c5f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalFood/Food_WaterBottle.prefab
+  uploadId: 705200

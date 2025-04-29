@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f9ad1f6e83578d444bfc938b04accc6e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_TileWall.mat
+  uploadId: 705200

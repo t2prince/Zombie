@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c82c6e30ac18dd74db79c42fc1e4732c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Houses/House_Medium_2.prefab
+  uploadId: 705200

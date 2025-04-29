@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f17f7c60adece4340981b122c0713545
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalProps/Prop_Worklight.prefab
+  uploadId: 705200

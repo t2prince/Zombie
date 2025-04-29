@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: da5cf56a40776974998b59f3775798aa
+timeCreated: 1489913260
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/Tombstones/Tombstone_C.prefab
+  uploadId: 705200

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6def9b698d0501341b3d32f22addaeea
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalProps/Prop_Sleepingbag_Rolled.prefab
+  uploadId: 705200

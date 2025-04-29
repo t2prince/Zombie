@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 07e957d146798de4fb90993ec38c475c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Prefabs/SurvivalProps/Prop_Sleepingbag.prefab
+  uploadId: 705200

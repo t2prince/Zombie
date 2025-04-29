@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6430d3c222c513f4aa89f56375d8ce4f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 283115
+  packageName: Zombie Farm
+  packageVersion: 1.3
+  assetPath: Assets/Zombie_Farm/Materials/M_Carpet.mat
+  uploadId: 705200
