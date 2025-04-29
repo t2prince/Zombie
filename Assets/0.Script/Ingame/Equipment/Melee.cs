@@ -1,5 +1,4 @@
 using Jamcat.Ingame.Character;
-using Jamcat.Managers.Map;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Equipment

@@ -9,8 +9,9 @@ namespace Jamcat.Ingame.Controllers.Component
         public struct waveInfo
         {
             public int monsterId;
-            public int startDelay;
-            public int interval;
+            public int level;
+            public float startDelay;
+            public float interval;
         }
         
         [SerializeField] private int waveStartNumber;
