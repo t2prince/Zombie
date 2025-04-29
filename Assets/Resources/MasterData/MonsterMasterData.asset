@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17422a1acc1b46b09ed889a569c306d3, type: 3}
   m_Name: MonsterMasterData
   m_EditorClassIdentifier: 
-  DataList: []
+  DataList:
+  - {fileID: 11400000, guid: b6ce17d49009a0d49b34d7a298f939da, type: 2}
+  - {fileID: 11400000, guid: c39b110d4753b494ca9f5b6738aba515, type: 2}
+  - {fileID: 11400000, guid: d1e05cc8d8cccba448d14c05bee66c08, type: 2}

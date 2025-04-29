@@ -12,6 +12,16 @@ namespace Jamcat.Ingame.Character
         [SerializeField] private float energy;
         private float currentEnergy { get; set; }
 
+        public int Level
+        {
+            get { return level; }
+            set
+            {
+                level = value;
+                currentHp += 10 * level;
+            }
+        }
+
         private void Start()
         {
             currentHp = hp;

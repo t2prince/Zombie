@@ -21,6 +21,7 @@ namespace Jamcat.Ingame
         [SerializeField] private string _mapName = "city";
         public static string MapName => Instance._mapName;
         private MapController _mapController;
+        private MonsterController _monsterController;
         
         public static int playerID;
 
@@ -89,6 +90,7 @@ namespace Jamcat.Ingame
         private void LoadController()
         {
             _mapController = Util.SingletonUtil.GetSingletonComponent<MapController>();
+            _monsterController = Util.SingletonUtil.GetSingletonComponent<MonsterController>();
         }
     }
 }

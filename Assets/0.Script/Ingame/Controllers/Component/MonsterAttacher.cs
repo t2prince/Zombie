@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Controllers.Component
 {
-    public class MonsterAttacher
+    public class MonsterAttacher : MonoBehaviour
     {
         [Serializable]
         public struct waveInfo
@@ -18,10 +19,12 @@ namespace Jamcat.Ingame.Controllers.Component
         [SerializeField] private int waveEndNumber;
         
         private int currentWaveNumber;
+        
+        public List<waveInfo> waveInfos;
 
         private void Start()
         {
-            
+                
         }
 
         private void SpawnMonster()

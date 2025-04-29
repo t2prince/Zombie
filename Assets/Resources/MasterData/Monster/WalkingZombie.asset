@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f1eb04fe5c04c11847fc9f87ccddd3c, type: 3}
   m_Name: WalkingZombie
   m_EditorClassIdentifier: 
-  id: 0
-  desc: 
-  monster: {fileID: 0}
+  id: 2
+  desc: "\uAC78\uC744 \uC815\uB3C4\uB85C \uC721\uCCB4\uAC00 \uBA40\uCA61\uD55C \uC880\uBE44"
+  monster: {fileID: 1015137038215652596, guid: fe19665d3ba6a5f4a8bab76c28faa99f, type: 3}
