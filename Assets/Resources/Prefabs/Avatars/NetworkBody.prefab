@@ -110,6 +110,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 421497050185885936}
+  - {fileID: 1833116187428666796}
   - {fileID: 3234892057281980358}
   ForceRemoteRenderTimeframe: 0
 --- !u!54 &8869646160097463289
@@ -119,10 +120,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6069726167303127091}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -224,8 +225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e9d27cdacf45d6b549311acf8fc6eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
-  energy: 0
+  hp: 100
+  energy: 100
 --- !u!1 &9213647574550066701
 GameObject:
   m_ObjectHideFlags: 0

@@ -71,6 +71,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b06c942dc5bcf9a46ba437fa8a788683, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9033435260846634216}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b06c942dc5bcf9a46ba437fa8a788683, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6737165247060947807}
   m_SourcePrefab: {fileID: 100100000, guid: b06c942dc5bcf9a46ba437fa8a788683, type: 3}
 --- !u!1 &9018316479613145185 stripped
 GameObject:
@@ -143,6 +146,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: -644193773159889344}
+  - {fileID: -6737165247060947807}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &-644193773159889344
 MonoBehaviour:
@@ -197,3 +201,31 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   ownerName: {fileID: 0}
+--- !u!114 &-6737165247060947807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9018316479613145185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e29a5da46f946a43a21a0c03ef7d768, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkTransform: {fileID: 0}
+  networkRigidbody: {fileID: 0}
+  _InitialIsKinematicState:
+    _value: 0
+  _CurrentGrabber: {fileID: 0}
+  _LocalPositionOffset: {x: 0, y: 0, z: 0}
+  _LocalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  onDidUngrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onDidGrab:
+    m_PersistentCalls:
+      m_Calls: []
+  extrapolateWhileTakingAuthority: 1
+  isTakingAuthority: 0
+  grabbable: {fileID: 0}

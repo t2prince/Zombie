@@ -78,9 +78,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: df20f91761fa425438b74820b4a86555, type: 3}
       insertIndex: -1
       addedObject: {fileID: -4861326419887826003}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: df20f91761fa425438b74820b4a86555, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6018847498461975782}
   m_SourcePrefab: {fileID: 100100000, guid: df20f91761fa425438b74820b4a86555, type: 3}
 --- !u!1 &3040542712896403951 stripped
 GameObject:
@@ -189,8 +186,8 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: -5558429614483460609}
   - {fileID: -4861326419887826003}
-  - {fileID: 6018847498461975782}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &-4861326419887826003
 MonoBehaviour:
@@ -209,26 +206,3 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
---- !u!114 &6018847498461975782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3040542712896403951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Animator: {fileID: 8618149181243668783}
-  ApplyTiming: 2
-  SyncSettings: 79
-  StateHashes: 000000000b69c53fe50b0d4a
-  TriggerHashes: 00000000
-  TotalWords: 0
---- !u!95 &8618149181243668783 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: df20f91761fa425438b74820b4a86555, type: 3}
-  m_PrefabInstance: {fileID: 2806662502645662910}
-  m_PrefabAsset: {fileID: 0}
