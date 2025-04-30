@@ -46,6 +46,7 @@ namespace Jamcat.Ingame
             var allAttachers = new List<Attacher>();
             foreach (var root in rootObjects)
             {
+                root.transform.SetParent(transform);
                 allAttachers.AddRange(root.GetComponentsInChildren<Attacher>());
             }
 

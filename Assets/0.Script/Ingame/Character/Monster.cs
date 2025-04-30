@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using Util;
 
 namespace Jamcat.Ingame.Character
 {
@@ -32,6 +33,7 @@ namespace Jamcat.Ingame.Character
 
         public void SetTarget(BaseCharacter target)
         {
+            if (target.IsFastNull()) return;
             _target = target;
             _agent.destination = target.transform.position;
         }
