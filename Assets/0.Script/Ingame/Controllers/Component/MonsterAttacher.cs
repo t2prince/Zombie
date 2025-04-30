@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Jamcat.Ingame.Controllers.Component
 {
-    public class MonsterAttacher : MonoBehaviour
+    public class MonsterAttacher : Attacher
     {
         [Serializable]
         public struct waveInfo
@@ -22,11 +22,6 @@ namespace Jamcat.Ingame.Controllers.Component
         private int currentWaveNumber;
         
         public List<waveInfo> waveInfos;
-
-        private void Start()
-        {
-                
-        }
 
         public void SpawnMonster()
         {
@@ -47,12 +42,14 @@ namespace Jamcat.Ingame.Controllers.Component
         {
             if (waveInfos.Count <= 0 || waveInfos.Count >= waveEndNumber) yield break;
             var currentWave = waveInfos[currentWaveNumber];
+            yield return Util.Coroutine.WaitForSeconds(currentWave.startDelay);
+            
             while (true)
             {
-                yield return Util.Coroutine.WaitForSeconds(currentWave.startDelay);
                 var monster = InGame.Monster.GetMonster(currentWave.monsterId, currentWave.level);
-                
                 monster.SetTarget(InGame.Map.Camp);
+                
+                yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
             }
             
         }
