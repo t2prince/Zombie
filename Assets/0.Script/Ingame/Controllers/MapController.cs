@@ -32,7 +32,7 @@ namespace Jamcat.Ingame
 
         private void Start()
         {
-            StartCoroutine(StartDays());
+            
         }
 
         private async System.Threading.Tasks.Task InitAsync()
@@ -54,6 +54,8 @@ namespace Jamcat.Ingame
             MonsterSpawnPoints = GetSpawnPoints(allAttachers, Attacher.SpawnPointType.Monster).Select(p => p.GetComponent<MonsterAttacher>()).ToList();
 
             Camp = GetComponentInChildren<BaseCamp>();
+            
+            StartCoroutine(StartDays());
         }
 
         private List<Transform> GetSpawnPoints(IEnumerable<Attacher> spawnPoints, Attacher.SpawnPointType type)

@@ -40,7 +40,7 @@ namespace Jamcat.Ingame.Controllers.Component
 
         private IEnumerator StartWave()
         {
-            if (waveInfos.Count <= 0 || waveInfos.Count >= waveEndNumber) yield break;
+            if (waveInfos.Count <= 0 || currentWaveNumber >= waveEndNumber) yield break;
             var currentWave = waveInfos[currentWaveNumber];
             yield return Util.Coroutine.WaitForSeconds(currentWave.startDelay);
             
@@ -48,6 +48,9 @@ namespace Jamcat.Ingame.Controllers.Component
             {
                 var monster = InGame.Monster.GetMonster(currentWave.monsterId, currentWave.level);
                 monster.SetTarget(InGame.Map.Camp);
+                monster.Spawn();
+                
+                monster.transform.position = transform.position;
                 
                 yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
             }

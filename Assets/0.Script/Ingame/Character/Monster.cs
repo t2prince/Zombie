@@ -13,7 +13,7 @@ namespace Jamcat.Ingame.Character
 
         public void Spawn()
         {
-            
+            gameObject.SetActive(true);
         }
 
         public override void TakeDamage(BaseCharacter attacker, float damage)
