@@ -7,6 +7,7 @@
 [Uu]serSettings/
 .vs/
 .idea/
+.utmp/
 .vscode/
 *.csproj
 *.unityproj
@@ -45,3 +46,6 @@ git commit -m "Apply Unity .gitignore"
 .utmp/RelWithDebInfo/1xa4l4c7/arm64-v8a/configure_fingerprint.bin
 /ProjectSettings/URPProjectSettings.asset
 /ProjectSettings/ShaderGraphSettings.asset
+.utmp/Debug/8l2s3b50/arm64-v8a/.cmake/api/v1/reply/cache-v2-956b0a103ab5290d6bdf.json
+.utmp/Debug/8l2s3b50/arm64-v8a/.cmake/api/v1/reply/cmakeFiles-v1-5d0d876ac31b734f50b7.json
+.utmp/Debug/8l2s3b50/arm64-v8a/.cmake/api/v1/reply/index-2025-04-30T08-27-56-0816.json
