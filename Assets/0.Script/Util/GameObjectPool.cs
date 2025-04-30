@@ -68,13 +68,23 @@ public class GameObjectPool<T> where T : MonoBehaviour
 	}
 
 	private void Allocate ()
-	{  
-		for (var i = 0; i < _count; ++i)
+	{
+		if (_count == 0)
 		{
 			var obj = _createFunc.Invoke();
 			obj.gameObject.SetActive(false);
-			_objects.Enqueue(obj);  
-		}  
+			_objects.Enqueue(obj);
+		}
+		else
+		{
+			for (var i = 0; i < _count; ++i)
+			{
+				var obj = _createFunc.Invoke();
+				obj.gameObject.SetActive(false);
+				_objects.Enqueue(obj);  
+			}	
+		}
+		  
 	}
 
 	public T Pop ()
