@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.AI;
 
@@ -9,7 +10,12 @@ namespace Jamcat.Ingame.Character
         
         private NavMeshAgent _agent;
         private BaseCharacter _target;
-        private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>(); 
+        private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
+
+        private void Awake()
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
 
         public void Spawn()
         {
