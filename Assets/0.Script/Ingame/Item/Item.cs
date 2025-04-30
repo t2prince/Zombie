@@ -1,11 +1,16 @@
 using System;
 using Fusion;
+using Fusion.Addons.Physics;
 using Fusion.XR.Shared.Grabbing;
 using TMPro;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Item
 {
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(NetworkRigidbody3D))]
     public class Item : Grabbable
     {
         [SerializeField] private TMP_Text ownerName;

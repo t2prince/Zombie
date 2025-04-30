@@ -21,7 +21,7 @@ namespace Jamcat.Ingame.Character
             currentEnergy = energy;
         }
 
-        public virtual void TakeDamage(BaseCharacter attacker, float damage)
+        public virtual void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 0.0f)
         {
             currentHp -= damage;
             if(currentHp <= 0)

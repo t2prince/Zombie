@@ -38,7 +38,7 @@ namespace Jamcat.Ingame.Equipment
             var target = other.GetComponentInParent<BaseCharacter>();
             
             if (target == null) return;
-            target.TakeDamage(_owner, _damage);
+            target.TakeDamage(_owner, _damage, _knockBackPower);
         }
     }
 }

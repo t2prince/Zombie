@@ -8,6 +8,7 @@ namespace Jamcat.Ingame.Equipment
     public class Bullet : MonoBehaviour
     {
         private float _damage;
+        private float _knockBackPower;
         private float _speed;
         public Action onHit;
         private Vector3 moveDirection;
@@ -45,7 +46,7 @@ namespace Jamcat.Ingame.Equipment
             Hit();
             
             if (target == null) return;
-            target.TakeDamage(_owner, _damage);
+            target.TakeDamage(_owner, _damage,_knockBackPower);
         }
 
         private void Hit()
