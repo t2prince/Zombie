@@ -15,10 +15,10 @@ namespace Jamcat.Ingame
 
         public List<MonsterAttacher> MonsterSpawnPoints { get; private set; }
         
-        private const float dayTime = 300.0f;
-        private const float nightTime = 240.0f;
-        private int waveCounte = 0;
-        private int currentWave = 0;
+        private const float dayTime = 10.0f;
+        private const float nightTime = 10.0f;
+        private int waveCount = 20;
+        
         public BaseCamp Camp { get; private set; }
 
         public Transform GetSpawnPosition(int index)
@@ -32,7 +32,7 @@ namespace Jamcat.Ingame
 
         private void Start()
         {
-            StartCoroutine(StartDays());
+            
         }
 
         private async System.Threading.Tasks.Task InitAsync()
@@ -46,6 +46,7 @@ namespace Jamcat.Ingame
             var allAttachers = new List<Attacher>();
             foreach (var root in rootObjects)
             {
+                root.transform.SetParent(transform);
                 allAttachers.AddRange(root.GetComponentsInChildren<Attacher>());
             }
 
@@ -54,6 +55,8 @@ namespace Jamcat.Ingame
             MonsterSpawnPoints = GetSpawnPoints(allAttachers, Attacher.SpawnPointType.Monster).Select(p => p.GetComponent<MonsterAttacher>()).ToList();
 
             Camp = GetComponentInChildren<BaseCamp>();
+            
+            StartCoroutine(StartDays());
         }
 
         private List<Transform> GetSpawnPoints(IEnumerable<Attacher> spawnPoints, Attacher.SpawnPointType type)
@@ -67,7 +70,7 @@ namespace Jamcat.Ingame
         private IEnumerator StartDays()
         {
             var count = 0;
-            while (++count < waveCounte)
+            while (++count < waveCount)
             {
                 foreach (var point in MonsterSpawnPoints)
                 {

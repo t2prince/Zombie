@@ -1441,9 +1441,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf2c26705a5946e79c9ee27f648cb299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 2
+  id: 
   waveStartNumber: 0
   waveEndNumber: 20
   waveInfos:
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
+  - monsterId: 0
+    level: 0
+    startDelay: 0
+    interval: 10
   - monsterId: 0
     level: 0
     startDelay: 0

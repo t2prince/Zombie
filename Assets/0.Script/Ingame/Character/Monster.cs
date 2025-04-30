@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using Util;
 
 namespace Jamcat.Ingame.Character
 {
@@ -9,11 +11,16 @@ namespace Jamcat.Ingame.Character
         
         private NavMeshAgent _agent;
         private BaseCharacter _target;
-        private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>(); 
+        private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
+
+        private void Awake()
+        {
+            _agent = GetComponent<NavMeshAgent>();
+        }
 
         public void Spawn()
         {
-            
+            gameObject.SetActive(true);
         }
 
         public override void TakeDamage(BaseCharacter attacker, float damage)
@@ -26,6 +33,7 @@ namespace Jamcat.Ingame.Character
 
         public void SetTarget(BaseCharacter target)
         {
+            if (target.IsFastNull()) return;
             _target = target;
             _agent.destination = target.transform.position;
         }
