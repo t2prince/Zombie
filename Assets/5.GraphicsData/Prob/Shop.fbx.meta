@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Flat
+    second: {fileID: 2100000, guid: 369daa08e3ab1e545929a08a70772631, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Prob
     second: {fileID: 2100000, guid: 45dbcaf844677274b952ff0c30a36c41, type: 2}
   materials:

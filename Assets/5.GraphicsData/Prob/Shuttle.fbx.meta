@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fa8e3cfdad4054b478c7d030f03b6d9c
+guid: 8b2e44edb02519f4ba019d0e043996ef
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,13 +7,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: 01 - Default
+      name: Prob
     second: {fileID: 2100000, guid: 45dbcaf844677274b952ff0c30a36c41, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Prob
-    second: {fileID: 2100000, guid: 45dbcaf844677274b952ff0c30a36c41, type: 2}
+      name: Prob_Metal
+    second: {fileID: 2100000, guid: 2fb037e9f9c373143be77184fba3c66b, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -86,7 +86,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human: []
@@ -105,7 +105,7 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
