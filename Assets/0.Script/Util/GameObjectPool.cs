@@ -64,7 +64,8 @@ public class GameObjectPool<T> where T : MonoBehaviour
 		_createFunc = fn;  
 
 		_objects = new Queue<T> (_count);  
-		Allocate ();  
+		if(_count > 0)
+			Allocate ();  
 	}
 
 	private void Allocate ()
