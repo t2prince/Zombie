@@ -25,6 +25,7 @@ namespace Jamcat.Ingame.Controllers.Component
 
         public void SpawnMonster()
         {
+            if (!InGame.Instance.Runner.IsSharedModeMasterClient) return;
             currentWaveNumber++;
 
             if (waveStartNumber > currentWaveNumber ||
@@ -35,6 +36,7 @@ namespace Jamcat.Ingame.Controllers.Component
         }
         public void StopWave()
         {
+            if (!InGame.Instance.Runner.IsSharedModeMasterClient) return;
             StopAllCoroutines();
         }
 

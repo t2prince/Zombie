@@ -19,7 +19,7 @@ namespace Jamcat.Ingame
             {
                  var pool = new GameObjectPool<Monster>(0, () =>
                  {
-                     var monster = _runner.Spawn(monsterData.monster,transform.position).GetComponent<Monster>();
+                     var monster = _runner.Spawn(monsterData.monster).GetComponent<Monster>();
                     monster.transform.SetParent(transform);
                     monster.transform.localScale = Vector3.one;
                     monster.id = monsterData.id;
