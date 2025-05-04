@@ -1,20 +1,14 @@
 {
     "name": "PhotonVoice.Editor",
-    "rootNamespace": "",
     "references": [
         "PhotonRealtime",
         "PhotonVoice",
         "PhotonVoice.API"
     ],
+    "optionalUnityReferences": [],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": true,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "allowUnsafeCode": false
 }
