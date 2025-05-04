@@ -5,6 +5,7 @@ using Jamcat.Ingame.Character;
 using Jamcat.Ingame.Controllers.Component;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using MonoBehaviourHelper = Util.MonoBehaviourHelper;
 
 namespace Jamcat.Ingame
 {
@@ -70,6 +71,7 @@ namespace Jamcat.Ingame
         private IEnumerator StartDays()
         {
             var count = 0;
+            yield return new WaitUntil(() => !MonoBehaviourHelper.IsFastNull(InGame.Instance.Runner));
             while (++count < waveCount)
             {
                 foreach (var point in MonsterSpawnPoints)
