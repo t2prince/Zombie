@@ -16,8 +16,9 @@ namespace Jamcat.Ingame.Character
         private Rigidbody _rigidbody;
         private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
 
-        private void Awake()
+        protected override void Init()
         {
+            base.Init();
             _agent = GetComponent<NavMeshAgent>();
             _rigidbody = GetComponent<Rigidbody>();
         }
@@ -39,6 +40,7 @@ namespace Jamcat.Ingame.Character
 
         public void SetTarget(BaseCharacter target)
         {
+            if (!Object.HasStateAuthority) return;
             if (target.IsFastNull()) return;
             _target = target;
             _agent.destination = target.transform.position;

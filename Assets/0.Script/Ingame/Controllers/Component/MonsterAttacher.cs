@@ -52,7 +52,7 @@ namespace Jamcat.Ingame.Controllers.Component
                 monster.SetTarget(InGame.Map.Camp);
                 monster.Spawn();
                 
-                monster.transform.position = transform.position;
+                monster.SetPosition(transform.position);
                 
                 yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
             }
