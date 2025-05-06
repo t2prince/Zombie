@@ -21,6 +21,18 @@ namespace Jamcat.Ingame.Character
             base.Init();
             _agent = GetComponent<NavMeshAgent>();
             _rigidbody = GetComponent<Rigidbody>();
+            
+            // Rigidbody가 있다면 isKinematic 설정
+            if (_rigidbody != null)
+            {
+                _rigidbody.isKinematic = true;
+            }
+
+            // NavMeshAgent 기본 설정 확인
+            if (_agent != null)
+            {
+                _agent.isStopped = false;
+            }
         }
 
         public void Spawn()
@@ -42,7 +54,9 @@ namespace Jamcat.Ingame.Character
         {
             if (!Object.HasStateAuthority) return;
             if (target.IsFastNull()) return;
+            
             _target = target;
+            _agent.enabled = true;
             _agent.destination = target.transform.position;
         }
 
@@ -72,6 +86,17 @@ namespace Jamcat.Ingame.Character
             {
                 _agent.isStopped = false;
                 _agent.updatePosition = true;
+            }
+        }
+        
+        private void Update()
+        {
+            if (!Object.HasStateAuthority) return;
+
+            if (!_target.IsFastNull())
+            {
+                // NavMeshAgent의 목적지 갱신
+                _agent.destination = _target.transform.position;
             }
         }
     }

@@ -61,6 +61,10 @@ PrefabInstance:
       value: NolegZombie
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: df20f91761fa425438b74820b4a86555, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: df20f91761fa425438b74820b4a86555, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 08adb59af3c634b48a388565e0169964, type: 2}
@@ -117,7 +121,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
