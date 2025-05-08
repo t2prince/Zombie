@@ -73,11 +73,6 @@ public class HandController : NetworkBehaviour
     public event Action OnLeftPrimaryButtonPressed;
     public event Action OnLeftSecondaryButtonPressed;
     public event Action OnLeftSecondaryButtonReleased;
-    
-#if UNITY_EDITOR
-    private bool wasLeftSecondaryPressed = false;
-    private bool wasRightSecondaryPressed = false;        
-#endif
 
     private void Start()
     {
@@ -135,39 +130,33 @@ public class HandController : NetworkBehaviour
     {
         UpdateHand();
 #if UNITY_EDITOR
-        bool isLeftSecondaryPressed = leftSecondaryButtonAction?.IsPressed() ?? false;
-        if (isLeftSecondaryPressed && !wasLeftSecondaryPressed)
-        {
-            OnLeftSecondaryButtonPressed?.Invoke();
-        }
-        else if (!isLeftSecondaryPressed && wasLeftSecondaryPressed)
-        {
-            OnLeftSecondaryButtonReleased?.Invoke();
-        }
-        wasLeftSecondaryPressed = isLeftSecondaryPressed;
-
-        // Right Secondary Button
-        bool isRightSecondaryPressed = rightSecondaryButtonAction?.IsPressed() ?? false;
-        if (isRightSecondaryPressed && !wasRightSecondaryPressed)
-        {
-            OnRightSecondaryButtonPressed?.Invoke();
-        }
-        else if (!isRightSecondaryPressed && wasRightSecondaryPressed)
-        {
-            OnRightSecondaryButtonReleased?.Invoke();
-        }
-        wasRightSecondaryPressed = isRightSecondaryPressed;
-
-        // Primary Buttons (No Release Logic)
-        if (leftPrimaryButtonAction?.IsPressed() ?? false)
+        if (Input.GetKey(KeyCode.W))
         {
             OnLeftPrimaryButtonPressed?.Invoke();
         }
 
-        if (rightPrimaryButtonAction?.IsPressed() ?? false)
+        if (Input.GetKey(KeyCode.A))
+        {
+            OnLeftSecondaryButtonPressed?.Invoke();
+        }
+        else if (Input.GetKeyUp(KeyCode.A))
+        {
+            OnLeftSecondaryButtonReleased?.Invoke();
+        }
+
+        if (Input.GetKey(KeyCode.S))
         {
             OnRightPrimaryButtonPressed?.Invoke();
-        }    
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            OnRightSecondaryButtonPressed?.Invoke();
+        }
+        else if (Input.GetKeyUp(KeyCode.D))
+        {
+            OnRightSecondaryButtonReleased?.Invoke();
+        }
 #endif        
     }
     

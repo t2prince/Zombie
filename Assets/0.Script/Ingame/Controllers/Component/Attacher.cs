@@ -9,6 +9,7 @@ namespace Jamcat.Ingame.Controllers.Component
             Character,
             Item,
             Monster,
+            Booster,
         }
 
         public SpawnPointType type;

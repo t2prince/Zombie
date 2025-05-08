@@ -43,7 +43,7 @@ namespace Jamcat.Ingame.Player
             var boosterData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Booster);
             var boosterAttacher = networkRig.GetComponentInChildren<Attacher>();
             var booster = Instantiate(boosterData.weaponPrefab, boosterAttacher.transform).GetComponent<Booster>();
-            booster.Init(character, boosterAttacher);
+            booster.Init(leftController, rightController);
         }
     }
 }
