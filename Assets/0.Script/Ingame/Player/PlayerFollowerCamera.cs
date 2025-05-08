@@ -17,6 +17,7 @@ namespace Jamcat.Ingame.Player
             if (_targetTransform == null) return;
             
             transform.position = _targetTransform.position;
+            transform.rotation = _targetTransform.rotation;
         }
     }
 }

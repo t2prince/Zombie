@@ -38,14 +38,16 @@ namespace Jamcat.Ingame.Player
         
         private void Update()
         {
-
             // 방향 키 입력 값 읽기
             var input = arrowKeyAction.ReadValue<Vector2>();
-            var move = new Vector3(input.x, 0, input.y) * moveSpeed * Time.deltaTime;
+            var move = Vector3.forward * input.y * moveSpeed * Time.deltaTime;
 
-            // 플레이어 이동
-            transform.Translate(move, Space.World);
+            // 앞뒤 이동 (로컬 좌표계 기준)
+            transform.Translate(move, Space.Self);
 
+            // 좌우 회전
+            var rotation = input.x * moveSpeed * 100f * Time.deltaTime;
+            transform.Rotate(Vector3.up, rotation);
         }
 #endif
         
