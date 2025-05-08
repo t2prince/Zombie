@@ -123,3 +123,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 0
   _knockBackPower: 0
+  boostForce: 15

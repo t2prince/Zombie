@@ -1,4 +1,5 @@
 using Fusion.Addons.Physics;
+using Jamcat.Ingame.Player;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Equipment
@@ -9,13 +10,9 @@ namespace Jamcat.Ingame.Equipment
         private bool isBoosting = false;
         [SerializeField] private float boostForce = 10f;
 
-        private void Awake()
+        public void Init(PlayerBody body, HandController leftHand, HandController rightHand)
         {
-            _rigidbody = GetComponentInParent<NetworkRigidbody3D>();
-        }
-
-        public void Init(HandController leftHand, HandController rightHand)
-        {
+            _rigidbody = body.GetComponent<NetworkRigidbody3D>();
             leftHand.OnLeftSecondaryButtonPressed += BoostStart;
             leftHand.OnLeftSecondaryButtonReleased += BoostEnd;
         }
