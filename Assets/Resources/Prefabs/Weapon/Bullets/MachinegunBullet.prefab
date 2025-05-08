@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3444608651634303482}
   - component: {fileID: 47623552723085977}
   m_Layer: 0
-  m_Name: BaseBullet
+  m_Name: MachinegunBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 565506313
+  SortKey: 3533301759
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []

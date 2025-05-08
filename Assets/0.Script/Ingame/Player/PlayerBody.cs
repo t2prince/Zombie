@@ -1,5 +1,6 @@
 using Fusion.XR.Shared.Rig;
 using Jamcat.Ingame.Character;
+using Jamcat.Ingame.Controllers.Component;
 using Jamcat.Ingame.Equipment;
 using Jamcat.Managers.Weapon;
 using UnityEngine;
@@ -38,6 +39,11 @@ namespace Jamcat.Ingame.Player
             var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
             var meleeWeapon = Instantiate(meleeData.weaponPrefab, rightHand.transform).GetComponent<Melee>();
             meleeWeapon.Init(character, rightController);
+            
+            var boosterData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Booster);
+            var boosterAttacher = networkRig.GetComponentInChildren<Attacher>();
+            var booster = Instantiate(boosterData.weaponPrefab, boosterAttacher.transform).GetComponent<Booster>();
+            booster.Init(character, boosterAttacher);
         }
     }
 }

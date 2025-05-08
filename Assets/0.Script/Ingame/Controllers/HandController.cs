@@ -66,10 +66,18 @@ public class HandController : NetworkBehaviour
     public event Action OnRightPrimaryButtonPressed;
     public event Action OnRightPrimaryButtonReleased;
     public event Action OnRightSecondaryButtonPressed;
+    public event Action OnRightSecondaryButtonReleased;
+    
     
     public event Action<bool> OnLeftTriggerPressed;
     public event Action OnLeftPrimaryButtonPressed;
     public event Action OnLeftSecondaryButtonPressed;
+    public event Action OnLeftSecondaryButtonReleased;
+    
+#if UNITY_EDITOR
+    private bool wasLeftSecondaryPressed = false;
+    private bool wasRightSecondaryPressed = false;        
+#endif
 
     private void Start()
     {
@@ -99,6 +107,7 @@ public class HandController : NetworkBehaviour
             leftTriggerPressAction.canceled += _ => { OnLeftTriggerPressed?.Invoke(false); };
             leftPrimaryButtonAction.started += _ => { OnLeftPrimaryButtonPressed?.Invoke(); };
             leftSecondaryButtonAction.started += _ => { OnLeftSecondaryButtonPressed?.Invoke(); };
+            leftSecondaryButtonAction.canceled += _ => { OnLeftSecondaryButtonReleased?.Invoke(); };
         }
         if (handedness == Handedness.Right)
         {
@@ -117,6 +126,7 @@ public class HandController : NetworkBehaviour
             rightPrimaryButtonAction.canceled += _ => { OnRightPrimaryButtonReleased?.Invoke(); };
             
             rightSecondaryButtonAction.started += _ => { OnRightSecondaryButtonPressed?.Invoke(); };
+            rightSecondaryButtonAction.canceled += _ => { OnRightSecondaryButtonReleased?.Invoke(); };
             rightThumbstickAction = InputSystem.actions.FindAction("RightHand/Primary2DAxis");
         }
     }
@@ -124,6 +134,41 @@ public class HandController : NetworkBehaviour
     private void Update()
     {
         UpdateHand();
+#if UNITY_EDITOR
+        bool isLeftSecondaryPressed = leftSecondaryButtonAction?.IsPressed() ?? false;
+        if (isLeftSecondaryPressed && !wasLeftSecondaryPressed)
+        {
+            OnLeftSecondaryButtonPressed?.Invoke();
+        }
+        else if (!isLeftSecondaryPressed && wasLeftSecondaryPressed)
+        {
+            OnLeftSecondaryButtonReleased?.Invoke();
+        }
+        wasLeftSecondaryPressed = isLeftSecondaryPressed;
+
+        // Right Secondary Button
+        bool isRightSecondaryPressed = rightSecondaryButtonAction?.IsPressed() ?? false;
+        if (isRightSecondaryPressed && !wasRightSecondaryPressed)
+        {
+            OnRightSecondaryButtonPressed?.Invoke();
+        }
+        else if (!isRightSecondaryPressed && wasRightSecondaryPressed)
+        {
+            OnRightSecondaryButtonReleased?.Invoke();
+        }
+        wasRightSecondaryPressed = isRightSecondaryPressed;
+
+        // Primary Buttons (No Release Logic)
+        if (leftPrimaryButtonAction?.IsPressed() ?? false)
+        {
+            OnLeftPrimaryButtonPressed?.Invoke();
+        }
+
+        if (rightPrimaryButtonAction?.IsPressed() ?? false)
+        {
+            OnRightPrimaryButtonPressed?.Invoke();
+        }    
+#endif        
     }
     
     public override void Despawned(NetworkRunner runner, bool hasState)
