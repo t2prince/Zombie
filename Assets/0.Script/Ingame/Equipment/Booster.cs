@@ -11,7 +11,7 @@ namespace Jamcat.Ingame.Equipment
 
         private void Awake()
         {
-            _rigidbody = GetComponent<NetworkRigidbody3D>();
+            _rigidbody = GetComponentInParent<NetworkRigidbody3D>();
         }
 
         public void Init(HandController leftHand, HandController rightHand)
