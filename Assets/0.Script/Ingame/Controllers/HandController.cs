@@ -73,6 +73,9 @@ public class HandController : NetworkBehaviour
     public event Action OnLeftPrimaryButtonPressed;
     public event Action OnLeftSecondaryButtonPressed;
     public event Action OnLeftSecondaryButtonReleased;
+#if UNITY_EDITOR    
+    private InputAction wasdAction;
+#endif
 
     private void Start()
     {
@@ -85,6 +88,18 @@ public class HandController : NetworkBehaviour
         
         rayInteractor.WhenStateChanged += HandleRayStateChanged;
         grabInteractor.WhenStateChanged += HandleGrabStateChanged;
+        
+#if UNITY_EDITOR            
+        // WASD 키 입력 액션 초기화
+        wasdAction = new InputAction(type: InputActionType.PassThrough);
+        wasdAction.AddCompositeBinding("2DVector")
+            .With("Up", "<Keyboard>/w")
+            .With("Down", "<Keyboard>/s")
+            .With("Left", "<Keyboard>/a")
+            .With("Right", "<Keyboard>/d");
+        wasdAction.Enable();
+
+#endif        
         
         if (handedness == Handedness.Left)
         {
@@ -130,34 +145,36 @@ public class HandController : NetworkBehaviour
     {
         UpdateHand();
 #if UNITY_EDITOR
-        if (Input.GetKey(KeyCode.W))
+        var wasdValue = wasdAction.ReadValue<Vector2>();
+
+        if (wasdValue.y > 0) // W 키
         {
             OnLeftPrimaryButtonPressed?.Invoke();
         }
 
-        if (Input.GetKey(KeyCode.A))
+        if (wasdValue.x < 0) // A 키
         {
             OnLeftSecondaryButtonPressed?.Invoke();
         }
-        else if (Input.GetKeyUp(KeyCode.A))
+        else if (wasdValue.x >= 0) // A 키 릴리즈
         {
             OnLeftSecondaryButtonReleased?.Invoke();
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (wasdValue.y < 0) // S 키
         {
             OnRightPrimaryButtonPressed?.Invoke();
         }
 
-        if (Input.GetKey(KeyCode.D))
+        if (wasdValue.x > 0) // D 키
         {
             OnRightSecondaryButtonPressed?.Invoke();
         }
-        else if (Input.GetKeyUp(KeyCode.D))
+        else if (wasdValue.x <= 0) // D 키 릴리즈
         {
             OnRightSecondaryButtonReleased?.Invoke();
         }
-#endif        
+#endif
     }
     
     public override void Despawned(NetworkRunner runner, bool hasState)

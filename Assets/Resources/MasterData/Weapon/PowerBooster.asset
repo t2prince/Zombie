@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cf2bb39a6e24ecea347e71e097e1c6b, type: 3}
-  m_Name: Iron
+  m_Name: PowerBooster
   m_EditorClassIdentifier: 
-  id: 0
-  desc: "\uAE30\uBCF8 \uAC80"
-  type: 1
-  weaponPrefab: {fileID: 1908795411310738674, guid: 8a4b421f2b4d1ef438f870d76e97d214, type: 3}
+  id: 1
+  desc: "\uD30C\uC6CC \uBD80\uC2A4\uD130"
+  type: 3
+  weaponPrefab: {fileID: 3396163196130657973, guid: b96194a5bc1ed4789948168983c580c1, type: 3}
   grade: 0

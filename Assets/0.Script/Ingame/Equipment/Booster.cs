@@ -7,7 +7,7 @@ namespace Jamcat.Ingame.Equipment
     {
         private NetworkRigidbody3D _rigidbody;
         private bool isBoosting = false;
-        private float boostForce = 10f;
+        [SerializeField] private float boostForce = 10f;
 
         private void Awake()
         {
