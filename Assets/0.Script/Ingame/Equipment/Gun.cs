@@ -5,10 +5,12 @@ namespace Jamcat.Ingame.Equipment
 {
     public class Gun : Weapon
     {
+        [SerializeField] float interval = 1f;
         [SerializeField] float bulletSpeed = 20f;
         [SerializeField] private Transform _firePoint;
         private Transform _leftController;
         private BaseCharacter _owner;
+        private float _lastFireTime = 0f;
         
         [SerializeField] private GameObject bulletPrefab;
         private GameObjectPool<Bullet> _bulletPool;
@@ -35,6 +37,10 @@ namespace Jamcat.Ingame.Equipment
         
         private void Fire()
         {
+            if (Time.time - _lastFireTime < interval) return;
+
+            _lastFireTime = Time.time; // 마지막 발사
+            
             var bullet = _bulletPool.Pop();
             bullet.gameObject.SetActive(true);
             bullet.Init(_owner,bulletSpeed,_damage);
