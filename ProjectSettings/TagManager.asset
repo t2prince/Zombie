@@ -6,9 +6,9 @@ TagManager:
   tags:
   - ground
   - water
-  - cradle
   - leftController
   - rightController
+  - Monster
   layers:
   - Default
   - TransparentFX

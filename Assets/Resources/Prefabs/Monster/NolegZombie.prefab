@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NolegZombie
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: df20f91761fa425438b74820b4a86555, type: 3}
+      propertyPath: m_TagString
+      value: Monster
+      objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: df20f91761fa425438b74820b4a86555, type: 3}
       propertyPath: m_Enabled
       value: 1

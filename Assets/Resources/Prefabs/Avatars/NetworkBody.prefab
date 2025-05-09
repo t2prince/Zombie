@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 1833116187428666796}
   m_Layer: 0
   m_Name: NetworkBody
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,6 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _head: {fileID: 9076843799844944451}
   _body: {fileID: 6753122204897996625}
+  moveSpeed: 2
 --- !u!114 &1833116187428666796
 MonoBehaviour:
   m_ObjectHideFlags: 0
