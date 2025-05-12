@@ -59,7 +59,10 @@ namespace Jamcat.Ingame.Character
 
         protected virtual void Die()
         {
-        
+            Util.Coroutine.DelayedAction(() => 
+            {
+                gameObject.SetActive(false);
+            }, 1.0f);
         }
     }
 }

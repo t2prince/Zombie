@@ -14,6 +14,7 @@ namespace Jamcat.Ingame.Character
         private NavMeshAgent _agent;
         private BaseCharacter _target;
         private Rigidbody _rigidbody;
+        private Animator _animator;
         private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
 
         protected override void Init()
@@ -21,6 +22,7 @@ namespace Jamcat.Ingame.Character
             base.Init();
             _agent = GetComponent<NavMeshAgent>();
             _rigidbody = GetComponent<Rigidbody>();
+            _animator = GetComponent<Animator>();
             
             // Rigidbody가 있다면 isKinematic 설정
             if (_rigidbody != null)
@@ -98,6 +100,14 @@ namespace Jamcat.Ingame.Character
                 // NavMeshAgent의 목적지 갱신
                 _agent.destination = _target.transform.position;
             }
+        }
+
+        protected override void Die()
+        {
+            _agent.enabled = false;
+            //사망 애니메이션 재생
+            _animator.SetTrigger("Die");
+            base.Die();
         }
     }
 }
