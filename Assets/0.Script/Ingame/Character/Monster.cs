@@ -14,6 +14,7 @@ namespace Jamcat.Ingame.Character
         private NavMeshAgent _agent;
         private BaseCharacter _target;
         private Rigidbody _rigidbody;
+        private Collider _collider;
         private Animator _animator;
         private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
 
@@ -23,6 +24,7 @@ namespace Jamcat.Ingame.Character
             _agent = GetComponent<NavMeshAgent>();
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<Animator>();
+            _collider = GetComponent<Collider>();
             
             // Rigidbody가 있다면 isKinematic 설정
             if (_rigidbody != null)
@@ -105,6 +107,7 @@ namespace Jamcat.Ingame.Character
         protected override void Die()
         {
             _agent.enabled = false;
+            _collider.enabled = false;
             //사망 애니메이션 재생
             _animator.SetTrigger("Die");
             base.Die();
