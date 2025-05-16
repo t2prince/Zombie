@@ -62,7 +62,7 @@ namespace Jamcat.Ingame.Character
             Util.Coroutine.DelayedAction(() => 
             {
                 gameObject.SetActive(false);
-            }, 1.0f);
+            }, 3.0f);
         }
     }
 }

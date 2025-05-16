@@ -44,9 +44,11 @@ namespace Jamcat.Ingame.Character
             gameObject.SetActive(true);
         }
 
-        public override void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 0.1f)
+        public override void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 5.0f)
         {
             base.TakeDamage(attacker, damage);
+            if(!_aggro.ContainsKey(attacker))
+                _aggro.Add(attacker, 0);
             _aggro[attacker] += damage;
             if(_target == null || _aggro[attacker] > _aggro[_target])
                 SetTarget(attacker);
