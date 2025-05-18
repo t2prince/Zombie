@@ -26,7 +26,7 @@ namespace Jamcat.Ingame.Equipment
             {
                 // 위 방향으로 힘을 가함
                 _rigidbody.Rigidbody.AddForce(Vector3.up * boostForce, ForceMode.Force);
-                
+                _gamePlayer.UseBooster(Time.fixedDeltaTime);
             }
         }
 
