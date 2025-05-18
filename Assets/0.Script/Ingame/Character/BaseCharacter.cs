@@ -11,9 +11,10 @@ namespace Jamcat.Ingame.Character
         private NetworkTransform _networkTransform;
         
         [SerializeField] protected float hp;
-        private float currentHp { get; set; }
+        private float CurrentHp { get; set; }
         [SerializeField] private float energy;
-        private float currentEnergy { get; set; }
+        private float CurrentEnergy { get; set; }
+        private float _energyRecoveryTimer = 0f;
 
         public int Level { get { return level; } set { level = value; } }
         public NetworkObject NetworkObject { get; private set; }
@@ -25,8 +26,8 @@ namespace Jamcat.Ingame.Character
 
         private void Start()
         {
-            currentHp = hp;
-            currentEnergy = energy;
+            CurrentHp = hp;
+            CurrentEnergy = energy;
             NetworkObject = GetComponent<NetworkObject>();
         }
 
@@ -37,19 +38,24 @@ namespace Jamcat.Ingame.Character
 
         public virtual void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 0.0f)
         {
-            currentHp -= damage;
-            if(currentHp <= 0)
+            CurrentHp -= damage;
+            if(CurrentHp <= 0)
                 Die();
+        }
+        
+        public void UseBooster(float deltaTime)
+        {
+            CurrentEnergy -= deltaTime;
         }
 
         public void Spawn()
         {
-            currentHp = hp + 10 * level;
+            CurrentHp = hp + 10 * level;
         }
 
         public void Heal(float heal)
         {
-            currentHp += heal;
+            CurrentHp += heal;
         }
 
         public void SetPosition(Vector3 pos)
@@ -63,6 +69,17 @@ namespace Jamcat.Ingame.Character
             {
                 gameObject.SetActive(false);
             }, 3.0f);
+        }
+
+        private void Update()
+        {
+            // 에너지 회복 로직
+            _energyRecoveryTimer += Time.deltaTime;
+            if (_energyRecoveryTimer >= 2f)
+            {
+                _energyRecoveryTimer = 0f;
+                CurrentEnergy = Mathf.Min(CurrentEnergy + energy * 0.01f, energy);
+            }
         }
     }
 }

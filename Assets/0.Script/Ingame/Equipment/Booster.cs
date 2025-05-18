@@ -1,4 +1,5 @@
 using Fusion.Addons.Physics;
+using Jamcat.Ingame.Character;
 using Jamcat.Ingame.Player;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Jamcat.Ingame.Equipment
 {
     public class Booster : Weapon
     {
+        private Character.GamePlayer _gamePlayer;
         private NetworkRigidbody3D _rigidbody;
         private bool isBoosting = false;
         [SerializeField] private float boostForce = 10f;
@@ -13,6 +15,7 @@ namespace Jamcat.Ingame.Equipment
         public void Init(PlayerBody body, HandController leftHand, HandController rightHand)
         {
             _rigidbody = body.GetComponent<NetworkRigidbody3D>();
+            _gamePlayer = body.GetComponent<GamePlayer>();
             leftHand.OnLeftSecondaryButtonPressed += BoostStart;
             leftHand.OnLeftSecondaryButtonReleased += BoostEnd;
         }
@@ -23,6 +26,7 @@ namespace Jamcat.Ingame.Equipment
             {
                 // 위 방향으로 힘을 가함
                 _rigidbody.Rigidbody.AddForce(Vector3.up * boostForce, ForceMode.Force);
+                
             }
         }
 

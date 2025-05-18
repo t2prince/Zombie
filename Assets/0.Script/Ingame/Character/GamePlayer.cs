@@ -4,7 +4,7 @@ using Jamcat.Ingame.Equipment;
 
 namespace Jamcat.Ingame.Character
 {
-    public class Player : BaseCharacter
+    public class GamePlayer : BaseCharacter
     {
         private Barrier _barrier;
         public virtual void TakeDamage(BaseCharacter attacher, float damage, float knockBackPower = 0.0f)
