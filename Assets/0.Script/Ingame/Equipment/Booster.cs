@@ -32,7 +32,10 @@ namespace Jamcat.Ingame.Equipment
 
         public void BoostStart()
         {
-            isBoosting = true;
+            if (_gamePlayer.IsBoostable())
+            {
+                isBoosting = true;
+            }
         }
 
         public void BoostEnd()

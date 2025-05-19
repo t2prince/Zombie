@@ -18,6 +18,8 @@ namespace Jamcat.Ingame.Character
 
         public int Level { get { return level; } set { level = value; } }
         public NetworkObject NetworkObject { get; private set; }
+        
+        private bool overBoosted = false;
 
         private void Awake()
         {
@@ -46,6 +48,11 @@ namespace Jamcat.Ingame.Character
         public void UseBooster(float deltaTime)
         {
             CurrentEnergy -= deltaTime;
+            if (CurrentEnergy <= 0)
+            {
+                overBoosted = true;
+                CurrentEnergy = 0;
+            }
         }
 
         public void Spawn()
@@ -56,6 +63,11 @@ namespace Jamcat.Ingame.Character
         public void Heal(float heal)
         {
             CurrentHp += heal;
+        }
+
+        public bool IsBoostable()
+        {
+            return CurrentEnergy > 0;
         }
 
         public void SetPosition(Vector3 pos)
@@ -79,6 +91,10 @@ namespace Jamcat.Ingame.Character
             {
                 _energyRecoveryTimer = 0f;
                 CurrentEnergy = Mathf.Min(CurrentEnergy + energy * 0.01f, energy);
+                if(CurrentEnergy * 0.5f >= energy)
+                {
+                    overBoosted = false;
+                }
             }
         }
     }
