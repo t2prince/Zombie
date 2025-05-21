@@ -11,9 +11,9 @@ namespace Jamcat.Ingame.Character
         private NetworkTransform _networkTransform;
         
         [SerializeField] protected float hp;
-        private float CurrentHp { get; set; }
+        [SerializeField] private float CurrentHp;
         [SerializeField] private float energy;
-        private float CurrentEnergy { get; set; }
+        [SerializeField] private float CurrentEnergy;
         private float _energyRecoveryTimer = 0f;
 
         public int Level { get { return level; } set { level = value; } }
@@ -45,14 +45,15 @@ namespace Jamcat.Ingame.Character
                 Die();
         }
         
-        public void UseBooster(float deltaTime)
+        public bool UseBooster(float deltaTime)
         {
             CurrentEnergy -= deltaTime;
-            if (CurrentEnergy <= 0)
-            {
-                overBoosted = true;
-                CurrentEnergy = 0;
-            }
+            if (!(CurrentEnergy <= 0)) return true;
+            
+            overBoosted = true;
+            CurrentEnergy = 0;
+            return false;
+
         }
 
         public void Spawn()
@@ -87,14 +88,13 @@ namespace Jamcat.Ingame.Character
         {
             // 에너지 회복 로직
             _energyRecoveryTimer += Time.deltaTime;
-            if (_energyRecoveryTimer >= 2f)
+            if (!(_energyRecoveryTimer >= 2f)) return;
+            
+            _energyRecoveryTimer = 0f;
+            CurrentEnergy = Mathf.Min(CurrentEnergy + energy * 0.01f, energy);
+            if(CurrentEnergy * 0.5f >= energy)
             {
-                _energyRecoveryTimer = 0f;
-                CurrentEnergy = Mathf.Min(CurrentEnergy + energy * 0.01f, energy);
-                if(CurrentEnergy * 0.5f >= energy)
-                {
-                    overBoosted = false;
-                }
+                overBoosted = false;
             }
         }
     }

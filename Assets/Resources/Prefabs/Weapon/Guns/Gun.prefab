@@ -441,7 +441,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388bf79eb3c0440cbeeebcf3659ae24e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletDamage: 5
+  _damage: 0
+  _knockBackPower: 0
+  interval: 0.5
   bulletSpeed: 20
   _firePoint: {fileID: 4909167288072713238}
   bulletPrefab: {fileID: 4143064322489161111, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}

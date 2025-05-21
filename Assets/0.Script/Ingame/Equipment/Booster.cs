@@ -11,6 +11,8 @@ namespace Jamcat.Ingame.Equipment
         private NetworkRigidbody3D _rigidbody;
         private bool isBoosting = false;
         [SerializeField] private float boostForce = 10f;
+        [SerializeField] private float boostEnergy = 10f;
+        
 
         public void Init(PlayerBody body, HandController leftHand, HandController rightHand)
         {
@@ -25,8 +27,10 @@ namespace Jamcat.Ingame.Equipment
             if (isBoosting && _rigidbody != null)
             {
                 // 위 방향으로 힘을 가함
+                const float boostRate = 100f;
                 _rigidbody.Rigidbody.AddForce(Vector3.up * boostForce, ForceMode.Force);
-                _gamePlayer.UseBooster(Time.fixedDeltaTime);
+                if (_gamePlayer.UseBooster(Time.fixedDeltaTime * boostEnergy * boostRate)) return;
+                isBoosting = false;
             }
         }
 
