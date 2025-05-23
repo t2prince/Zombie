@@ -228,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   CurrentHp: 0
-  energy: 30
+  energy: 100
   CurrentEnergy: 0
 --- !u!1 &9213647574550066701
 GameObject:

@@ -88,11 +88,11 @@ namespace Jamcat.Ingame.Character
         {
             // 에너지 회복 로직
             _energyRecoveryTimer += Time.deltaTime;
-            if (!(_energyRecoveryTimer >= 2f)) return;
+            if (!(_energyRecoveryTimer >= 0.5f)) return;
             
             _energyRecoveryTimer = 0f;
-            CurrentEnergy = Mathf.Min(CurrentEnergy + energy * 0.01f, energy);
-            if(CurrentEnergy * 0.5f >= energy)
+            CurrentEnergy = Mathf.Min(CurrentEnergy + energy * 0.1f, energy);
+            if(CurrentEnergy * 0.2f >= energy)
             {
                 overBoosted = false;
             }
