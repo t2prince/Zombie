@@ -18,11 +18,11 @@ namespace Jamcat.Ingame
             foreach (var monsterData in data)
             {
                  var pool = new GameObjectPool<Monster>(0, () =>
-                 {
-                     var monster = _runner.Spawn(monsterData.monster).GetComponent<Monster>();
-                    monster.transform.SetParent(transform);
-                    monster.transform.localScale = Vector3.one;
-                    monster.id = monsterData.id;
+                 { 
+                     var monster = _runner.Spawn(monsterData.monster).GetComponent<Monster>(); 
+                     monster.transform.SetParent(transform); 
+                     monster.transform.localScale = Vector3.one; 
+                     monster.id = monsterData.id;
                 
                     return monster;
                 });
@@ -37,17 +37,17 @@ namespace Jamcat.Ingame
             var monster = pool.Pop();
             monster.Level = level;
             monster.Spawn();
+            monster.OnKilled += CollectMonster;
 
             return monster;
         }
 
-        public void CollectMonster(Monster monster)
+        public void CollectMonster(BaseCharacter character)
         {
-            monster.gameObject.SetActive(false);
-            _runner.Despawn(monster.NetworkObject); 
+            var monster = character.GetComponent<Monster>();
+            if (monster == null) return;
             
-            var pool = _monsterPoolList[monster.id];
-            pool.Push(monster);
+            monster.gameObject.SetActive(false);
         }
     }
 }

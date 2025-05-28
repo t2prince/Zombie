@@ -18,6 +18,7 @@ namespace Jamcat.Ingame.Character
 
         public int Level { get { return level; } set { level = value; } }
         public NetworkObject NetworkObject { get; private set; }
+        public Action<BaseCharacter> OnKilled;
         
         private bool overBoosted = false;
 
@@ -80,6 +81,7 @@ namespace Jamcat.Ingame.Character
         {
             Util.Coroutine.DelayedAction(() => 
             {
+                OnKilled?.Invoke(this);
                 gameObject.SetActive(false);
             }, 3.0f);
         }
