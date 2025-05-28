@@ -77,6 +77,11 @@ namespace Jamcat.Ingame.Character
             _networkTransform.Teleport(pos);
         }
 
+        public void Kill()
+        {
+            TakeDamage(this, 99999,0);
+        }
+
         protected virtual void Die()
         {
             Util.Coroutine.DelayedAction(() => 
