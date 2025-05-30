@@ -31,11 +31,6 @@ namespace Jamcat.Ingame
             _ = InitAsync(); // async 메서드 호출 (fire-and-forget)
         }
 
-        private void Start()
-        {
-            
-        }
-
         private async System.Threading.Tasks.Task InitAsync()
         {
             var asyncOp = SceneManager.LoadSceneAsync(InGame.MapName, LoadSceneMode.Additive);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Jamcat.Ingame.Character;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Controllers.Component
@@ -18,6 +19,7 @@ namespace Jamcat.Ingame.Controllers.Component
         
         [SerializeField] private int waveStartNumber;
         [SerializeField] private int waveEndNumber;
+        private List<Monster> monsters = new List<Monster>();
         
         private int currentWaveNumber;
         
@@ -37,6 +39,11 @@ namespace Jamcat.Ingame.Controllers.Component
         public void StopWave()
         {
             if (!InGame.Instance.Runner.IsSharedModeMasterClient) return;
+            foreach (var monster in monsters)
+            {
+                if (monster == null || monster.NetworkObject == null || !monster.NetworkObject.IsValid) continue;
+                monster.Kill();
+            }
             StopAllCoroutines();
         }
 
@@ -51,8 +58,8 @@ namespace Jamcat.Ingame.Controllers.Component
                 var monster = InGame.Monster.GetMonster(currentWave.monsterId, currentWave.level);
                 monster.SetTarget(InGame.Map.Camp);
                 monster.Spawn();
-                
                 monster.SetPosition(transform.position);
+                monsters.Add(monster);
                 
                 yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
             }
