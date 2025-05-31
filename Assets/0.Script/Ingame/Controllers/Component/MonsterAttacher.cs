@@ -63,8 +63,6 @@ namespace Jamcat.Ingame.Controllers.Component
                 
                 yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
             }
-            
         }
-        
     }
 }
