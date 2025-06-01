@@ -17,6 +17,16 @@ namespace Jamcat.Ingame.Character
         private Collider _collider;
         private Animator _animator;
         private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
+        [SerializeField] private string walkAnimationName = "Attack";
+        [SerializeField] private string AttackAnimationName = "CrawilingAttack";    
+        
+        public enum AnimationState
+        {
+            Idle,
+            Walk,
+            Attack,
+            Die,
+        }
 
         protected override void Init()
         {
