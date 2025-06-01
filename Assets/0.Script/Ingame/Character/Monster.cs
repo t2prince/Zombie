@@ -28,6 +28,31 @@ namespace Jamcat.Ingame.Character
             Die,
         }
 
+        private AnimationState animationState
+        {
+            set
+            {
+                if (_animator == null) return;
+
+                switch (value)
+                {
+                    case AnimationState.Idle:
+                        _animator.SetTrigger("Idle");
+                        break;
+                    case AnimationState.Walk:
+                        _animator.SetTrigger(walkAnimationName);
+                        break;
+                    case AnimationState.Attack:
+                        _animator.SetTrigger(AttackAnimationName);
+                        break;
+                    case AnimationState.Die:
+                        _animator.SetTrigger("Die");
+                        break;
+                }
+            }
+        }
+        
+
         protected override void Init()
         {
             base.Init();
