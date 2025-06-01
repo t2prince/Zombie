@@ -25,10 +25,11 @@ namespace Jamcat.Ingame.Character
             Idle,
             Walk,
             Attack,
+            KnockBack,
             Die,
         }
 
-        private AnimationState animationState
+        private AnimationState _animationState
         {
             set
             {
@@ -44,6 +45,9 @@ namespace Jamcat.Ingame.Character
                         break;
                     case AnimationState.Attack:
                         _animator.SetTrigger(AttackAnimationName);
+                        break;
+                    case AnimationState.KnockBack:
+                        _animator.SetTrigger("Injured");
                         break;
                     case AnimationState.Die:
                         _animator.SetTrigger("Die");
@@ -99,6 +103,7 @@ namespace Jamcat.Ingame.Character
             _target = target;
             _agent.enabled = true;
             _agent.destination = target.transform.position;
+            _animationState = AnimationState.Walk;
         }
 
         private void KnockBack(Vector3 dir, float power)
@@ -115,6 +120,8 @@ namespace Jamcat.Ingame.Character
             {
                 rb.AddForce(dir.normalized * power, ForceMode.Impulse);
             }
+            
+            _animationState = AnimationState.KnockBack; // 넉백 애니메이션 상태로 변경
 
             // 일정 시간 후 NavMeshAgent 재활성화
             StartCoroutine(ResetAgent());
