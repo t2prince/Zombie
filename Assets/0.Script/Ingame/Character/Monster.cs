@@ -16,9 +16,18 @@ namespace Jamcat.Ingame.Character
         private Rigidbody _rigidbody;
         private Collider _collider;
         private Animator _animator;
+        
         private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
-        [SerializeField] private string walkAnimationName = "Attack";
-        [SerializeField] private string AttackAnimationName = "CrawilingAttack";    
+        //[SerializeField] private string walkAnimationName = "Attack";
+        //[SerializeField] private string AttackAnimationName = "CrawilingAttack";
+
+        [SerializeField] private WalkType walkType;
+        
+        public enum WalkType
+        {
+            Walk,
+            Crawling,
+        }
         
         public enum AnimationState
         {
@@ -41,10 +50,10 @@ namespace Jamcat.Ingame.Character
                         _animator.SetTrigger("Idle");
                         break;
                     case AnimationState.Walk:
-                        _animator.SetTrigger(walkAnimationName);
+                        _animator.SetTrigger(walkType == WalkType.Crawling ? "Crawling" : "Walk");
                         break;
                     case AnimationState.Attack:
-                        _animator.SetTrigger(AttackAnimationName);
+                        _animator.SetTrigger(walkType == WalkType.Crawling ? "CrawlingAttack" : "Attack");
                         break;
                     case AnimationState.KnockBack:
                         _animator.SetTrigger("Injured");
@@ -86,8 +95,11 @@ namespace Jamcat.Ingame.Character
         public override void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 5.0f)
         {
             base.TakeDamage(attacker, damage);
-            if(!_aggro.ContainsKey(attacker))
+            if (!_aggro.ContainsKey(attacker))
+            {
                 _aggro.Add(attacker, 0);
+            }
+            
             _aggro[attacker] += damage;
             if(_target == null || _aggro[attacker] > _aggro[_target])
                 SetTarget(attacker);
@@ -99,6 +111,8 @@ namespace Jamcat.Ingame.Character
         {
             if (!Object.HasStateAuthority) return;
             if (target.IsFastNull()) return;
+            if(!_aggro.ContainsKey(target))
+                _aggro.Add(target, 0);
             
             _target = target;
             _agent.enabled = true;
