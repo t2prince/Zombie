@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.06035
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2562482
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.253385
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -96,13 +96,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e112f7ff1a074799bb0cd8340c3ddf0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
+  hp: 50
   CurrentHp: 0
-  energy: 0
+  energy: 10
   CurrentEnergy: 0
-  id: 0
-  walkAnimationName: Attack
-  AttackAnimationName: CrawilingAttack
+  id: 1
+  walkType: 0
 --- !u!114 &-7951676019499826600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,7 +145,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0

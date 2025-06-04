@@ -260,7 +260,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1000
+  CurrentHp: 0
   energy: 0
+  CurrentEnergy: 0
 --- !u!1001 &61582260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1586,7 +1588,7 @@ MonoBehaviour:
   - monsterId: 0
     level: 0
     startDelay: 0
-    interval: 10
+    interval: 300
   - monsterId: 0
     level: 0
     startDelay: 0

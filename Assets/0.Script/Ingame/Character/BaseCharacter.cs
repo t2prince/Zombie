@@ -88,6 +88,7 @@ namespace Jamcat.Ingame.Character
             {
                 OnKilled?.Invoke(this);
                 gameObject.SetActive(false);
+                OnKilled = null;
             }, 3.0f);
         }
 

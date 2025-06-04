@@ -16588,7 +16588,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2577508672459715540, guid: 3b73b87be041d476ebc5379a99856adc, type: 3}
       propertyPath: _fSecondInAFullDay
-      value: 300
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 5581909398467620985, guid: 3b73b87be041d476ebc5379a99856adc, type: 3}
       propertyPath: en_CurrWeather
