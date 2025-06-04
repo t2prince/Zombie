@@ -16,8 +16,8 @@ namespace Jamcat.Ingame
 
         public List<MonsterAttacher> MonsterSpawnPoints { get; private set; }
         
-        private const float dayTime = 10.0f;
-        private const float nightTime = 10.0f;
+        private const float dayTime = 300.0f;
+        private const float nightTime = 300.0f;
         private int waveCount = 20;
         
         public BaseCamp Camp { get; private set; }

@@ -46,7 +46,7 @@ namespace Jamcat.Ingame.Controllers.Component
             }
             StopAllCoroutines();
         }
-
+        
         private IEnumerator StartWave()
         {
             if (waveInfos.Count <= 0 || currentWaveNumber >= waveEndNumber) yield break;
@@ -59,7 +59,12 @@ namespace Jamcat.Ingame.Controllers.Component
                 monster.SetTarget(InGame.Map.Camp);
                 monster.Spawn();
                 monster.SetPosition(transform.position);
+                monster.OnKilled += (attacker) =>
+                {
+                    monsters.Remove(monster);
+                };
                 monsters.Add(monster);
+                
                 
                 yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
             }
