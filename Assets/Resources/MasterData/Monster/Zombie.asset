@@ -15,4 +15,4 @@ MonoBehaviour:
   id: 1
   desc: "\uC0AC\uC9C0\uB294 \uBD99\uC5B4\uC788\uC9C0\uB9CC \uAE30\uC5B4\uB2E4\uB2D0
     \uC815\uB3C4\uB85C \uC57D\uD55C \uC880"
-  monster: {fileID: -5558429614483460609, guid: 74cc17bb14f36a940a28f3474a41bd35, type: 3}
+  monster: {fileID: -6112214082990212296, guid: 03b24b7e6af5f4e2281591a7dbd81aae, type: 3}

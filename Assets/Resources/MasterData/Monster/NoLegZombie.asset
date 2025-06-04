@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   desc: "\uB2E4\uB9AC\uB97C \uC783\uC740 \uC880\uBE44. \uB0B4\uAD6C\uAC00 \uC57D\uD558\uB2E4"
-  monster: {fileID: 614894005800003598, guid: c54851c55b2417d4f874f9c4a4ff2c66, type: 3}
+  monster: {fileID: -6112214082990212296, guid: 999ef7267722d49e0b65148bcc3e6e5a, type: 3}

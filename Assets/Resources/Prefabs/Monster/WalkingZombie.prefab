@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
       propertyPath: m_Name
-      value: NoregZombie
+      value: WalkingZombie
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
       propertyPath: m_Controller
@@ -77,7 +77,7 @@ PrefabInstance:
       addedObject: {fileID: 3280441441621043002}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6859902579416448951}
+      addedObject: {fileID: 4911298343147464799}
   m_SourcePrefab: {fileID: 100100000, guid: 492315d765cf6c741b570dc49b149a9c, type: 3}
 --- !u!1 &7896187263710758934 stripped
 GameObject:
@@ -101,8 +101,8 @@ MonoBehaviour:
   energy: 0
   CurrentEnergy: 0
   id: 0
-  walkAnimationName: Walk
-  AttackAnimationName: Walk
+  walkAnimationName: Attack
+  AttackAnimationName: CrawilingAttack
 --- !u!114 &-7951676019499826600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 3095051191
+  SortKey: 2073322700
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
@@ -188,7 +188,7 @@ MonoBehaviour:
   SyncParent: 0
   _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
---- !u!195 &6859902579416448951
+--- !u!195 &4911298343147464799
 NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
