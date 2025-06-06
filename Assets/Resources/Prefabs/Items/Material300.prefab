@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c7799396d6d83504e8f587c3326ae965, type: 3}
       propertyPath: m_Name
-      value: Material
+      value: Material100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -67,13 +67,7 @@ PrefabInstance:
       addedObject: {fileID: 228620175474525497}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c7799396d6d83504e8f587c3326ae965, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7037360828317530249}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c7799396d6d83504e8f587c3326ae965, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3032351725847496674}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c7799396d6d83504e8f587c3326ae965, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -5383495035334005511}
+      addedObject: {fileID: -6233333157671089796}
   m_SourcePrefab: {fileID: 100100000, guid: c7799396d6d83504e8f587c3326ae965, type: 3}
 --- !u!1 &1912650946748770675 stripped
 GameObject:
@@ -145,10 +139,9 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 7037360828317530249}
-  - {fileID: -5383495035334005511}
+  - {fileID: -6233333157671089796}
   ForceRemoteRenderTimeframe: 0
---- !u!114 &7037360828317530249
+--- !u!114 &-6233333157671089796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,75 +150,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912650946748770675}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f51d25e5c7a4a69b19619da8fbea92a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stateAuthorityChangeErrorCorrectionDelta: 0
-  SyncScale: 0
-  SyncParent: 1
-  _interpolationTarget: {fileID: 0}
-  UsePreciseRotation: 0
-  UseRenderSleepThresholds: 1
-  RenderThresholds:
-    UseEnergy: 1
-    Position: 0.01
-    Rotation: 0.01
-    Scale: 0.01
---- !u!114 &3032351725847496674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1912650946748770675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7604d481da84581a234baffc03d23de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localPositionOffset: {x: 0, y: 0, z: 0}
-  localRotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  currentGrabber: {fileID: 0}
-  expectedIsKinematic: 1
-  allowedClosedHandGrabing: 1
-  networkGrabbable: {fileID: 0}
-  rb: {fileID: 0}
-  applyVelocityOnRelease: 0
-  onWillGrab:
-    m_PersistentCalls:
-      m_Calls: []
-  onUngrab:
-    m_PersistentCalls:
-      m_Calls: []
-  onGrab:
-    m_PersistentCalls:
-      m_Calls: []
-  ownerName: {fileID: 0}
---- !u!114 &-5383495035334005511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1912650946748770675}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e29a5da46f946a43a21a0c03ef7d768, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  networkTransform: {fileID: 0}
-  networkRigidbody: {fileID: 0}
-  _InitialIsKinematicState:
-    _value: 0
-  _CurrentGrabber: {fileID: 0}
-  _LocalPositionOffset: {x: 0, y: 0, z: 0}
-  _LocalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  onDidUngrab:
-    m_PersistentCalls:
-      m_Calls: []
-  onDidGrab:
-    m_PersistentCalls:
-      m_Calls: []
-  extrapolateWhileTakingAuthority: 1
-  isTakingAuthority: 0
-  grabbable: {fileID: 0}
+  hp: 1000
+  CurrentHp: 0
+  energy: 0
+  CurrentEnergy: 0
+  defence: 100
+  material: {fileID: 0}
+  quantity: 100

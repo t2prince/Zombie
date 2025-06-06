@@ -50,7 +50,7 @@ namespace Jamcat.Ingame.Character
                         _animator.SetTrigger("Idle");
                         break;
                     case AnimationState.Walk:
-                        _animator.SetTrigger(walkType == WalkType.Crawling ? "Crawling" : "Walk");
+                        _animator.SetTrigger(walkType == WalkType.Crawling ? "Crawling" : "Walk001");
                         break;
                     case AnimationState.Attack:
                         _animator.SetTrigger(walkType == WalkType.Crawling ? "CrawlingAttack" : "Attack");
@@ -62,7 +62,7 @@ namespace Jamcat.Ingame.Character
                         _animator.SetTrigger("Die");
                         break;
                 }
-            }
+            } 
         }
         
 

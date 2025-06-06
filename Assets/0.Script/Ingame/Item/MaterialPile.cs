@@ -7,6 +7,7 @@ namespace Jamcat.Ingame.Item
     {
         [SerializeField] private float defence;
         [SerializeField] private GameObject material;
+        [SerializeField] private int quantity;
         public override void TakeDamage(BaseCharacter attacher, float damage, float knockBackPower = 0.0f)
         {
             var finalDamage = Mathf.Max(damage - defence, 0);
