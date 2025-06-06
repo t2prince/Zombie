@@ -11,8 +11,6 @@ namespace Jamcat.Ingame.Character
 {
     public class Monster: BaseCharacter
     {
-        public int id;
-        
         private NavMeshAgent _agent;
         private BaseCharacter _target;
         private Rigidbody _rigidbody;
@@ -20,13 +18,48 @@ namespace Jamcat.Ingame.Character
         private Animator _animator;
         private AIState _aiState = AIState.Idle;
         
+
+        private AIState State
+        {
+            get => _aiState;
+            set
+            {
+                if(_aiState == value) return;
+                _aiState = value;
+                switch (_aiState)
+                {
+                    case AIState.Idle:
+                        StopMove();
+                        StopAttack();
+                        _animationState = AnimationState.Idle;
+                        break;
+                    case AIState.Move:
+                        StartMove();
+                        StopAttack();
+                        _animationState = AnimationState.Walk;
+                        break;
+                    case AIState.Attack:
+                        StopMove();
+                        StartAttack();
+                        _animationState = AnimationState.Attack;
+                        break;
+                    case AIState.Die:
+                        StopMove();
+                        _animationState = AnimationState.Die; 
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
         
         private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
         [SerializeField] private float attackRange = 2.0f;
         [SerializeField] private float attackPower = 10f;
+        [SerializeField] private float attackDelay = 1f;
+        [SerializeField] private float attackInterval = 5f;
+        [SerializeField] private bool isAggressive = false;
         [SerializeField] private WalkType walkType;
-        
-        
         
         public enum WalkType
         {
@@ -168,34 +201,21 @@ namespace Jamcat.Ingame.Character
         {
             if (!Object.HasStateAuthority) return;
 
-            if (!_target.IsFastNull())
+            switch (State)
             {
-                if (transform.InRange(_target.transform, attackRange))
-                {
-                    _animationState = AnimationState.Attack;
-                    _agent.isStopped = true;
-                    _agent.updatePosition = false;
-                    
-                    Util.Coroutine.DelayedAction(() =>
-                    {
-                        _target.TakeDamage(this, attackPower);
-                        _aiState = AIState.Move;
-                    }, 1.0f); // 공격 애니메이션 재생 시간
-                }
-                else
-                {
-                    _animationState = AnimationState.Walk;
-                    _agent.isStopped = false;
-                    _agent.updatePosition = true;
-                }                
-                _agent.destination = _target.transform.position;
-            }
-            else
-            {
-                _animationState = AnimationState.Idle;
-                _agent.isStopped = true;
-                _agent.updatePosition = false;
-                _aiState = AIState.Idle;
+                case AIState.Idle:
+                    Idle();
+                    break;
+                case AIState.Move:
+                    Move();
+                    break;
+                case AIState.Attack:
+                    Attack();
+                    break;
+                case AIState.Die:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -206,6 +226,67 @@ namespace Jamcat.Ingame.Character
             //사망 애니메이션 재생
             _animator.SetTrigger("Die");
             base.Die();
+        }
+
+        private void Idle()
+        {
+            if (isAggressive)
+            {
+                //주변에서 플레이어 찾아서 공격
+            }
+        }
+
+        private void StartAttack()
+        {
+            StartCoroutine(Attack());
+        }
+
+        private IEnumerator Attack()
+        {
+            yield return Util.Coroutine.WaitForSeconds(attackDelay);
+            while (transform.InRange(_target.transform, attackRange))
+            {
+                _target.TakeDamage(this, attackPower);
+                yield return Util.Coroutine.WaitForSeconds(attackInterval);
+            }
+        }
+        
+        private void StopAttack()
+        {
+            StopAllCoroutines();
+        }
+
+        private void Move()
+        {
+            if (_target.IsFastNull())
+            {
+                State = AIState.Idle;
+                return;
+            }
+
+            if (transform.InRange(_target.transform, attackRange))
+            {
+                State = AIState.Attack;
+            }
+            else
+            {
+                _agent.destination = _target.transform.position;
+            }
+        }
+
+        private void StopMove()
+        {
+            _agent.isStopped = true;
+            _agent.updatePosition = false;
+        }
+        
+        private void StartMove()
+        {
+            if (_target == null || _target.IsFastNull()) return;
+            _agent.isStopped = false;
+            _agent.updatePosition = true;
+            _agent.destination = _target.transform.position;
+            _animationState = AnimationState.Walk;
         }
     }
 }
