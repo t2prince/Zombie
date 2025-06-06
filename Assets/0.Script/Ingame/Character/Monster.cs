@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Script.Util;
 using UnityEngine.AI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Util;
 
 namespace Jamcat.Ingame.Character
@@ -16,12 +18,15 @@ namespace Jamcat.Ingame.Character
         private Rigidbody _rigidbody;
         private Collider _collider;
         private Animator _animator;
+        private AIState _aiState = AIState.Idle;
+        
         
         private Dictionary<BaseCharacter,float> _aggro = new Dictionary<BaseCharacter,float>();
-        //[SerializeField] private string walkAnimationName = "Attack";
-        //[SerializeField] private string AttackAnimationName = "CrawilingAttack";
-
+        [SerializeField] private float attackRange = 2.0f;
+        [SerializeField] private float attackPower = 10f;
         [SerializeField] private WalkType walkType;
+        
+        
         
         public enum WalkType
         {
@@ -36,6 +41,14 @@ namespace Jamcat.Ingame.Character
             Attack,
             KnockBack,
             Die,
+        }
+        
+        public enum AIState
+        {
+            Idle,
+            Move,
+            Attack,
+            Die
         }
 
         private AnimationState _animationState
@@ -157,8 +170,32 @@ namespace Jamcat.Ingame.Character
 
             if (!_target.IsFastNull())
             {
-                // NavMeshAgent의 목적지 갱신
+                if (transform.InRange(_target.transform, attackRange))
+                {
+                    _animationState = AnimationState.Attack;
+                    _agent.isStopped = true;
+                    _agent.updatePosition = false;
+                    
+                    Util.Coroutine.DelayedAction(() =>
+                    {
+                        _target.TakeDamage(this, attackPower);
+                        _aiState = AIState.Move;
+                    }, 1.0f); // 공격 애니메이션 재생 시간
+                }
+                else
+                {
+                    _animationState = AnimationState.Walk;
+                    _agent.isStopped = false;
+                    _agent.updatePosition = true;
+                }                
                 _agent.destination = _target.transform.position;
+            }
+            else
+            {
+                _animationState = AnimationState.Idle;
+                _agent.isStopped = true;
+                _agent.updatePosition = false;
+                _aiState = AIState.Idle;
             }
         }
 
