@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2552b06d322446cebfb402d790f6fdfe, type: 3}
   m_Name: ItemMasterData
   m_EditorClassIdentifier: 
-  DataList: []
+  DataList:
+  - {fileID: 11400000, guid: 14721ec3b765b41058240271499682e1, type: 2}
+  - {fileID: 11400000, guid: bfe43ca350e0246c3b3341354a9c49fd, type: 2}
+  - {fileID: 11400000, guid: 46f4848c96627435b9ef6196b5476a00, type: 2}
+  - {fileID: 11400000, guid: dd82a5318e6a44b7991bbbe42621c81f, type: 2}
+  - {fileID: 11400000, guid: 85a860a0346f04d0c854b9dc4e74a5d8, type: 2}
+  - {fileID: 11400000, guid: 655fa36a52c7b41d785bc2aff7f66c85, type: 2}

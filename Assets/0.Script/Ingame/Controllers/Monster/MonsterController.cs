@@ -22,7 +22,6 @@ namespace Jamcat.Ingame
                      var monster = _runner.Spawn(monsterData.monster).GetComponent<Monster>(); 
                      monster.transform.SetParent(transform); 
                      monster.transform.localScale = Vector3.one; 
-                     monster.id = monsterData.id;
                 
                     return monster;
                 });

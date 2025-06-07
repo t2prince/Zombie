@@ -11,12 +11,23 @@ namespace Jamcat.Ingame.Equipment
         public void Init(BaseCharacter owner, HandController controller)
         {
             _owner = owner;
-            controller.OnRightPrimaryButtonPressed += Show;
-            controller.OnRightPrimaryButtonReleased += Hide;
+            controller.OnRightTriggerPressed += OnTriggerPressed;
             
             transform.SetParent(controller.transform);
             
             Hide();
+        }
+
+        private void OnTriggerPressed(bool isPressed)
+        {
+            if (isPressed)
+            {
+                Show();
+            }
+            else
+            {
+                Hide();
+            }
         }
 
         public void Show()

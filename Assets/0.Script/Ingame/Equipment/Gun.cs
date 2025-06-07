@@ -8,7 +8,6 @@ namespace Jamcat.Ingame.Equipment
         [SerializeField] float interval = 1f;
         [SerializeField] float bulletSpeed = 20f;
         [SerializeField] private Transform _firePoint;
-        private Transform _leftController;
         private BaseCharacter _owner;
         private float _lastFireTime = 0f;
         
@@ -30,9 +29,16 @@ namespace Jamcat.Ingame.Equipment
         public void Init(BaseCharacter owner, HandController controller)
         {
             _owner = owner;
-            _leftController = controller.transform;
-            controller.OnLeftPrimaryButtonPressed += Fire;
+            controller.OnLeftTriggerPressed += OnTriggerPressed;
             transform.SetParent(controller.transform);
+        }
+        
+        private void OnTriggerPressed(bool isPressed)
+        {
+            if (isPressed)
+            {
+                Fire();
+            }
         }
         
         private void Fire()
@@ -45,7 +51,7 @@ namespace Jamcat.Ingame.Equipment
             bullet.gameObject.SetActive(true);
             bullet.Init(_owner,bulletSpeed,_damage);
             bullet.transform.position = _firePoint.position;
-            bullet.Fire(_leftController.forward);
+            bullet.Fire(_firePoint.forward);
             bullet.transform.SetParent(null);
             bullet.onHit = () =>
             {

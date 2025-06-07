@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99f6c9c26e87466690dcea2e990a2b50, type: 3}
   m_Name: ItemData 3
   m_EditorClassIdentifier: 
-  id: 0
+  id: 3
   desc: "\uAD11\uC11D 30"
-  type: 0
+  type: 2
   count: 0
   itemPrefab: {fileID: 0}
