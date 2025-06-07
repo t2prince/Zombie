@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cf2bb39a6e24ecea347e71e097e1c6b, type: 3}
-  m_Name: Gun
+  m_Name: LazerGun
   m_EditorClassIdentifier: 
-  id: 0
-  desc: "\uAE30\uBCF8 \uCD1D"
+  id: 1
+  desc: "레이저 총"
   type: 0
-  weaponPrefab: {fileID: 2104229898004059957, guid: d2b80fb8b94874ceeab6d4c27003368e, type: 3}
-  grade: 0
+  weaponPrefab: {fileID: 1857933182900170946, guid: a8ae5a5e746cd4d1e966de68cb44cfd5, type: 3}
+  grade: 1
