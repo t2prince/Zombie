@@ -273,6 +273,30 @@ namespace Jamcat.Ingame.Character
             else
             {
                 _agent.destination = _target.transform.position;
+                
+                // 길이 막혔는지 확인하고 바리케이트 공격
+                CheckForBarricadeObstacle();
+            }
+        }
+        
+        private void CheckForBarricadeObstacle()
+        {
+            // NavMeshAgent가 목적지에 도달할 수 없는 경우 체크
+            if (_agent.pathStatus == NavMeshPathStatus.PathPartial || 
+                (_agent.hasPath && _agent.remainingDistance < 0.5f && !transform.InRange(_target.transform, attackRange * 2)))
+            {
+                // 주변의 바리케이트 찾기
+                Collider[] obstacles = Physics.OverlapSphere(transform.position, attackRange * 2);
+                foreach (var obstacle in obstacles)
+                {
+                    var barricade = obstacle.GetComponent<Barricade>();
+                    if (barricade != null && !barricade.IsDead)
+                    {
+                        // 바리케이트를 새로운 타겟으로 설정
+                        SetTarget(barricade);
+                        break;
+                    }
+                }
             }
         }
 
