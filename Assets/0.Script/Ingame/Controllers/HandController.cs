@@ -149,7 +149,11 @@ public class HandController : NetworkBehaviour
 
         if (wasdValue.y > 0) // W 키
         {
-            OnLeftPrimaryButtonPressed?.Invoke();
+            OnLeftTriggerPressed?.Invoke(true);
+        }
+        else if (wasdValue.y <= 0) // W 키 릴리즈
+        {
+            OnLeftTriggerPressed?.Invoke(false);
         }
 
         if (wasdValue.x < 0) // A 키

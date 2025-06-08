@@ -247,7 +247,10 @@ namespace Jamcat.Ingame.Character
             while (transform.InRange(_target.transform, attackRange))
             {
                 _target.TakeDamage(this, attackPower);
-                yield return Util.Coroutine.WaitForSeconds(attackInterval); }
+                yield return Util.Coroutine.WaitForSeconds(attackInterval); 
+            }
+
+            State = AIState.Move;
         }
         
         private void StopAttack()
