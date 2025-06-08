@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 0
   desc: "\uAE30\uBCF8 \uCD1D"
   type: 0
-  weaponPrefab: {fileID: 2104229898004059957, guid: d2b80fb8b94874ceeab6d4c27003368e, type: 3}
+  weaponPrefab: {fileID: 2609074460154268211, guid: d2b80fb8b94874ceeab6d4c27003368e, type: 3}
   grade: 0

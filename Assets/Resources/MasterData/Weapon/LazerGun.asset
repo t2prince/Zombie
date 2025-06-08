@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LazerGun
   m_EditorClassIdentifier: 
   id: 1
-  desc: "레이저 총"
+  desc: "\uB808\uC774\uC800 \uCD1D"
   type: 0
-  weaponPrefab: {fileID: 1857933182900170946, guid: a8ae5a5e746cd4d1e966de68cb44cfd5, type: 3}
+  weaponPrefab: {fileID: -8650572479737131681, guid: a8ae5a5e746cd4d1e966de68cb44cfd5, type: 3}
   grade: 1

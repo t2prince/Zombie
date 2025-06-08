@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MachineGun
   m_EditorClassIdentifier: 
   id: 2
-  desc: "머신건"
+  desc: "\uBA38\uC2E0\uAC74"
   type: 0
-  weaponPrefab: {fileID: 1856307222770407496, guid: 7df5a81dd3ffd4936aad1300926966e2, type: 3}
+  weaponPrefab: {fileID: -3958101929419321854, guid: 7df5a81dd3ffd4936aad1300926966e2, type: 3}
   grade: 2

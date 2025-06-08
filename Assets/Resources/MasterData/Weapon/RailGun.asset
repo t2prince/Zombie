@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RailGun
   m_EditorClassIdentifier: 
   id: 3
-  desc: "레일건"
+  desc: "\uB808\uC77C\uAC74"
   type: 0
-  weaponPrefab: {fileID: 8696067152564942397, guid: f05834feaf656450d92379cc7e509ee6, type: 3}
+  weaponPrefab: {fileID: 8146137520885469849, guid: f05834feaf656450d92379cc7e509ee6, type: 3}
   grade: 3
