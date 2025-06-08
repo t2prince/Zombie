@@ -13,6 +13,8 @@ namespace Jamcat.Ingame.Character
     {
         private NavMeshAgent _agent;
         private BaseCharacter _target;
+        private BaseCharacter _mainTarget; // 메인 타겟 (셔틀 등)
+        private bool _hasMainTarget = false; // Attacher를 통해 소환되어 메인 타겟이 있는지 여부
         private Rigidbody _rigidbody;
         private Collider _collider;
         private Animator _animator;
@@ -153,6 +155,16 @@ namespace Jamcat.Ingame.Character
             KnockBack(attacker.transform.position - transform.position, knockBackPower);
         }
 
+        public void SetMainTarget(BaseCharacter target)
+        {
+            if (!Object.HasStateAuthority) return;
+            if (target.IsFastNull()) return;
+            
+            _mainTarget = target;
+            _hasMainTarget = true;
+            SetTarget(target);
+        }
+        
         public void SetTarget(BaseCharacter target)
         {
             if (!Object.HasStateAuthority) return;
@@ -262,8 +274,31 @@ namespace Jamcat.Ingame.Character
         {
             if (_target.IsFastNull())
             {
+                // 메인 타겟이 있는 몬스터만 메인 타겟으로 돌아가기
+                if (_hasMainTarget && _mainTarget != null && !_mainTarget.IsFastNull())
+                {
+                    SetTarget(_mainTarget);
+                    return;
+                }
+                
                 State = AIState.Idle;
                 return;
+            }
+
+            // 메인 타겟이 있는 몬스터만 바리케이트 파괴 후 복귀 로직 사용
+            if (_hasMainTarget)
+            {
+                // 현재 타겟이 바리케이트이고 파괴되었는지 확인
+                var currentBuilding = _target.GetComponent<Building>();
+                if (currentBuilding != null && !currentBuilding.gameObject.activeInHierarchy)
+                {
+                    // 바리케이트가 파괴되었으면 메인 타겟으로 돌아가기
+                    if (_mainTarget != null && !_mainTarget.IsFastNull())
+                    {
+                        SetTarget(_mainTarget);
+                        return;
+                    }
+                }
             }
 
             if (transform.InRange(_target.transform, attackRange))
@@ -274,13 +309,19 @@ namespace Jamcat.Ingame.Character
             {
                 _agent.destination = _target.transform.position;
                 
-                // 길이 막혔는지 확인하고 바리케이트 공격
-                CheckForBarricadeObstacle();
+                // 메인 타겟이 있는 몬스터만 바리케이트 우회 로직 사용
+                if (_hasMainTarget)
+                {
+                    CheckForBarricadeObstacle();
+                }
             }
         }
         
         private void CheckForBarricadeObstacle()
         {
+            // 현재 타겟이 이미 바리케이트인 경우는 체크하지 않음
+            if (_target.GetComponent<Building>() != null) return;
+            
             // NavMeshAgent가 목적지에 도달할 수 없는 경우 체크
             if (_agent.pathStatus == NavMeshPathStatus.PathPartial || 
                 (_agent.hasPath && _agent.remainingDistance < 0.5f && !transform.InRange(_target.transform, attackRange * 2)))
@@ -289,11 +330,11 @@ namespace Jamcat.Ingame.Character
                 Collider[] obstacles = Physics.OverlapSphere(transform.position, attackRange * 2);
                 foreach (var obstacle in obstacles)
                 {
-                    var barricade = obstacle.GetComponent<Barricade>();
-                    if (barricade != null && !barricade.IsDead)
+                    var building = obstacle.GetComponent<Building>();
+                    if (building != null && building.gameObject.activeInHierarchy)
                     {
-                        // 바리케이트를 새로운 타겟으로 설정
-                        SetTarget(barricade);
+                        // 건물(바리케이트)을 새로운 타겟으로 설정
+                        SetTarget(building);
                         break;
                     }
                 }

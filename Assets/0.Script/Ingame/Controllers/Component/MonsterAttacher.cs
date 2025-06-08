@@ -56,7 +56,7 @@ namespace Jamcat.Ingame.Controllers.Component
             while (true)
             {
                 var monster = InGame.Monster.GetMonster(currentWave.monsterId, currentWave.level);
-                monster.SetTarget(InGame.Map.Camp);
+                monster.SetMainTarget(InGame.Map.Camp);
                 monster.Spawn();
                 monster.SetPosition(transform.position);
                 monster.OnKilled += (attacker) =>
