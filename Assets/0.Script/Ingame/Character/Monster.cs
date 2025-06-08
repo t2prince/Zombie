@@ -164,6 +164,7 @@ namespace Jamcat.Ingame.Character
             _agent.enabled = true;
             _agent.destination = target.transform.position;
             _animationState = AnimationState.Walk;
+            _aiState = AIState.Move;
         }
 
         private void KnockBack(Vector3 dir, float power)
@@ -210,7 +211,6 @@ namespace Jamcat.Ingame.Character
                     Move();
                     break;
                 case AIState.Attack:
-                    Attack();
                     break;
                 case AIState.Die:
                     break;
