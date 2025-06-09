@@ -8,6 +8,8 @@ namespace _0.Script.Ingame.Interface
     {
         private string text = "";
         private Monitor _monitor;
+        private const float originalHeight = 0.03885181f; // Original height of the key
+        private const float pressHeight = 0.01f; // Height to press the key
 
         private void Awake()
         {
@@ -27,6 +29,11 @@ namespace _0.Script.Ingame.Interface
             {
                 OnKeyPress();
             }
+        }
+        
+        private void OnTriggerExit(Collider other)
+        {
+            
         }
     }
 }
