@@ -19,7 +19,8 @@ namespace Jamcat.Ingame.Character
         private Collider _collider;
         private Animator _animator;
         private AIState _aiState = AIState.Idle;
-        
+        private AudioSource _attackSource;
+        private AudioSource _hitSource;
 
         private AIState State
         {
@@ -143,6 +144,7 @@ namespace Jamcat.Ingame.Character
         public override void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 5.0f)
         {
             base.TakeDamage(attacker, damage);
+            _hitSource.Play();
             if (!_aggro.ContainsKey(attacker))
             {
                 _aggro.Add(attacker, 0);
@@ -259,6 +261,7 @@ namespace Jamcat.Ingame.Character
             while (transform.InRange(_target.transform, attackRange))
             {
                 _target.TakeDamage(this, attackPower);
+                _attackSource.Play();
                 yield return Util.Coroutine.WaitForSeconds(attackInterval); 
             }
 

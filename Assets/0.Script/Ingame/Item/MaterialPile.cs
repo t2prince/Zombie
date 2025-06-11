@@ -1,3 +1,4 @@
+using Fusion;
 using Jamcat.Ingame.Character;
 using UnityEngine;
 
@@ -26,7 +27,16 @@ namespace Jamcat.Ingame.Item
 
         private void SpawnMaterial()
         {
-            
+            for (var i = 0; i < quantity; i++)
+            {
+                var offset = new Vector3(
+                    Random.Range(-0.5f, 0.5f),
+                    0.5f,
+                    Random.Range(-0.5f, 0.5f)
+                );
+                var spawnPos = transform.position + offset;
+                InGame.Instance.Runner.Spawn(material, spawnPos, Quaternion.identity);
+            }
         }
     }
 }
