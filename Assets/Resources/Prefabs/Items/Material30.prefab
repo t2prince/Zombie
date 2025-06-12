@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 37dbfe69abd214362b5bac7811d594a9, type: 3}
       propertyPath: m_Name
-      value: Materia30
+      value: Material30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -85,7 +85,7 @@ MonoBehaviour:
   energy: 0
   CurrentEnergy: 0
   defence: 30
-  material: {fileID: 6020925024376724568, guid: bfa189c83f8f64a31a1579a37a74ca49, type: 3}
+  material: {fileID: 3764725034505408460, guid: bf6ff2a59fe174d598b8a42cfb9ba44a, type: 3}
   quantity: 30
 --- !u!114 &-7794302853380621833
 MonoBehaviour:

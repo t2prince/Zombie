@@ -19,8 +19,8 @@ namespace Jamcat.Ingame.Character
         private Collider _collider;
         private Animator _animator;
         private AIState _aiState = AIState.Idle;
-        private AudioSource _attackSource;
-        private AudioSource _hitSource;
+        [SerializeField] private AudioSource _attackSource;
+        
 
         private AIState State
         {

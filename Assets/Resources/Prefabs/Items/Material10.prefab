@@ -85,7 +85,7 @@ MonoBehaviour:
   energy: 0
   CurrentEnergy: 0
   defence: 0
-  material: {fileID: 6020925024376724568, guid: 2d36e946de29b4619bc4577458ab8337, type: 3}
+  material: {fileID: 2929029283887127824, guid: 59605d6f00a0d442db68b5ae6078250a, type: 3}
   quantity: 0
 --- !u!114 &1853700291264909778
 MonoBehaviour:

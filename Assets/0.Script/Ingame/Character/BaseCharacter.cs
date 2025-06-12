@@ -14,6 +14,8 @@ namespace Jamcat.Ingame.Character
         [SerializeField] private float CurrentHp;
         [SerializeField] private float energy;
         [SerializeField] private float CurrentEnergy;
+        [SerializeField] private AudioSource _hitSource;
+        
         private float _energyRecoveryTimer = 0f;
 
         public int Level { get { return level; } set { level = value; } }

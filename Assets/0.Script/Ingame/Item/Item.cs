@@ -40,5 +40,10 @@ namespace Jamcat.Ingame.Item
             _collider.enabled = true;
             base.Ungrab();
         }
+
+        protected bool IsGrabbed()
+        {
+            return _collider.enabled;
+        }
     }
 }
