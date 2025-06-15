@@ -15,6 +15,7 @@ namespace Jamcat.Ingame.Character
         [SerializeField] private float energy;
         [SerializeField] private float CurrentEnergy;
         [SerializeField] private AudioSource _hitSource;
+        [SerializeField] private AudioSource _deathSource;
         
         private float _energyRecoveryTimer = 0f;
 
@@ -43,6 +44,7 @@ namespace Jamcat.Ingame.Character
 
         public virtual void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 0.0f)
         {
+            _hitSource.Play();
             CurrentHp -= damage;
             if(CurrentHp <= 0)
                 Die();

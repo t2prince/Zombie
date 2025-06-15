@@ -144,7 +144,6 @@ namespace Jamcat.Ingame.Character
         public override void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 5.0f)
         {
             base.TakeDamage(attacker, damage);
-            _hitSource.Play();
             if (!_aggro.ContainsKey(attacker))
             {
                 _aggro.Add(attacker, 0);
