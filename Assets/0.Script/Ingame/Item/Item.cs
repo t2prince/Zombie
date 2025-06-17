@@ -27,6 +27,11 @@ namespace Jamcat.Ingame.Item
             //do it!
         }
 
+        public void Spawn()
+        {
+            
+        }
+
         public override void Grab(Grabber newGrabber, Transform grabPointTransform = null)
         {
             _rigidbody.isKinematic = true;

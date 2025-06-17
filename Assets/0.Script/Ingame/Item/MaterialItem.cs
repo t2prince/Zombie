@@ -13,7 +13,7 @@ namespace Jamcat.Ingame.Item
         {
             if (other.CompareTag(TagManager.HOLDER))
             {
-                    
+                
             }
             else if (other.CompareTag(TagManager.INVENTORY))
             {

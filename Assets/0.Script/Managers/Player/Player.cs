@@ -8,6 +8,4 @@ namespace Jamcat.Managers.Player
         public int level;
         public float exp;
     }
-    
-    
 }

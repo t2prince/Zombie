@@ -10,6 +10,7 @@ namespace Jamcat.Managers.Player
         {
             public int gold = 0;
             public int gem = 0;
+            public int material = 0;
         }
 
         [Serializable]
@@ -20,7 +21,8 @@ namespace Jamcat.Managers.Player
             public int barrierId = 0;
             public int boosterId = 0;
         }
-        
+
+        public float space = 5f;
         public Weapons weapons = new Weapons();
         public Wallet wallet = new Wallet();
     }
