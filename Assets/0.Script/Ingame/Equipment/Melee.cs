@@ -1,3 +1,4 @@
+using System;
 using Jamcat.Ingame.Character;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ namespace Jamcat.Ingame.Equipment
     public class Melee : Weapon
     {
         [SerializeField] private Animator _animator;
+        [SerializeField] private AudioSource _shownSound;
         private BaseCharacter _owner;
         
         public void Init(BaseCharacter owner, HandController controller)
@@ -14,6 +16,7 @@ namespace Jamcat.Ingame.Equipment
             controller.OnRightTriggerPressed += OnTriggerPressed;
             
             transform.SetParent(controller.transform);
+            _shownSound = GetComponent<AudioSource>();
             
             Hide();
         }
@@ -50,6 +53,11 @@ namespace Jamcat.Ingame.Equipment
             
             if (target == null) return;
             target.TakeDamage(_owner, _damage, _knockBackPower);
+        }
+
+        private void OnEnable()
+        {
+            _shownSound.Play();
         }
     }
 }
