@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1812570232619656020}
   - component: {fileID: 1908795411310738674}
+  - component: {fileID: 1296114817230564372}
   m_Layer: 0
   m_Name: Melee
   m_TagString: Untagged
@@ -46,7 +47,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 10
+  _knockBackPower: 0
   _animator: {fileID: 0}
+--- !u!65 &1296114817230564372
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475122674440662592}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.1, y: 1.4, z: 0.1}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &3476743847748873532
 GameObject:
   m_ObjectHideFlags: 0
