@@ -7,7 +7,7 @@ namespace Jamcat.Ingame.Interface
     {
         private string text = "";
         private Monitor _monitor;
-        private const float originalHeight = 0.03885181f;
+        private const float originalHeight = 0.036f;
         private const float pressHeight = 0.01f;
         private const float animationDuration = 0.1f;
 
@@ -17,6 +17,12 @@ namespace Jamcat.Ingame.Interface
         private void Awake()
         {
             var textMesh = GetComponentInChildren<TextMesh>();
+            if (textMesh == null)
+            {
+                text = string.Empty;
+                return;
+            } 
+            
             text = textMesh.text;
             _monitor = GetComponentInParent<Monitor>();
             originalPosition = transform.localPosition;

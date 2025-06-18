@@ -20,6 +20,7 @@ namespace Jamcat.Ingame.Equipment
             _owner = owner;
             _speed = bulletSpeed;
             _damage = bulletDamage;
+            tag = owner.gameObject.tag;
         }
 
         public void Fire(Vector3 direction)
