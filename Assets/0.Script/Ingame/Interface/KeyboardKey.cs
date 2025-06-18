@@ -1,8 +1,7 @@
 using System.Collections;
-using Jamcat.Ingame.Interface;
 using UnityEngine;
 
-namespace _0.Script.Ingame.Interface
+namespace Jamcat.Ingame.Interface
 {
     public class KeyboardKey : MonoBehaviour
     {

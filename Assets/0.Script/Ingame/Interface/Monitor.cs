@@ -5,7 +5,7 @@ namespace Jamcat.Ingame.Interface
 {
     public class Monitor : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _text;
+        [SerializeField] private TextMesh _text;
         public void AddText(string text)
         {
             if (_text != null)
