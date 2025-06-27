@@ -18,9 +18,8 @@ namespace Jamcat.Ingame.Item
 
         protected override void Die()
         {
-            Destroy(gameObject);
-            InGame.Instance.Runner.Despawn(NetworkObject);
             SpawnMaterial();
+            base.Die();
         }
 
         private void SpawnMaterial()

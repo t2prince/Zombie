@@ -97,7 +97,7 @@ MonoBehaviour:
   _deathSource: {fileID: -266186566267355789}
   defence: 50
   material: {fileID: 1772598635297801101, guid: b2d0a79308af549c497d93b2d1ab32a5, type: 3}
-  quantity: 50
+  quantity: 3
 --- !u!114 &-3450875851732038300
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -44,6 +44,9 @@ namespace Jamcat.Ingame.Character
 
         public virtual void TakeDamage(BaseCharacter attacker, float damage, float knockBackPower = 0.0f)
         {
+            if (CurrentHp <= 0)
+                return;
+            
             _hitSource.Play();
             CurrentHp -= damage;
             if(CurrentHp <= 0)
@@ -85,15 +88,16 @@ namespace Jamcat.Ingame.Character
         {
             TakeDamage(this, 99999,0);
         }
-
+        
         protected virtual void Die()
         {
             Util.Coroutine.DelayedAction(() => 
             {
                 OnKilled?.Invoke(this);
-                gameObject.SetActive(false);
+                Destroy(gameObject);
+                InGame.Instance.Runner.Despawn(NetworkObject);
                 OnKilled = null;
-            }, 3.0f);
+            }, 1.0f);
         }
 
         private void Update()
