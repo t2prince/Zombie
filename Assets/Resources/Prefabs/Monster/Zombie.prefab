@@ -109,9 +109,9 @@ MonoBehaviour:
   CurrentHp: 0
   energy: 20
   CurrentEnergy: 0
-  _hitSource: {fileID: 0}
-  _deathSource: {fileID: 0}
-  _attackSource: {fileID: 0}
+  _hitSource: {fileID: -7953246811692481169}
+  _deathSource: {fileID: -1607060578280967680}
+  _attackSource: {fileID: 5701488520519265627}
   attackRange: 2
   attackPower: 10
   attackDelay: 1
@@ -282,7 +282,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -379,7 +379,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -431,7 +431,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4f18df80a5231bf4dbf607095e57a0c0, type: 3}
   m_Resource: {fileID: 8300000, guid: 4f18df80a5231bf4dbf607095e57a0c0, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -476,7 +476,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

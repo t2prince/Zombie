@@ -109,9 +109,9 @@ MonoBehaviour:
   CurrentHp: 0
   energy: 5
   CurrentEnergy: 0
-  _hitSource: {fileID: 0}
-  _deathSource: {fileID: 0}
-  _attackSource: {fileID: 0}
+  _hitSource: {fileID: -7575546257715159837}
+  _deathSource: {fileID: -5857952253129154002}
+  _attackSource: {fileID: -6474205283333611064}
   attackRange: 2
   attackPower: 10
   attackDelay: 1

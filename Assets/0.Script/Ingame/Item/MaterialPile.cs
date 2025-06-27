@@ -13,11 +13,7 @@ namespace Jamcat.Ingame.Item
         public override void TakeDamage(BaseCharacter attacher, float damage, float knockBackPower = 0.0f)
         {
             var finalDamage = Mathf.Max(damage - defence, 0);
-            hp -= finalDamage;
-            if (hp <= 0)
-            {
-                Die();
-            }
+            base.TakeDamage(attacher, finalDamage, knockBackPower);
         }
 
         protected override void Die()
