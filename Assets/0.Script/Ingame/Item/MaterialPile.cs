@@ -31,8 +31,14 @@ namespace Jamcat.Ingame.Item
                     0.5f,
                     Random.Range(-0.5f, 0.5f)
                 );
+                
                 var spawnPos = transform.position + offset;
-                InGame.Instance.Runner.Spawn(material, spawnPos, Quaternion.identity);
+                var randomRotation = Quaternion.Euler(
+                    Random.Range(0f, 360f),
+                    Random.Range(0f, 360f),
+                    Random.Range(0f, 360f)
+                );
+                InGame.Instance.Runner.Spawn(material, spawnPos, randomRotation);
             }
         }
     }

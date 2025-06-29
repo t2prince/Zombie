@@ -13,6 +13,7 @@ namespace Jamcat.Ingame.Equipment
         public Action onHit;
         private Vector3 moveDirection;
         private GameObject effect;
+        private AudioSource _fireSound;
         
         private BaseCharacter _owner;
         public void Init(BaseCharacter owner, float bulletSpeed, float bulletDamage)
@@ -20,6 +21,7 @@ namespace Jamcat.Ingame.Equipment
             _owner = owner;
             _speed = bulletSpeed;
             _damage = bulletDamage;
+            _fireSound = GetComponent<AudioSource>();
             tag = owner.gameObject.tag;
         }
 
@@ -28,6 +30,7 @@ namespace Jamcat.Ingame.Equipment
             moveDirection = direction.normalized;
             transform.forward = moveDirection;
             StartCoroutine(MoveForward());
+            _fireSound.Play();
         }
 
         private IEnumerator MoveForward()
