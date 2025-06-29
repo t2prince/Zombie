@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Fusion;
 using Jamcat.Ingame.Character;
 using UnityEngine;
 
@@ -14,8 +15,15 @@ namespace Jamcat.Ingame.Equipment
         private Vector3 moveDirection;
         private GameObject effect;
         private AudioSource _fireSound;
+        private NetworkObject _networkObject;
         
         private BaseCharacter _owner;
+
+        private void Awake()
+        {
+            _networkObject = GetComponent<NetworkObject>();
+        }
+
         public void Init(BaseCharacter owner, float bulletSpeed, float bulletDamage)
         {
             _owner = owner;
@@ -57,6 +65,7 @@ namespace Jamcat.Ingame.Equipment
         {
             //사운드 재생
             //피격 이팩트
+            InGame.Instance.Runner.Despawn(_networkObject);
             onHit?.Invoke();
         }
     }

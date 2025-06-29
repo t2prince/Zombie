@@ -1,3 +1,4 @@
+using Fusion;
 using Jamcat.Ingame.Character;
 using UnityEngine;
 
@@ -10,20 +11,14 @@ namespace Jamcat.Ingame.Equipment
         [SerializeField] private Transform _firePoint;
         private BaseCharacter _owner;
         private float _lastFireTime = 0f;
+        private NetworkObject _networkObject;
+        private NetworkRunner Runner => InGame.Instance.Runner;
         
         [SerializeField] private GameObject bulletPrefab;
-        private GameObjectPool<Bullet> _bulletPool;
 
         private void Awake()
         {
-            _bulletPool = new GameObjectPool<Bullet>(8, () =>
-            {
-                var bulletObj = Instantiate(bulletPrefab, transform);
-                bulletObj.SetActive(false);
-                
-                var bullet = bulletObj.GetComponent<Bullet>();
-                return bullet;
-            });
+            _networkObject = GetComponent<NetworkObject>();
         }
 
         public void Init(BaseCharacter owner, HandController controller)
@@ -40,32 +35,18 @@ namespace Jamcat.Ingame.Equipment
                 Fire();
             }
         }
-        
+            
         private void Fire()
         {
             if (Time.time - _lastFireTime < interval) return;
+            _lastFireTime = Time.time;
 
-            _lastFireTime = Time.time; // 마지막 발사
-            
-            var bullet = _bulletPool.Pop();
-            bullet.gameObject.SetActive(true);
-            bullet.Init(_owner,bulletSpeed,_damage);
-            bullet.transform.position = _firePoint.position;
-            bullet.Fire(_firePoint.forward);
-            bullet.transform.SetParent(null);
-            bullet.onHit = () =>
-            {
-                CollectBullet(bullet);
-            };
-            
-            Util.Coroutine.DelayedAction(() => CollectBullet(bullet), 5.0f);
-        }
+            var spawnPos = _firePoint.position;
+            var direction = _firePoint.forward;
 
-        private void CollectBullet(Bullet bullet)
-        {
-            if(!bullet.isActiveAndEnabled) return;
-            bullet.gameObject.SetActive(false);
-            _bulletPool.Push(bullet);
+            var bullet = Runner.Spawn(bulletPrefab, spawnPos, Quaternion.LookRotation(direction)).GetComponent<Bullet>();
+            bullet.Init(_owner, bulletSpeed, _damage);
+            bullet.Fire(direction); 
         }
     }
 }
