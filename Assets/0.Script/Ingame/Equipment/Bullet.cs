@@ -39,6 +39,14 @@ namespace Jamcat.Ingame.Equipment
             transform.forward = moveDirection;
             StartCoroutine(MoveForward());
             _fireSound.Play();
+            
+            Util.Coroutine.DelayedAction(
+                () =>
+                {
+                    if(_networkObject.IsValid)
+                        InGame.Instance.Runner.Despawn(_networkObject);
+                },
+                5.0f);
         }
 
         private IEnumerator MoveForward()
@@ -63,8 +71,6 @@ namespace Jamcat.Ingame.Equipment
 
         private void Hit()
         {
-            //사운드 재생
-            //피격 이팩트
             InGame.Instance.Runner.Despawn(_networkObject);
             onHit?.Invoke();
         }

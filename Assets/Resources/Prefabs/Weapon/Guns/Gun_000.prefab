@@ -119,6 +119,6 @@ MonoBehaviour:
   _damage: 0
   _knockBackPower: 0
   interval: 1
-  bulletSpeed: 20
+  bulletSpeed: 50
   _firePoint: {fileID: 3008895541771263355}
   bulletPrefab: {fileID: 4143064322489161111, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}

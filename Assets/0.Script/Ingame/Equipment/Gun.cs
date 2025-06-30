@@ -42,7 +42,7 @@ namespace Jamcat.Ingame.Equipment
             _lastFireTime = Time.time;
 
             var spawnPos = _firePoint.position;
-            var direction = _firePoint.forward;
+            var direction = transform.forward;
 
             var bullet = Runner.Spawn(bulletPrefab, spawnPos, Quaternion.LookRotation(direction)).GetComponent<Bullet>();
             bullet.Init(_owner, bulletSpeed, _damage);
