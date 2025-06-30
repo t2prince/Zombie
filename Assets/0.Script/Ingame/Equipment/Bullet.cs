@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Jamcat.Ingame.Equipment
 {
-    public class Bullet : MonoBehaviour
+    public class Bullet : NetworkBehaviour
     {
         private float _damage;
         private float _knockBackPower;
@@ -15,14 +15,10 @@ namespace Jamcat.Ingame.Equipment
         private Vector3 moveDirection;
         private GameObject effect;
         private AudioSource _fireSound;
-        private NetworkObject _networkObject;
+        
+        [Networked] private Vector3 MoveDirection { get; set; }
         
         private BaseCharacter _owner;
-
-        private void Awake()
-        {
-            _networkObject = GetComponent<NetworkObject>();
-        }
 
         public void Init(BaseCharacter owner, float bulletSpeed, float bulletDamage)
         {
@@ -35,26 +31,23 @@ namespace Jamcat.Ingame.Equipment
 
         public void Fire(Vector3 direction)
         {
-            moveDirection = direction.normalized;
-            transform.forward = moveDirection;
-            StartCoroutine(MoveForward());
+            MoveDirection = direction.normalized;
+            transform.forward = MoveDirection;
             _fireSound.Play();
-            
-            Util.Coroutine.DelayedAction(
-                () =>
-                {
-                    if(_networkObject.IsValid)
-                        InGame.Instance.Runner.Despawn(_networkObject);
-                },
-                5.0f);
+
+            // 일정 시간 후 Despawn
+            Util.Coroutine.DelayedAction(() =>
+            {
+                if (Object != null && Object.IsValid && Object.HasStateAuthority)
+                    InGame.Instance.Runner.Despawn(Object);
+            }, 5.0f);
         }
 
-        private IEnumerator MoveForward()
+        public override void FixedUpdateNetwork()
         {
-            while (true)
+            if (HasStateAuthority || HasInputAuthority)
             {
-                transform.Translate(moveDirection * _speed * Time.deltaTime, Space.World);
-                yield return null;
+                transform.position += MoveDirection * _speed * InGame.Instance.Runner.DeltaTime;
             }
         }
 
@@ -71,7 +64,7 @@ namespace Jamcat.Ingame.Equipment
 
         private void Hit()
         {
-            InGame.Instance.Runner.Despawn(_networkObject);
+            InGame.Instance.Runner.Despawn(Object);
             onHit?.Invoke();
         }
     }
