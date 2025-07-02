@@ -50,7 +50,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e5ce9d86ea446f044bb55cb8a515055e, type: 3}
       propertyPath: m_Name
-      value: Gem_000
+      value: Gem_300
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e5ce9d86ea446f044bb55cb8a515055e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -227,6 +231,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   ownerName: {fileID: 0}
+  quantity: 0
 --- !u!114 &1382528600119104815
 MonoBehaviour:
   m_ObjectHideFlags: 0
