@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Jamcat.Ingame.Item
 {
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(NetworkRigidbody3D))]
     public class Item : Grabbable

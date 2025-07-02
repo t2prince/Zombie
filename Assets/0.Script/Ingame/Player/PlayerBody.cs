@@ -63,13 +63,13 @@ namespace Jamcat.Ingame.Player
             //왼손 / 오른손 바꿀 수 있게끔 해줄 필요 있음
             var character = GetComponent<BaseCharacter>();
 
-            // var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
-            // var gun = Instantiate(gunData.weaponPrefab, leftHand.transform).GetComponent<Gun>();
-            // gun.Init(character, leftController);
-            //
-            // var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
-            // var meleeWeapon = Instantiate(meleeData.weaponPrefab, rightHand.transform).GetComponent<Melee>();
-            // meleeWeapon.Init(character, rightController);
+            var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
+            var gun = Instantiate(gunData.weaponPrefab, leftHand.transform).GetComponent<Gun>();
+            gun.Init(character, leftController);
+            
+            var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
+            var meleeWeapon = Instantiate(meleeData.weaponPrefab, rightHand.transform).GetComponent<Melee>();
+            meleeWeapon.Init(character, rightController);
             
             var boosterData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Booster);
             var boosterAttacher = networkRig.GetComponentInChildren<Attacher>();

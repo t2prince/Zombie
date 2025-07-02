@@ -7,7 +7,6 @@ namespace Jamcat.Ingame.Item
     public class MaterialItem : Item
     {
         [SerializeField] private int quantity;
-        
 
         private void OnTriggerEnter(Collider other)
         {
