@@ -11,9 +11,22 @@ namespace Jamcat.Ingame.Item
     [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(NetworkRigidbody3D))]
+    
     public class Item : Grabbable
     {
-        [SerializeField] private TMP_Text ownerName;
+        [SerializeField] private int quantity;
+        public enum ITemType
+        {
+            Material,
+            Gold,
+            Use
+        };
+
+        public int id;
+        public ITemType type;
+        public int space;
+        public int quality;
+        
         private Rigidbody _rigidbody;
         private Collider _collider;
 
@@ -44,11 +57,6 @@ namespace Jamcat.Ingame.Item
             _rigidbody.isKinematic = false;
             _collider.enabled = true;
             base.Ungrab();
-        }
-
-        protected bool IsGrabbed()
-        {
-            return _collider.enabled;
         }
     }
 }

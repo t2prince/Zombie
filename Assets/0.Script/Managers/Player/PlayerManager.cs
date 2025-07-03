@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Jamcat.Core;
 using UnityEngine;
 
@@ -6,6 +8,7 @@ namespace Jamcat.Managers.Player
     public static class PlayerManager
     {
         private static Player _player;
+        private static List<Ingame.Item.Item> _pocket;
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
@@ -31,6 +34,14 @@ namespace Jamcat.Managers.Player
         {
             SaveWallet();
             SaveInventory();
+        }
+
+        public static bool AddItem(Ingame.Item.Item item)
+        {
+            if (!(_pocket.Sum(i => i.space) + item.space < _player.space)) return false;
+            
+            _pocket.Add(item);
+            return true;
         }
         
         public static void GetGold(int amount)
@@ -85,7 +96,7 @@ namespace Jamcat.Managers.Player
             }
         }
         
-        public static void GetGem(int amount)
+        public static void AddGem(int amount)
         {
             _player.wallet.gem += amount;
         }
