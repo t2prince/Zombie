@@ -1,13 +1,19 @@
 
 
+using Fusion;
+using Fusion.XR.Shared.Rig;
+using Jamcat.Core;
 using Jamcat.Ingame.Equipment;
+using Jamcat.Ingame.Player;
+using UnityEngine;
 
 namespace Jamcat.Ingame.Character
 {
     public class GamePlayer : BaseCharacter
     {
         private Barrier _barrier;
-        public virtual void TakeDamage(BaseCharacter attacher, float damage, float knockBackPower = 0.0f)
+        
+        public override void TakeDamage(BaseCharacter attacher, float damage, float knockBackPower = 0.0f)
         {
             hp -= damage;
         }

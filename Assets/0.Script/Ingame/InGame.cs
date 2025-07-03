@@ -55,7 +55,7 @@ namespace Jamcat.Ingame
             //카메라, 컨트롤러 연동을 담당하는 프리팹
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
             //충돌, 물리, 로코모션을 담당하는 프리팹
-            var bodyPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkBody");
+            var bodyPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
             
             //맵에서 스폰 위치 가져오기
             var spot = _mapController.GetSpawnPosition(playerID);

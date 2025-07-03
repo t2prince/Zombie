@@ -7,7 +7,7 @@ namespace Jamcat.Managers.Player
 {
     public static class PlayerManager
     {
-        private static Player _player;
+        private static PlayerData _playerData;
         private static List<Ingame.Item.Item> _pocket;
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -16,18 +16,18 @@ namespace Jamcat.Managers.Player
             LoadPlayer();
         }
 
-        public static Player.Wallet GetWallet()
+        public static PlayerData.Wallet GetWallet()
         {
-            return _player.wallet;
+            return _playerData.wallet;
         }
 
-        public static Player.Weapons GetWeapons()
+        public static PlayerData.Weapons GetWeapons()
         {
-            return _player.weapons;
+            return _playerData.weapons;
         }
         private static void LoadPlayer()
         {
-            _player = new Player();
+            _playerData = new PlayerData();
         }
         
         public static void SaveAll()
@@ -38,7 +38,7 @@ namespace Jamcat.Managers.Player
 
         public static bool AddItem(Ingame.Item.Item item)
         {
-            if (!(_pocket.Sum(i => i.space) + item.space < _player.space)) return false;
+            if (!(_pocket.Sum(i => i.space) + item.space < _playerData.space)) return false;
             
             _pocket.Add(item);
             return true;
@@ -46,19 +46,19 @@ namespace Jamcat.Managers.Player
         
         public static void GetGold(int amount)
         {
-            _player.wallet.gold += amount;
+            _playerData.wallet.gold += amount;
         }
         
         public static void GetMaterial(int amount)
         {
-            _player.wallet.material += amount;
+            _playerData.wallet.material += amount;
         }
         
         public static bool UseGold(int amount)
         {
-            if (_player.wallet.gold >= amount)
+            if (_playerData.wallet.gold >= amount)
             {
-                _player.wallet.gold -= amount;
+                _playerData.wallet.gold -= amount;
                 return true;
             }
             else
@@ -70,9 +70,9 @@ namespace Jamcat.Managers.Player
         
         public static bool UseMaterial(int amount)
         {
-            if (_player.wallet.material >= amount)
+            if (_playerData.wallet.material >= amount)
             {
-                _player.wallet.material -= amount;
+                _playerData.wallet.material -= amount;
                 return true;
             }
             else
@@ -84,9 +84,9 @@ namespace Jamcat.Managers.Player
         
         public static bool UseGem(int amount)
         {
-            if (_player.wallet.gem >= amount)
+            if (_playerData.wallet.gem >= amount)
             {
-                _player.wallet.gem -= amount;
+                _playerData.wallet.gem -= amount;
                 return true;
             }
             else
@@ -98,7 +98,7 @@ namespace Jamcat.Managers.Player
         
         public static void AddGem(int amount)
         {
-            _player.wallet.gem += amount;
+            _playerData.wallet.gem += amount;
         }
 
         public static void SaveWallet()
