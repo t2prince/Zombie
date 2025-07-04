@@ -4950,8 +4950,8 @@ GameObject:
   m_Component:
   - component: {fileID: 942342321}
   - component: {fileID: 942342324}
-  - component: {fileID: 942342325}
   - component: {fileID: 942342326}
+  - component: {fileID: 942342327}
   m_Layer: 2
   m_Name: LeftHardwareHand
   m_TagString: Untagged
@@ -5060,21 +5060,6 @@ MonoBehaviour:
   updateHandCommandWithAction: 1
   updateGrabWithAction: 1
   networkTransform: {fileID: 0}
---- !u!114 &942342325
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 942342320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26cf04a2efd7a0544a3bc987cca0fda0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabbedObject: {fileID: 0}
-  networkGrabber: {fileID: 0}
-  hoveredGrabbables: []
 --- !u!65 &942342326
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5096,6 +5081,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2, y: 0.2, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &942342327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942342320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c43a900e66794fda827f22e0d55532de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabbedObject: {fileID: 0}
+  networkGrabber: {fileID: 0}
+  hoveredGrabbables: []
 --- !u!1 &944904371
 GameObject:
   m_ObjectHideFlags: 0
@@ -9088,8 +9088,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1663936223}
   - component: {fileID: 1663936226}
-  - component: {fileID: 1663936227}
   - component: {fileID: 1663936228}
+  - component: {fileID: 1663936229}
   m_Layer: 2
   m_Name: RightHardwareHand
   m_TagString: Untagged
@@ -9198,21 +9198,6 @@ MonoBehaviour:
   updateHandCommandWithAction: 1
   updateGrabWithAction: 1
   networkTransform: {fileID: 0}
---- !u!114 &1663936227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1663936222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26cf04a2efd7a0544a3bc987cca0fda0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabbedObject: {fileID: 0}
-  networkGrabber: {fileID: 0}
-  hoveredGrabbables: []
 --- !u!65 &1663936228
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9234,6 +9219,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2, y: 0.2, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1663936229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663936222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c43a900e66794fda827f22e0d55532de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabbedObject: {fileID: 0}
+  networkGrabber: {fileID: 0}
+  hoveredGrabbables: []
 --- !u!1 &1669882487
 GameObject:
   m_ObjectHideFlags: 0

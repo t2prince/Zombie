@@ -1,4 +1,6 @@
+using Fusion.XR.Shared.Grabbing;
 using Fusion.XR.Shared.Rig;
+using Ingame.Player;
 using Jamcat.Ingame.Character;
 using Jamcat.Ingame.Controllers.Component;
 using Jamcat.Ingame.Equipment;
@@ -12,6 +14,7 @@ namespace Jamcat.Ingame.Player
     {
         [SerializeField] private Transform _head;
         [SerializeField] private Transform _body;
+        private Pocket _pocket;
         
         public Transform Head => _head;
         public Transform Body => _body;
@@ -20,6 +23,8 @@ namespace Jamcat.Ingame.Player
         private Melee currentMelee;
         private Barrier currentBarrier;
         private Booster currentBooster;
+
+        
 
 #if UNITY_EDITOR
         private InputAction arrowKeyAction;
@@ -55,12 +60,30 @@ namespace Jamcat.Ingame.Player
         {
             var leftHand = networkRig.leftHand;
             var rightHand = networkRig.rightHand;
+            _pocket = networkRig.GetComponentInChildren<Pocket>();
+            
+            var grabbers = rig.GetComponentsInChildren<PlayerGrabber>();
+            foreach (var grabber in grabbers)
+            {
+                grabber.onGrabbed += (g) =>
+                {
+                    var item = grabber.GetComponent<Item.Item>();
+                    if (item == null || item.type == Item.Item.ITemType.Use) return;
+                    
+                    _pocket.gameObject.SetActive(true);
+                };    
+                
+                grabber.onUngrabbed += (g) =>
+                {
+                    _pocket.gameObject.SetActive(false);
+                };   
+            }
 
             var leftController = leftHand.GetComponentInChildren<HandController>();
             var rightController = rightHand.GetComponentInChildren<HandController>();
             
             //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
-            //왼손 / 오른손 바꿀 수 있게끔 해줄 필요 있음
+            //왼손 <-> 오른손 바꿀 수 있게끔 해줄 필요 있음
             var character = GetComponent<BaseCharacter>();
 
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);

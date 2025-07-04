@@ -52,24 +52,24 @@ namespace Jamcat.Ingame
         
         private void SpawnPlayer()
         {
+            //충돌, 물리, 로코모션을 담당하는 프리팹
+            var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
+            
             //카메라, 컨트롤러 연동을 담당하는 프리팹
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
-            //충돌, 물리, 로코모션을 담당하는 프리팹
-            var bodyPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
             
             //맵에서 스폰 위치 가져오기
             var spot = _mapController.GetSpawnPosition(playerID);
             
             //rig 및 body 스폰
             var networkRig =  Runner.Spawn(rigPrefab,spot.position,spot.rotation).GetComponent<NetworkRig>();
-            var body = Runner.Spawn(bodyPrefab,spot.position,spot.rotation).GetComponent<PlayerBody>();
+            var body = Runner.Spawn(player,spot.position,spot.rotation).GetComponent<PlayerBody>();
             
             //플레이어 body를 따라오는 카메라 및 HardwareRig
-            //TODO: 이 구조 나중에 한번 바꾸고 정리해야 한다 
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
             var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
             
-            body.Init(hardwareRig,networkRig);
+            body.Init(hardwareRig, networkRig);
             playerCamera.Init(body.Head);
             
             
