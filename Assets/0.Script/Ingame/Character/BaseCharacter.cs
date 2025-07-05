@@ -12,22 +12,17 @@ namespace Jamcat.Ingame.Character
         private NetworkTransform _networkTransform;
         
         [SerializeField] protected float hp;
-        [SerializeField] private float CurrentHp;
-        [SerializeField] private float energy;
-        [SerializeField] private float CurrentEnergy;
+        [SerializeField] protected float CurrentHp;
+        
         [SerializeField] private AudioSource _hitSource;
         [SerializeField] private AudioSource _deathSource;
         
         public float Hp => CurrentHp;
-        public float Energy => CurrentEnergy;
         
-        private float _energyRecoveryTimer = 0f;
 
         public int Level { get { return level; } set { level = value; } }
-        public NetworkObject NetworkObject { get; private set; }
+        public NetworkObject NetworkObject { get; protected set; }
         public Action<BaseCharacter> OnKilled;
-        
-        private bool overBoosted = false;
 
         private void Awake()
         {
@@ -37,7 +32,6 @@ namespace Jamcat.Ingame.Character
         private void Start()
         {
             CurrentHp = hp;
-            CurrentEnergy = energy;
             NetworkObject = GetComponent<NetworkObject>();
         }
 
@@ -56,18 +50,6 @@ namespace Jamcat.Ingame.Character
             if(CurrentHp <= 0)
                 Die();
         }
-        
-        public bool UseBooster(float deltaTime)
-        {
-            CurrentEnergy -= deltaTime;
-            if (!(CurrentEnergy <= 0)) return true;
-            
-            overBoosted = true;
-            CurrentEnergy = 0;
-            Watch.Instance.UpdateUI(this);
-            return false;
-
-        }
 
         public void Spawn()
         {
@@ -78,12 +60,7 @@ namespace Jamcat.Ingame.Character
         {
             CurrentHp += heal;
         }
-
-        public bool IsBoostable()
-        {
-            return CurrentEnergy > 0;
-        }
-
+        
         public void SetPosition(Vector3 pos)
         {
             _networkTransform.Teleport(pos);
@@ -103,22 +80,6 @@ namespace Jamcat.Ingame.Character
                 InGame.Instance.Runner.Despawn(NetworkObject);
                 OnKilled = null;
             }, 1.0f);
-        }
-
-        private void Update()
-        {
-            // 에너지 회복 로직
-            _energyRecoveryTimer += Time.deltaTime;
-            if (!(_energyRecoveryTimer >= 0.5f)) return;
-            
-            _energyRecoveryTimer = 0f;
-            CurrentEnergy = Mathf.Min(CurrentEnergy + energy * 0.1f, energy);
-            if(CurrentEnergy * 0.2f >= energy)
-            {
-                overBoosted = false;
-            }
-            
-            Watch.Instance.UpdateUI(this);
         }
     }
 }
