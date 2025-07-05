@@ -1,5 +1,6 @@
 
 
+using _0.Script.Ingame.Player;
 using Fusion;
 using Fusion.XR.Shared.Rig;
 using Jamcat.Core;
@@ -15,7 +16,8 @@ namespace Jamcat.Ingame.Character
         
         public override void TakeDamage(BaseCharacter attacher, float damage, float knockBackPower = 0.0f)
         {
-            hp -= damage;
+            base.TakeDamage(attacher, damage, knockBackPower);
+            Watch.Instance.UpdateUI(this);
         }
         
         protected override void Die()

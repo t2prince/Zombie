@@ -1,4 +1,5 @@
 using System;
+using _0.Script.Ingame.Player;
 using Fusion;
 using Jamcat.Ingame.Equipment;
 using UnityEngine;
@@ -16,6 +17,9 @@ namespace Jamcat.Ingame.Character
         [SerializeField] private float CurrentEnergy;
         [SerializeField] private AudioSource _hitSource;
         [SerializeField] private AudioSource _deathSource;
+        
+        public float Hp => CurrentHp;
+        public float Energy => CurrentEnergy;
         
         private float _energyRecoveryTimer = 0f;
 
@@ -60,6 +64,7 @@ namespace Jamcat.Ingame.Character
             
             overBoosted = true;
             CurrentEnergy = 0;
+            Watch.Instance.UpdateUI(this);
             return false;
 
         }
@@ -112,6 +117,8 @@ namespace Jamcat.Ingame.Character
             {
                 overBoosted = false;
             }
+            
+            Watch.Instance.UpdateUI(this);
         }
     }
 }

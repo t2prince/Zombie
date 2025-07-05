@@ -7,7 +7,7 @@ namespace Jamcat.Ingame.Equipment
 {
     public class Booster : Weapon
     {
-        private Character.GamePlayer _gamePlayer;
+        private GamePlayer _gamePlayer;
         private NetworkRigidbody3D _rigidbody;
         private bool isBoosting = false;
         [SerializeField] private float boostForce = 10f;
