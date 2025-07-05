@@ -13,7 +13,7 @@ namespace _0.Script.Ingame.Player
         public TMP_Text material;
         public TMP_Text gold;
 
-        public void UpdateUI(BaseCharacter player)
+        public void UpdateUI(GamePlayer player)
         {
             hp.text = player.Hp.ToString("F0");
             energy.text = player.Energy.ToString("F0");
