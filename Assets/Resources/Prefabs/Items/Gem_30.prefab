@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: d4e7c024da9a46d41a9204c2affa5c24, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d4e7c024da9a46d41a9204c2affa5c24, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d4e7c024da9a46d41a9204c2affa5c24, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d4e7c024da9a46d41a9204c2affa5c24, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -136,8 +148,8 @@ Rigidbody:
   m_GameObject: {fileID: 3764725034505408460}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_LinearDamping: 0.5
+  m_AngularDamping: 0.2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -206,8 +218,11 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls: []
-  ownerName: {fileID: 0}
   quantity: 0
+  id: 0
+  type: 0
+  space: 0
+  quality: 0
 --- !u!114 &3484920783750015666
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1502,9 +1502,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: {fileID: 2268724723770841077}
-  energy: {fileID: 8350351473711712581}
-  material: {fileID: 3676716567696221650}
-  gold: {fileID: 4728359368041015123}
+  energy: {fileID: 3088324108164615940}
+  material: {fileID: 5384387129786071182}
+  gold: {fileID: 1727627689424232672}
 --- !u!4 &6868718521160582964 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 90a6c33303884e24fb3a39731ede91af, type: 3}
