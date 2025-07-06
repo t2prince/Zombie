@@ -87,21 +87,25 @@ namespace Jamcat.Ingame.Player
             //왼손 <-> 오른손 바꿀 수 있게끔 해줄 필요 있음
             var character = GetComponent<BaseCharacter>();
 
-            var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
-            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation).GetComponent<Gun>();
-            gun.transform.SetParent(leftHand.transform);
-            gun.Init(character, leftController);
-            
-            var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
-            var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation).GetComponent<Melee>();
-            meleeWeapon.transform.SetParent(rightHand.transform);
-            meleeWeapon.Init(character, rightController);
-            
-            var boosterData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Booster);
-            var boosterAttacher = networkRig.GetComponentInChildren<Attacher>();
-            var booster = InGame.Instance.Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation).GetComponent<Booster>();
-            booster.transform.SetParent(boosterAttacher.transform);
-            booster.Init(this, leftController, rightController);
+            // 네트워크 권한이 있는 경우에만 무기 스폰
+            if (character.Object.HasStateAuthority)
+            {
+                var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
+                var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation).GetComponent<Gun>();
+                gun.transform.SetParent(leftHand.transform);
+                gun.Init(character, leftController);
+                
+                var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
+                var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation).GetComponent<Melee>();
+                meleeWeapon.transform.SetParent(rightHand.transform);
+                meleeWeapon.Init(character, rightController);
+                
+                var boosterData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Booster);
+                var boosterAttacher = networkRig.GetComponentInChildren<Attacher>();
+                var booster = InGame.Instance.Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation).GetComponent<Booster>();
+                booster.transform.SetParent(boosterAttacher.transform);
+                booster.Init(this, leftController, rightController);
+            }
         }
     }
 }
