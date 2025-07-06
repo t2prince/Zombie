@@ -60,6 +60,11 @@ namespace Jamcat.Ingame.Character
         {
             CurrentHp += heal;
         }
+
+        public bool IsDead()
+        {
+            return CurrentHp <= 0;
+        }
         
         public void SetPosition(Vector3 pos)
         {
@@ -70,6 +75,8 @@ namespace Jamcat.Ingame.Character
         {
             TakeDamage(this, 99999,0);
         }
+        
+        
         
         protected virtual void Die()
         {

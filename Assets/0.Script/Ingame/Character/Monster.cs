@@ -288,7 +288,7 @@ namespace Jamcat.Ingame.Character
             }
 
             // 메인 타겟이 있는 몬스터만 바리케이트 파괴 후 복귀 로직 사용
-            if (_hasMainTarget)
+            if (_hasMainTarget && !_target.IsDead())
             {
                 // 현재 타겟이 바리케이트이고 파괴되었는지 확인
                 var currentBuilding = _target.GetComponent<Building>();
