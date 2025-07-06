@@ -60,7 +60,8 @@ namespace Jamcat.Ingame.Player
         {
             var leftHand = networkRig.leftHand;
             var rightHand = networkRig.rightHand;
-            _pocket = networkRig.GetComponentInChildren<Pocket>();
+            _pocket = GetComponentInChildren<Pocket>();
+            _pocket.gameObject.SetActive(false);
             
             var grabbers = rig.GetComponentsInChildren<PlayerGrabber>();
             foreach (var grabber in grabbers)
