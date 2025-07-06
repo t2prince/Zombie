@@ -10,16 +10,10 @@ namespace Jamcat.Ingame.Equipment
         [SerializeField] float bulletSpeed = 20f;
         [SerializeField] private Transform _firePoint;
         private BaseCharacter _owner;
-        private float _lastFireTime = 0f;
-        private NetworkObject _networkObject;
+        private float _lastFireTime;
         private NetworkRunner Runner => InGame.Instance.Runner;
         
         [SerializeField] private GameObject bulletPrefab;
-
-        private void Awake()
-        {
-            _networkObject = GetComponent<NetworkObject>();
-        }
 
         public void Init(BaseCharacter owner, HandController controller)
         {
@@ -38,6 +32,7 @@ namespace Jamcat.Ingame.Equipment
             
         private void Fire()
         {
+            if (!Object.HasStateAuthority) return;
             if (Time.time - _lastFireTime < interval) return;
             _lastFireTime = Time.time;
 
@@ -45,6 +40,7 @@ namespace Jamcat.Ingame.Equipment
             var direction = transform.forward;
 
             var bullet = Runner.Spawn(bulletPrefab, spawnPos, Quaternion.LookRotation(direction)).GetComponent<Bullet>();
+            bullet.GetComponent<NetworkTransform>().Teleport(spawnPos);
             bullet.Init(_owner, bulletSpeed, _damage);
             bullet.Fire(direction); 
         }

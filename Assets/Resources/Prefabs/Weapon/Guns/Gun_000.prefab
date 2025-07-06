@@ -93,6 +93,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90d20a388c80fda4d9d5a2bd784e3baf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2609074460154268211}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90d20a388c80fda4d9d5a2bd784e3baf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2244513137806743603}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90d20a388c80fda4d9d5a2bd784e3baf, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8959776374395685940}
   m_SourcePrefab: {fileID: 100100000, guid: 90d20a388c80fda4d9d5a2bd784e3baf, type: 3}
 --- !u!4 &1619159914578021775 stripped
 Transform:
@@ -122,3 +128,40 @@ MonoBehaviour:
   bulletSpeed: 50
   _firePoint: {fileID: 3008895541771263355}
   bulletPrefab: {fileID: 4143064322489161111, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
+--- !u!114 &-2244513137806743603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104229898004059957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2082506269
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2609074460154268211}
+  - {fileID: 8959776374395685940}
+  ForceRemoteRenderTimeframe: 0
+--- !u!114 &8959776374395685940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104229898004059957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 1
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0

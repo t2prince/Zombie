@@ -93,6 +93,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 47335c7340c63b941a0f69079d684a0d, type: 3}
       insertIndex: -1
       addedObject: {fileID: -3958101929419321854}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 47335c7340c63b941a0f69079d684a0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3295743044416979184}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 47335c7340c63b941a0f69079d684a0d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6300672095198925305}
   m_SourcePrefab: {fileID: 100100000, guid: 47335c7340c63b941a0f69079d684a0d, type: 3}
 --- !u!4 &1335666083365421810 stripped
 Transform:
@@ -122,3 +128,40 @@ MonoBehaviour:
   bulletSpeed: 20
   _firePoint: {fileID: 3396629247380601367}
   bulletPrefab: {fileID: 0}
+--- !u!114 &-3295743044416979184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856307222770407496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 545631562
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: -3958101929419321854}
+  - {fileID: -6300672095198925305}
+  ForceRemoteRenderTimeframe: 0
+--- !u!114 &-6300672095198925305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856307222770407496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 1
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
