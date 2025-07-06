@@ -32,7 +32,7 @@ namespace Jamcat.Ingame.Equipment
             
         private void Fire()
         {
-            //if (!Object.HasStateAuthority) return;
+            if (!Object.HasStateAuthority) return;
             if (Time.time - _lastFireTime < interval) return;
             _lastFireTime = Time.time;
 
