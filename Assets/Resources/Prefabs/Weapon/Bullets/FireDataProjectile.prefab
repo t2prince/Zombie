@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 10
-  _lifeTime: 10
+  _lifeTime: 3
   _hitMask:
     serializedVersion: 2
     m_Bits: 1
