@@ -38,7 +38,7 @@ namespace Fusion.Addons.Physics
     /// Abstracted method for capturing position and rotation values from the passed Rigidbody or Rigidbody2D
     /// to the <see cref="NetworkRBData"/> networked property.
     /// </summary>
-    protected abstract void CaptureRBPositionRotation(RBType rb, ref NetworkRBData data, bool useWorldSpace);
+    protected abstract void CaptureRBPositionRotation(RBType rb, ref NetworkRBData data);
     /// <summary>
     /// Abstracted method for capturing velocity and other values from the passed Rigidbody or Rigidbody2D
     /// to the <see cref="NetworkRBData"/> networked property.
@@ -200,7 +200,7 @@ namespace Fusion.Addons.Physics
         }
 
       } else {
-        CaptureRBPositionRotation(rb, ref Data, useWorldSpace);
+        CaptureRBPositionRotation(rb, ref Data);
 
         // Only capture extras (velocity, etc) on the State Authority or if there is client prediction.
         if (!captureTRSPOnly) {

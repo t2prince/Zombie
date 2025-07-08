@@ -1,5 +1,6 @@
 using Fusion;
 using Jamcat.Ingame.Character;
+using Projectiles.NetworkObjectFireData;
 using UnityEngine;
 
 namespace Jamcat.Ingame.Equipment
@@ -9,6 +10,8 @@ namespace Jamcat.Ingame.Equipment
         [SerializeField] float interval = 1f;
         [SerializeField] float bulletSpeed = 20f;
         [SerializeField] private Transform _firePoint;
+        [SerializeField] private Weapon_NetworkObjectFireData _fireData;
+        
         private BaseCharacter _owner;
         private float _lastFireTime;
         private NetworkRunner Runner => InGame.Instance.Runner;
@@ -20,6 +23,7 @@ namespace Jamcat.Ingame.Equipment
             _owner = owner;
             controller.OnLeftTriggerPressed += OnTriggerPressed;
             transform.SetParent(controller.transform);
+            _fireData = GetComponent<Weapon_NetworkObjectFireData>();
         }
         
         private void OnTriggerPressed(bool isPressed)
@@ -32,17 +36,10 @@ namespace Jamcat.Ingame.Equipment
             
         private void Fire()
         {
-            if (!Object.HasStateAuthority) return;
             if (Time.time - _lastFireTime < interval) return;
             _lastFireTime = Time.time;
 
-            var spawnPos = _firePoint.position;
-            var direction = transform.forward;
-
-            var bullet = Runner.Spawn(bulletPrefab, spawnPos, Quaternion.LookRotation(direction)).GetComponent<Bullet>();
-            bullet.GetComponent<NetworkTransform>().Teleport(spawnPos);
-            bullet.Init(_owner, bulletSpeed, _damage);
-            bullet.Fire(direction); 
+            _fireData.Fire();    
         }
     }
 }

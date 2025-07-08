@@ -47,16 +47,12 @@ namespace Fusion.Addons.Physics {
     }
 
     /// <inheritdoc/>
-    protected override void CaptureRBPositionRotation(Rigidbody rb, ref NetworkRBData data, bool useWorldSpace) {
-      
-      var pos = useWorldSpace ? rb.position : rb.transform.localPosition;
-      var rot = useWorldSpace ? rb.rotation : rb.transform.localRotation;
-      
-      data.TRSPData.Position = pos;
+    protected override void CaptureRBPositionRotation(Rigidbody rb, ref NetworkRBData data) {
+      data.TRSPData.Position = rb.position;
       if (UsePreciseRotation) {
-        data.FullPrecisionRotation = rot;
+        data.FullPrecisionRotation = rb.rotation;
       } else {
-        data.TRSPData.Rotation = rot;
+        data.TRSPData.Rotation = rb.rotation;
       }
     }
     /// <inheritdoc/>
@@ -64,8 +60,6 @@ namespace Fusion.Addons.Physics {
       rb.position = pos;
       rb.rotation = rot;
     }
-
-
     /// <inheritdoc/>
     protected override NetworkRigidbodyFlags GetRBFlags(Rigidbody rb) {
       var flags = default(NetworkRigidbodyFlags);
@@ -86,30 +80,19 @@ namespace Fusion.Addons.Physics {
     /// <inheritdoc/>
     protected override void CaptureExtras(Rigidbody rb, ref NetworkRBData data) {
       data.Mass        = rb.mass;
-#if UNITY_6000_0_OR_NEWER
-      data.Drag          = rb.linearDamping;
-      data.AngularDrag   = rb.angularDamping;
-      data.LinearVelocity= rb.linearVelocity;
-#else
-      data.Drag            = rb.drag;
-      data.AngularDrag     = rb.angularDrag;
-      data.LinearVelocity  = rb.velocity;
-#endif
+      data.Drag        = rb.linearDamping;
+      data.AngularDrag = rb.angularDamping;
+
+      data.LinearVelocity  = rb.linearVelocity;
       data.AngularVelocity = rb.angularVelocity;
     }
-    
-    /// <inheritdoc/>-
+    /// <inheritdoc/>
     protected override void ApplyExtras(Rigidbody rb, ref NetworkRBData data) {
       rb.mass        = data.Mass;
-#if UNITY_6000_0_OR_NEWER
-      rb.angularDamping= data.AngularDrag;
-      rb.linearDamping = data.Drag;
-      rb.linearVelocity= data.LinearVelocity;
-#else
-      rb.drag            = data.Drag;
-      rb.angularDrag     = data.AngularDrag;
-      rb.velocity        = data.LinearVelocity;
-#endif
+      rb.linearDamping        = data.Drag;
+      rb.angularDamping = data.AngularDrag;
+
+      rb.linearVelocity        = data.LinearVelocity;
       rb.angularVelocity = data.AngularVelocity;
     }
 
@@ -118,11 +101,7 @@ namespace Fusion.Addons.Physics {
       base.ResetRigidbody();
       var rb = _rigidbody;
       if (!rb.isKinematic) {
-#if UNITY_6000_0_OR_NEWER
         rb.linearVelocity        = default;
-#else
-        rb.velocity        = default;
-#endif
         rb.angularVelocity = default;
       }
     }
@@ -136,15 +115,7 @@ namespace Fusion.Addons.Physics {
 
     /// <inheritdoc/>
     protected override bool IsRigidbodyBelowSleepingThresholds(Rigidbody rb) {
-      
-      float sqrMag;
-#if UNITY_6000_0_OR_NEWER
-      sqrMag = rb.linearVelocity.sqrMagnitude;
-#else
-      sqrMag = rb.velocity.sqrMagnitude;
-#endif
-      
-      var energy  = rb.mass * sqrMag;
+      var energy  = rb.mass * rb.linearVelocity.sqrMagnitude;
       var angVel  = rb.angularVelocity;
       var inertia = rb.inertiaTensor;
 
