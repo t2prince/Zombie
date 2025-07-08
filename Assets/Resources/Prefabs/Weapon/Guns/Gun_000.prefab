@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3008895541771263355}
   - component: {fileID: 5928789594054257781}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirePos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6067343792950794545}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0.33}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0.4123}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -181,6 +181,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gun_000
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 90d20a388c80fda4d9d5a2bd784e3baf, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -285,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: 1399454352287768327, guid: 5460e1ffc0e90fa4e95a4d7e4700fdfe, type: 3}
-  _bufferSize: 8
+  _bufferSize: 3
 --- !u!114 &5266451367069521586
 MonoBehaviour:
   m_ObjectHideFlags: 0

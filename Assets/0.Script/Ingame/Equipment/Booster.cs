@@ -28,7 +28,7 @@ namespace Jamcat.Ingame.Equipment
             {
                 // 위 방향으로 힘을 가함
                 const float boostRate = 10f;
-                _rigidbody.Rigidbody.AddForce(Vector3.up * boostForce, ForceMode.Force);
+                _rigidbody.Rigidbody.AddForce((Vector3.up + _rigidbody.transform.forward * 0.2f)* boostForce, ForceMode.Force);
                 if (_gamePlayer.UseBooster(Time.fixedDeltaTime * boostEnergy * boostRate)) return;
                 isBoosting = false;
             }

@@ -46,9 +46,9 @@ namespace Jamcat.Ingame.Character
             //스타트 지점에서 부활
         }
         
-        public bool UseBooster(float deltaTime)
+        public bool UseBooster(float useEnergy)
         {
-            CurrentEnergy -= deltaTime;
+            CurrentEnergy -= useEnergy;
             if (!(CurrentEnergy <= 0)) return true;
             
             overBoosted = true;
