@@ -73,9 +73,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - Intensity: 1
+    - Intensity: 2.5
     - SoftParticleToggle_: 1
-    - SoftParticle_: 3.54
+    - SoftParticle_: 1.0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 2

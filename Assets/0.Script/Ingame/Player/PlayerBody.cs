@@ -91,7 +91,11 @@ namespace Jamcat.Ingame.Player
             if (!character.Object.HasStateAuthority) return;
             
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
+#if UNITY_EDITOR
+            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position + new Vector3(-0.3f,0,0), leftHand.transform.rotation).GetComponent<Gun>();
+#else
             var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation).GetComponent<Gun>();
+#endif
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
                 

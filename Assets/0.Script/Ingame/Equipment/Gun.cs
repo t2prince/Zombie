@@ -1,3 +1,4 @@
+using System;
 using Fusion;
 using Jamcat.Ingame.Character;
 using Projectiles.NetworkObjectFireData;
@@ -14,7 +15,6 @@ namespace Jamcat.Ingame.Equipment
         
         private BaseCharacter _owner;
         private float _lastFireTime;
-        private NetworkRunner Runner => InGame.Instance.Runner;
         
         [SerializeField] private GameObject bulletPrefab;
 
@@ -22,7 +22,9 @@ namespace Jamcat.Ingame.Equipment
         {
             _owner = owner;
             controller.OnLeftTriggerPressed += OnTriggerPressed;
+            
             transform.SetParent(controller.transform);
+            
             _fireData = GetComponent<Weapon_NetworkObjectFireData>();
         }
         
