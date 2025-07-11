@@ -73,9 +73,11 @@ namespace Projectiles.NetworkObjectFireData
 			// In Fusion 2 there is no longer a predicted spawn. We can go around this to have a buffer of pre-spawned
 			// objects that are already living inside simulation but inactive. Check NetworkObjectBuffer component for more info.
 			var projectile = _projectileBuffer.Get<FireDataProjectile>(FireTransform.position, FireTransform.rotation, Object.InputAuthority);
+			var position = FireTransform.position + _localFireTransform.localPosition;
+			Debug.Log("Fire Position:" + FireTransform.position);
 			if (projectile != null)
 			{
-				projectile.Fire(FireTransform.position, FireTransform.forward);
+				projectile.Fire(position, _localFireTransform.forward);
 			}
 		}
 	}

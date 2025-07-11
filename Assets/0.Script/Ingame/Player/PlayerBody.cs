@@ -92,12 +92,13 @@ namespace Jamcat.Ingame.Player
             
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
 #if UNITY_EDITOR
-            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position + new Vector3(-0.3f,0,0), leftHand.transform.rotation).GetComponent<Gun>();
+            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, rig.leftHand.transform.position + new Vector3(-0.3f,0,0), rig.leftHand.transform.rotation).GetComponent<Gun>();
 #else
-            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation).GetComponent<Gun>();
+            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, rig.leftHand.transform.position, rig.leftHand.transform.rotation).GetComponent<Gun>();
 #endif
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
+            gun.SetFirePoint(rig.leftHand.transform);
                 
             var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
             var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation).GetComponent<Melee>();

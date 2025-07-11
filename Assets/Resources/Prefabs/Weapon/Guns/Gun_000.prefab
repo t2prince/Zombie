@@ -333,7 +333,6 @@ MonoBehaviour:
   _knockBackPower: 0
   interval: 0.5
   bulletSpeed: 50
-  _firePoint: {fileID: 3008895541771263355}
   _fireData: {fileID: 0}
   bulletPrefab: {fileID: 4143064322489161111, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
 --- !u!114 &-2244513137806743603
@@ -401,6 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24214c764116df24b8491861069d4d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _localFireTransform: {fileID: 3008895541771263355}
   _fireTransform: {fileID: 3008895541771263355}
   _fireClip: {fileID: 8300000, guid: 53dfb554abbcb4703ae21e369a6cc50a, type: 3}
   _fireSoundSourcesRoot: {fileID: 3008895541771263355}

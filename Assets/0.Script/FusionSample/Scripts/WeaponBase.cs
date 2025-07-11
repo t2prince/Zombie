@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Fusion;
 
 namespace Projectiles
@@ -8,7 +9,13 @@ namespace Projectiles
 	{
 		// PUBLIC MEMBERS
 
-		public Transform FireTransform => _fireTransform;
+		public Transform FireTransform
+		{
+			protected get => _fireTransform;
+			set => _fireTransform = value;
+		}
+
+		[SerializeField] protected Transform _localFireTransform;
 
 		// PRIVATE MEMBERS
 
