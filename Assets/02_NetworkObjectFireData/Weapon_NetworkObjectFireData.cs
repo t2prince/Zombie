@@ -14,6 +14,8 @@ namespace Projectiles.NetworkObjectFireData
 		[SerializeField]
 		private NetworkObjectBuffer _projectileBuffer;
 
+		private Vector3 _localShootPos;
+
 		[Networked]
 		private int _fireCount { get; set; }
 
@@ -44,6 +46,7 @@ namespace Projectiles.NetworkObjectFireData
 			// with fire count larger than zero. To prevent unwanted fire effects triggered in Render method
 			// we consider all fire that happened before the Spawn as already visible.
 			_visibleFireCount = _fireCount;
+			_localShootPos = _localFireTransform.localPosition;
 		}
 
 		public override void Render()
@@ -73,7 +76,7 @@ namespace Projectiles.NetworkObjectFireData
 			// In Fusion 2 there is no longer a predicted spawn. We can go around this to have a buffer of pre-spawned
 			// objects that are already living inside simulation but inactive. Check NetworkObjectBuffer component for more info.
 			var projectile = _projectileBuffer.Get<FireDataProjectile>(FireTransform.position, FireTransform.rotation, Object.InputAuthority);
-			var position = FireTransform.position + _localFireTransform.localPosition;
+			var position = FireTransform.position;
 			Debug.Log("Fire Position:" + FireTransform.position);
 			if (projectile != null)
 			{
