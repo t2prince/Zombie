@@ -1,4 +1,5 @@
 ﻿using Fusion;
+using Jamcat.Ingame.Character;
 using UnityEngine;
 
 namespace Projectiles.NetworkObjectFireData
@@ -14,9 +15,15 @@ namespace Projectiles.NetworkObjectFireData
 	public class FireDataProjectile : NetworkBehaviour
 	{
 		// PRIVATE MEMBERS
+		
+		[SerializeField]
+		private float _damage = 10f;
+		
+		private BaseCharacter _owner;
 
 		[SerializeField]
 		private float _speed = 50f;
+		
 		[SerializeField]
 		private float _lifeTime = 4f;
 		[SerializeField]
@@ -100,6 +107,11 @@ namespace Projectiles.NetworkObjectFireData
 				{
 					hit.Collider.attachedRigidbody.AddForce(direction * _hitImpulse, ForceMode.Impulse);
 				}
+
+				var target = hit.GameObject.GetComponent<BaseCharacter>();
+				if (target == null) return;
+				
+				target.TakeDamage(_owner, _damage);
 			}
 		}
 
