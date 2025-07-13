@@ -57,17 +57,17 @@ namespace Ingame.Player
             var item = grabbable.GetComponent<Jamcat.Ingame.Item.Item>();
             if (item != null)
             {
-                // var rigidbody = item.GetComponent<Rigidbody>();
-                // if (rigidbody != null)
-                // {
-                //     Vector3 finalVelocity = _currentVelocity * _velocityMultiplier;
-                //     Vector3 finalAngularVelocity = _currentAngularVelocity * _angularVelocityMultiplier;
-                //     
-                //     finalVelocity = Vector3.ClampMagnitude(finalVelocity, _maxDropVelocity);
-                //     
-                //     rigidbody.linearVelocity = finalVelocity;
-                //     rigidbody.angularVelocity = finalAngularVelocity;
-                // }
+                var rigidbody = item.GetComponent<Rigidbody>();
+                if (rigidbody != null)
+                {
+                    Vector3 finalVelocity = _currentVelocity * _velocityMultiplier;
+                    Vector3 finalAngularVelocity = _currentAngularVelocity * _angularVelocityMultiplier;
+                    
+                    finalVelocity = Vector3.ClampMagnitude(finalVelocity, _maxDropVelocity);
+                    
+                    rigidbody.linearVelocity = finalVelocity;
+                    rigidbody.angularVelocity = finalAngularVelocity;
+                }
             }
             
             onUngrabbed?.Invoke(grabbable);

@@ -22,6 +22,7 @@ namespace Jamcat.Ingame
         public static string MapName => Instance._mapName;
         private MapController _mapController;
         private MonsterController _monsterController;
+        private MaterialSpawner _materialSpawner;
         
         public static MapController Map => Instance._mapController;
         public static MonsterController Monster => Instance._monsterController;
@@ -46,6 +47,7 @@ namespace Jamcat.Ingame
             
             SpawnPlayer();
             SpawnItems();
+            SpawnMaterials();
             
             EffectController.Instance.fadeInOut.FadeIn();
         }
@@ -88,6 +90,18 @@ namespace Jamcat.Ingame
                 item.transform.position = point.position;
                 item.Init();
             }
+        }
+
+        private void SpawnMaterials()
+        {
+            _materialSpawner = FindAnyObjectByType<MaterialSpawner>();
+            if (_materialSpawner == null)
+            {
+                var spawnerObject = new GameObject("MaterialSpawner");
+                _materialSpawner = spawnerObject.AddComponent<MaterialSpawner>();
+            }
+            
+            _materialSpawner.Initialize(Runner);
         }
 
         private void LoadController()
