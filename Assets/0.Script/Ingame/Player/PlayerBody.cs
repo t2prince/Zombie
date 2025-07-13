@@ -60,7 +60,7 @@ namespace Jamcat.Ingame.Player
         {
             var leftHand = networkRig.leftHand;
             var rightHand = networkRig.rightHand;
-            _pocket = GetComponentInChildren<Pocket>();
+            _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
             
             var grabbers = rig.GetComponentsInChildren<PlayerGrabber>();
@@ -107,6 +107,7 @@ namespace Jamcat.Ingame.Player
             var booster = InGame.Instance.Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation).GetComponent<Booster>();
             booster.transform.SetParent(boosterAttacher.transform);
             booster.Init(this, leftController, rightController);
+            booster.PlayerBody = networkRig.transform;
         }
     }
 }

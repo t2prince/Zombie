@@ -4,6 +4,7 @@ using Fusion;
 using Fusion.Addons.Physics;
 using Fusion.XR.Shared.Rig;
 using UnityEngine;
+using Jamcat.Ingame.Player;
 
 namespace Jamcat.Locomotion
 {
@@ -43,6 +44,10 @@ namespace Jamcat.Locomotion
 
         public LayerMask locomotionEnabledLayers;
         public bool disableMovement = false;
+        
+        private Vector3 lastMovementDirection;
+        public float rotationSpeed = 5f;
+        private PlayerBody playerBody;
 
         protected override void InitializeValues()
         {
@@ -54,6 +59,8 @@ namespace Jamcat.Locomotion
             lastHeadPosition = headCollider.transform.position;
             velocityIndex = 0;
             lastPosition = transform.position;
+            
+            playerBody = GetComponent<PlayerBody>();
         }
 
         private Vector3 CurrentLeftHandPosition()
@@ -172,6 +179,22 @@ namespace Jamcat.Locomotion
             if (rigidBodyMovement != Vector3.zero)
             {
                 transform.position += rigidBodyMovement;
+                
+                // PlayerBody 회전 로직 추가
+                if (playerBody != null)
+                {
+                    Vector3 horizontalMovement = new Vector3(rigidBodyMovement.x, 0, rigidBodyMovement.z);
+                    if (horizontalMovement.magnitude > 0.1f)
+                    {
+                        Vector3 targetDirection = horizontalMovement.normalized;
+                        if (Vector3.Angle(lastMovementDirection, targetDirection) > 10f)
+                        {
+                            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+                            playerBody.Body.rotation = Quaternion.Slerp(playerBody.Body.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                            lastMovementDirection = targetDirection;
+                        }
+                    }
+                }
             }
 
             lastHeadPosition = headCollider.transform.position;

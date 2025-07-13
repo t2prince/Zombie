@@ -108,7 +108,7 @@ namespace Fusion.XR.Shared.Grabbing {
             CheckHovered();
         }
 
-        void CheckHovered()
+        protected void CheckHovered()
         {
             // Hovered object may have been destroyed while being hovered. Destroyed gameobjects respond to "== null" while staying in collections
             foreach (var key in hoveredGrabbableByColliders.Keys)
