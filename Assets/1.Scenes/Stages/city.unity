@@ -19823,6 +19823,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   minBuildingHeight: 5
   maxRaycastDistance: 500
+  maxBuildingHeight: 100
   materialData: []
 --- !u!1 &494351939 stripped
 GameObject:
@@ -51717,6 +51718,14 @@ PrefabInstance:
     - target: {fileID: 314201773980975584, guid: 0c69ca3459138490e94bced965c50b3f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 733348225170664519, guid: 0c69ca3459138490e94bced965c50b3f, type: 3}
+      propertyPath: SortKey
+      value: 724750544
+      objectReference: {fileID: 0}
+    - target: {fileID: 5563620398638672868, guid: 0c69ca3459138490e94bced965c50b3f, type: 3}
+      propertyPath: SortKey
+      value: 3262120437
       objectReference: {fileID: 0}
     - target: {fileID: 6827880052365800162, guid: 0c69ca3459138490e94bced965c50b3f, type: 3}
       propertyPath: m_Name
