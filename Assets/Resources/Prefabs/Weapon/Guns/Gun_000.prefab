@@ -218,7 +218,7 @@ PrefabInstance:
       addedObject: {fileID: -8378721269347439426}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 90d20a388c80fda4d9d5a2bd784e3baf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5266451367069521586}
+      addedObject: {fileID: 8713610893739480495}
   m_SourcePrefab: {fileID: 100100000, guid: 90d20a388c80fda4d9d5a2bd784e3baf, type: 3}
 --- !u!4 &1619159914578021775 stripped
 Transform:
@@ -242,11 +242,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388bf79eb3c0440cbeeebcf3659ae24e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 0
+  _damage: 10
   _knockBackPower: 0
   interval: 0.5
   bulletSpeed: 50
-  _fireData: {fileID: 0}
+  _fireData: {fileID: 8713610893739480495}
   bulletPrefab: {fileID: 4143064322489161111, guid: 25fbd15f0a4be7f47ba3a8478db7460b, type: 3}
 --- !u!114 &-2244513137806743603
 MonoBehaviour:
@@ -268,7 +268,7 @@ MonoBehaviour:
   - {fileID: 2609074460154268211}
   - {fileID: 8959776374395685940}
   - {fileID: -8378721269347439426}
-  - {fileID: 5266451367069521586}
+  - {fileID: 8713610893739480495}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &8959776374395685940
 MonoBehaviour:
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefab: {fileID: 1399454352287768327, guid: 5460e1ffc0e90fa4e95a4d7e4700fdfe, type: 3}
   _bufferSize: 8
---- !u!114 &5266451367069521586
+--- !u!114 &8713610893739480495
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -310,13 +310,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2104229898004059957}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24214c764116df24b8491861069d4d8d, type: 3}
+  m_Script: {fileID: 11500000, guid: 93a7c447bf8b4b8c8cbedc35dcc62275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _localFireTransform: {fileID: 3008895541771263355}
   _fireTransform: {fileID: 3008895541771263355}
   _fireClip: {fileID: 8300000, guid: 53dfb554abbcb4703ae21e369a6cc50a, type: 3}
   _fireSoundSourcesRoot: {fileID: 3008895541771263355}
-  _projectilePrefab: {fileID: 1408696557959382459, guid: 5460e1ffc0e90fa4e95a4d7e4700fdfe, type: 3}
-  _useBuffer: 1
-  _projectileBuffer: {fileID: -8378721269347439426}
+  _hitMask:
+    serializedVersion: 2
+    m_Bits: 129
+  _hitImpulse: 50
+  _dummyProjectilePrefab: {fileID: -5766378943921523141, guid: 5460e1ffc0e90fa4e95a4d7e4700fdfe, type: 3}

@@ -68,6 +68,30 @@ namespace Projectiles.NetworkObjectFireData
 			{
 				_lifeCooldown = TickTimer.CreateFromSeconds(Runner, _lifeTime);
 			}
+			
+			// Fire 시점에서 디버그 정보 출력
+			Debug.Log($"[FireDataProjectile] Fire called:");
+			Debug.Log($"  Fire Position: {position}");
+			Debug.Log($"  Fire Direction: {direction}");
+			Debug.Log($"  Fire Velocity: {_fireVelocity}");
+			Debug.Log($"  Fire Tick: {_fireTick}");
+			Debug.Log($"  HitMask configured: {_hitMask.value}");
+			Debug.Log($"  HitMask layers: {GetLayerNames(_hitMask)}");
+			Debug.Log($"  Object.InputAuthority at Fire: {Object.InputAuthority}");
+			Debug.Log($"  Runner.LocalPlayer: {Runner.LocalPlayer}");
+		}
+		
+		private string GetLayerNames(LayerMask mask)
+		{
+			var layers = new System.Collections.Generic.List<string>();
+			for (int i = 0; i < 32; i++)
+			{
+				if ((mask.value & (1 << i)) != 0)
+				{
+					layers.Add($"{i}({LayerMask.LayerToName(i)})");
+				}
+			}
+			return layers.Count > 0 ? string.Join(", ", layers) : "None";
 		}
 
 		// NetworkBehaviour INTERFACE
@@ -90,12 +114,55 @@ namespace Projectiles.NetworkObjectFireData
 
 			var direction = nextPosition - previousPosition;
 
-			float distance = direction.magnitude;
+			var distance = direction.magnitude;
+			
+			if (distance <= 0f)
+			{
+				Debug.LogWarning("[FireDataProjectile] Distance is zero or negative, skipping raycast");
+				return;
+			}
+			
 			direction /= distance; // Normalize
-
+			var hit = new LagCompensatedHit();
 			var hitOptions = HitOptions.IncludePhysX | HitOptions.IgnoreInputAuthority;
-			if (Runner.LagCompensation.Raycast(previousPosition, direction, distance,
-				    Object.InputAuthority, out var hit, _hitMask, hitOptions) == true)
+			
+			
+			bool lagCompHit = false;
+			
+			// InputAuthority가 없으면 LagCompensation.Raycast 사용 불가
+			if (Object.HasInputAuthority)
+			{
+				lagCompHit = Runner.LagCompensation.Raycast(previousPosition, direction, distance,
+					    Object.InputAuthority, out hit, _hitMask, hitOptions);
+				Debug.Log($"  LagCompensation.Raycast result: {lagCompHit}");
+			}
+			else
+			{
+				Debug.LogWarning("[FireDataProjectile] No InputAuthority - cannot use LagCompensation.Raycast");
+			}
+			
+			// InputAuthority가 없거나 LagCompensation이 실패하면 Physics.Raycast 사용
+			if (!lagCompHit)
+			{
+				if (Object.HasStateAuthority) // StateAuthority에서만 Physics 기반 충돌 처리
+				{
+					RaycastHit physicsHitInfo;
+					if (Physics.Raycast(previousPosition, direction, out physicsHitInfo, distance, _hitMask))
+					{
+						Debug.Log("[FireDataProjectile] Using Physics.Raycast (StateAuthority mode)");
+						
+						// LagCompensatedHit 형태로 변환
+						hit = new LagCompensatedHit();
+						hit.Point = physicsHitInfo.point;
+						hit.Normal = physicsHitInfo.normal;
+						hit.Collider = physicsHitInfo.collider;
+						hit.GameObject = physicsHitInfo.collider.gameObject;
+						lagCompHit = true;
+					}
+				}
+			}
+			
+			if (lagCompHit)
 			{
 				_isDestroyed = true;
 				_lifeCooldown = TickTimer.CreateFromSeconds(Runner, _lifeTimeAfterHit);

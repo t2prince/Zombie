@@ -42,9 +42,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4776425986708267999}
   - component: {fileID: 1399454352287768327}
-  - component: {fileID: 1408696557959382459}
   - component: {fileID: 7051292032269901310}
   - component: {fileID: 4959884410698186286}
+  - component: {fileID: -5766378943921523141}
   m_Layer: 0
   m_Name: FireDataProjectile
   m_TagString: Untagged
@@ -85,31 +85,8 @@ MonoBehaviour:
   ObjectInterest: 1
   Flags: 264449
   NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 1408696557959382459}
+  NetworkedBehaviours: []
   ForceRemoteRenderTimeframe: 0
---- !u!114 &1408696557959382459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2377159041968830181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d8d0cf138c94288b6f53da03b59770e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 10
-  _lifeTime: 3
-  _hitMask:
-    serializedVersion: 2
-    m_Bits: 1
-  _hitImpulse: 20
-  _hitEffect: {fileID: 22341060345199204}
-  _lifeTimeAfterHit: 2
-  _visualsRoot: {fileID: 52021268794569382}
-  _trail: {fileID: 1393407400767424779}
 --- !u!33 &7051292032269901310
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -163,6 +140,23 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-5766378943921523141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2377159041968830181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cbc1bb7e8904ff2945d10cb05815436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 80
+  _maxDistance: 100
+  _hitEffect: {fileID: 22341060345199204}
+  _lifeTimeAfterHit: 2
+  _visualRoot: {fileID: 52021268794569382}
 --- !u!1001 &20942570898425314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -334,10 +328,5 @@ PrefabInstance:
 --- !u!4 &1300474296452348649 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4463598664183040, guid: 10ad1120f54e1924e945f7c26f3fabe3, type: 3}
-  m_PrefabInstance: {fileID: 1298142689499092969}
-  m_PrefabAsset: {fileID: 0}
---- !u!96 &1393407400767424779 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 96138273301831394, guid: 10ad1120f54e1924e945f7c26f3fabe3, type: 3}
   m_PrefabInstance: {fileID: 1298142689499092969}
   m_PrefabAsset: {fileID: 0}

@@ -2,6 +2,7 @@ using System;
 using Fusion;
 using Jamcat.Ingame.Character;
 using Projectiles.NetworkObjectFireData;
+using Projectiles.ProjectileDataBuffer_Hitscan;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,7 +12,7 @@ namespace Jamcat.Ingame.Equipment
     {
         [SerializeField] float interval = 1f;
         [SerializeField] float bulletSpeed = 20f;
-        [SerializeField] private Weapon_NetworkObjectFireData _fireData;
+        [SerializeField] private Weapon_ProjectileDataBuffer_Hitscan _fireData;
         
         public Transform FirePoint { get; set; } 
         
@@ -20,22 +21,19 @@ namespace Jamcat.Ingame.Equipment
         
         [SerializeField] private GameObject bulletPrefab;
 
+        public void SetFirePoint(Transform firePoint)
+        {
+            _fireData.FireTransform = firePoint;
+        }
+
         public void Init(BaseCharacter owner, HandController controller)
         {
             _owner = owner;
             controller.OnLeftTriggerPressed += OnTriggerPressed;
             
             transform.SetParent(controller.transform);
-            
-            _fireData = GetComponent<Weapon_NetworkObjectFireData>();
-            
         }
 
-        public void SetFirePoint(Transform firePoint)
-        {
-            _fireData.FireTransform = firePoint;
-        }
-        
         private void OnTriggerPressed(bool isPressed)
         {
             if (isPressed)
