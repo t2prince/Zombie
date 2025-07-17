@@ -11,7 +11,7 @@ namespace Jamcat.Ingame.Equipment
         private NetworkRigidbody3D _rigidbody;
         private bool isBoosting = false;
         [SerializeField] private float boostForce = 10f;
-        [SerializeField] private float boostEnergy = 10f;
+        [SerializeField] private float boostEnergy = 5f;
         
         public Transform PlayerBody { get; set; } 
         

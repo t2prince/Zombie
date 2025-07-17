@@ -107,7 +107,7 @@ namespace Jamcat.Ingame.Player
             var booster = InGame.Instance.Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation).GetComponent<Booster>();
             booster.transform.SetParent(boosterAttacher.transform);
             booster.Init(this, leftController, rightController);
-            booster.PlayerBody = networkRig.transform;
+            booster.PlayerBody = networkRig.GetComponentInChildren<NetworkHeadset>().transform;
         }
     }
 }
