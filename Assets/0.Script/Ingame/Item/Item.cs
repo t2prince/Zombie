@@ -12,7 +12,7 @@ namespace Jamcat.Ingame.Item
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(NetworkRigidbody3D))]
     
-    public class Item : Grabbable
+    public class Item : NetworkGrabbable
     {
         [SerializeField] private int quantity;
         public enum ITemType
@@ -40,18 +40,18 @@ namespace Jamcat.Ingame.Item
             //do it!
         }
 
-        public override void Grab(Grabber newGrabber, Transform grabPointTransform = null)
+        public override void LocalGrab()
         {
             _rigidbody.isKinematic = true;
             _collider.enabled = false;
-            base.Grab(newGrabber, grabPointTransform);
+            base.LocalGrab();
         }
 
-        public override void Ungrab()
+        public override void LocalUngrab()
         {
             _rigidbody.isKinematic = false;
             _collider.enabled = true;
-            base.Ungrab();
+            base.LocalUngrab();
         }
     }
 }

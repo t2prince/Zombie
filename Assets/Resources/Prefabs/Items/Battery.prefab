@@ -147,6 +147,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 4593553768035832471}
   - {fileID: 318935382747069624}
+  - {fileID: 170081674654514786}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &4593553768035832471
 MonoBehaviour:
@@ -211,21 +212,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7604d481da84581a234baffc03d23de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localPositionOffset: {x: 0, y: 0, z: 0}
-  localRotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  currentGrabber: {fileID: 0}
-  expectedIsKinematic: 1
-  allowedClosedHandGrabing: 1
-  networkGrabbable: {fileID: 0}
-  rb: {fileID: 0}
-  applyVelocityOnRelease: 0
-  onWillGrab:
+  networkTransform: {fileID: 0}
+  networkRigidbody: {fileID: 0}
+  _InitialIsKinematicState:
+    _value: 0
+  _CurrentGrabber: {fileID: 0}
+  _LocalPositionOffset: {x: 0, y: 0, z: 0}
+  _LocalRotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  onDidUngrab:
     m_PersistentCalls:
       m_Calls: []
-  onUngrab:
+  onDidGrab:
     m_PersistentCalls:
       m_Calls: []
-  onGrab:
-    m_PersistentCalls:
-      m_Calls: []
-  ownerName: {fileID: 0}
+  extrapolateWhileTakingAuthority: 1
+  isTakingAuthority: 0
+  grabbable: {fileID: 0}
+  quantity: 0
+  id: 0
+  type: 0
+  space: 0
+  quality: 0
