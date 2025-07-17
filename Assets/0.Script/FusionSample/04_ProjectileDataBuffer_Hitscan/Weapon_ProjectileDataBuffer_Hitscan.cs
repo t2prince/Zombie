@@ -32,18 +32,15 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 		{
 			var hitPosition = Vector3.zero;
 
-			var hitOptions = HitOptions.IncludePhysX | HitOptions.IgnoreInputAuthority;
-
 			// Whole projectile path and effects are immediately processed (= hitscan projectile)
-			if (Runner.LagCompensation.Raycast(FireTransform.position, FireTransform.forward, 100f,
-				    Object.InputAuthority, out var hit, _hitMask, hitOptions) == true)
+			if (Physics.Raycast(FireTransform.position, FireTransform.forward, out RaycastHit hit, 100f, _hitMask))
 			{
-				if (hit.Collider != null && hit.Collider.attachedRigidbody != null)
+				if (hit.collider != null && hit.collider.attachedRigidbody != null)
 				{
-					hit.Collider.attachedRigidbody.AddForce(FireTransform.forward * _hitImpulse, ForceMode.Impulse);
+					hit.collider.attachedRigidbody.AddForce(FireTransform.forward * _hitImpulse, ForceMode.Impulse);
 				}
 
-				hitPosition = hit.Point;
+				hitPosition = hit.point;
 			}
 
 			// As opposed to Example 03, with projectile data buffer it would be possible to fire
