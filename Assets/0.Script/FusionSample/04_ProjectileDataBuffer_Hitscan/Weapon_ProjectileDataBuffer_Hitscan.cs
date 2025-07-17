@@ -1,4 +1,7 @@
-﻿using Fusion;
+﻿using System;
+using Fusion;
+using Jamcat.Ingame.Character;
+using Jamcat.Ingame.Equipment;
 using UnityEngine;
 
 namespace Projectiles.ProjectileDataBuffer_Hitscan
@@ -10,14 +13,14 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 	// However if kinematic projectiles are needed, the solution needs to be more complex, proceed to Example 05.
 	public class Weapon_ProjectileDataBuffer_Hitscan : WeaponBase
 	{
-		// PRIVATE MEMBERS
-
 		[SerializeField]
 		private LayerMask _hitMask;
 		[SerializeField]
 		private float _hitImpulse = 50f;
 		[SerializeField]
 		private DummyFlyingProjectile _dummyProjectilePrefab;
+
+		[SerializeField] private float _damage = 10f; 
 
 		[Networked]
 		private int _fireCount { get; set; }
@@ -26,18 +29,38 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 
 		private int _visibleFireCount;
 
+		private Gun _gun;
+
 		// WeaponBase INTERFACE
 
 		public override void Fire()
 		{
+			var origin = FireTransform.position;
+			var direction = FireTransform.forward;
+
+			if (Object.HasInputAuthority)
+			{
+				Rpc_Fire(origin, direction);
+			}
+		}
+		
+		[Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+		public void Rpc_Fire(Vector3 fireOrigin, Vector3 fireDirection)
+		{
 			var hitPosition = Vector3.zero;
 
 			// Whole projectile path and effects are immediately processed (= hitscan projectile)
-			if (Physics.Raycast(FireTransform.position, FireTransform.forward, out RaycastHit hit, 100f, _hitMask))
+			if (Physics.Raycast(fireOrigin, fireDirection, out RaycastHit hit, 100f, _hitMask))
 			{
 				if (hit.collider != null && hit.collider.attachedRigidbody != null)
 				{
-					hit.collider.attachedRigidbody.AddForce(FireTransform.forward * _hitImpulse, ForceMode.Impulse);
+					hit.collider.attachedRigidbody.AddForce(fireDirection * _hitImpulse, ForceMode.Impulse);
+
+					var target = hit.transform.GetComponent<BaseCharacter>();
+					if (target != null)
+					{
+						_gun.Attack(target);
+					}
 				}
 
 				hitPosition = hit.point;
@@ -97,6 +120,11 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 			// like ImpactNormal, ImpactType to better reconstruct projectile effects on all clients
 			// See ProjectileManager in the Projectiles Advanced.
 			// It is however best practice to keep the ProjectileData struct as small as possible.
+		}
+
+		private void Awake()
+		{
+			
 		}
 	}
 }

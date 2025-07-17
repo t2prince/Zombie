@@ -34,6 +34,11 @@ namespace Jamcat.Ingame.Equipment
             transform.SetParent(controller.transform);
         }
 
+        public void Attack(BaseCharacter target)
+        {
+            target.TakeDamage(_owner, _damage, _knockBackPower);
+        }
+        
         private void OnTriggerPressed(bool isPressed)
         {
             if (isPressed)

@@ -44,14 +44,14 @@ namespace Jamcat.Ingame
             if (player != Runner.LocalPlayer) return;
             playerID = Runner.LocalPlayer.PlayerId - 1;
             
-            SpawnPlayer();
+            SpawnPlayer(player);
             SpawnItems();
             SpawnMaterials();
             
             EffectController.Instance.fadeInOut.FadeIn();
         }
         
-        private void SpawnPlayer()
+        private void SpawnPlayer(PlayerRef playerRef)
         {
             //충돌, 물리, 로코모션을 담당하는 프리팹
             var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
@@ -70,7 +70,7 @@ namespace Jamcat.Ingame
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
             var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
             
-            body.Init(hardwareRig, networkRig);
+            body.Init(hardwareRig, networkRig, playerRef);
             playerCamera.Init(body.Head);
             
             

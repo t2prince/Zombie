@@ -90,6 +90,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d4e7c024da9a46d41a9204c2affa5c24, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3484920783750015666}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d4e7c024da9a46d41a9204c2affa5c24, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2417241294281009573}
   m_SourcePrefab: {fileID: 100100000, guid: d4e7c024da9a46d41a9204c2affa5c24, type: 3}
 --- !u!1 &3764725034505408460 stripped
 GameObject:
@@ -251,3 +254,32 @@ MonoBehaviour:
   extrapolateWhileTakingAuthority: 1
   isTakingAuthority: 0
   grabbable: {fileID: 0}
+--- !u!114 &2417241294281009573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3764725034505408460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4290acb83d51f7448a942794de0756e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localPositionOffset: {x: 0, y: 0, z: 0}
+  localRotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  currentGrabber: {fileID: 0}
+  expectedIsKinematic: 1
+  allowedClosedHandGrabing: 1
+  networkGrabbable: {fileID: 0}
+  rb: {fileID: 0}
+  applyVelocityOnRelease: 0
+  onWillGrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onUngrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onGrab:
+    m_PersistentCalls:
+      m_Calls: []

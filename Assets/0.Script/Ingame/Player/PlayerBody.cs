@@ -1,3 +1,4 @@
+using Fusion;
 using Fusion.XR.Shared.Grabbing;
 using Fusion.XR.Shared.Rig;
 using Ingame.Player;
@@ -56,7 +57,7 @@ namespace Jamcat.Ingame.Player
         }
 #endif
         
-        public void Init(HardwareRig hardwareRig, NetworkRig networkRig)
+        public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
             var leftHand = networkRig.leftHand;
             var rightHand = networkRig.rightHand;
@@ -88,14 +89,14 @@ namespace Jamcat.Ingame.Player
             var character = GetComponent<BaseCharacter>();
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
 
-            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation).GetComponent<Gun>();
+            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, playerRef).GetComponent<Gun>();
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
             var position = hardwareRig.leftHand.GetComponentInChildren<GunAttacher>().GetPosition(gunData.id);
             gun.SetFirePoint(position);
                 
             var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
-            var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation).GetComponent<Melee>();
+            var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation, playerRef).GetComponent<Melee>();
             meleeWeapon.transform.SetParent(rightHand.transform);
             meleeWeapon.Init(character, rightController);
                 

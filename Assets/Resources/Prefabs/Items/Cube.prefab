@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2236706565611259337}
   - component: {fileID: 6102038548395103114}
   - component: {fileID: 1329340763220353632}
+  - component: {fileID: -3838891238950258547}
   m_Layer: 7
   m_Name: Cube
   m_TagString: Untagged
@@ -245,3 +246,32 @@ MonoBehaviour:
   extrapolateWhileTakingAuthority: 1
   isTakingAuthority: 0
   grabbable: {fileID: 0}
+--- !u!114 &-3838891238950258547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6020925024376724568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4290acb83d51f7448a942794de0756e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localPositionOffset: {x: 0, y: 0, z: 0}
+  localRotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  currentGrabber: {fileID: 0}
+  expectedIsKinematic: 1
+  allowedClosedHandGrabing: 1
+  networkGrabbable: {fileID: 0}
+  rb: {fileID: 0}
+  applyVelocityOnRelease: 0
+  onWillGrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onUngrab:
+    m_PersistentCalls:
+      m_Calls: []
+  onGrab:
+    m_PersistentCalls:
+      m_Calls: []
