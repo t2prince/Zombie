@@ -43,7 +43,6 @@ namespace Jamcat.Ingame
         {
             if (player != Runner.LocalPlayer) return;
             playerID = Runner.LocalPlayer.PlayerId - 1;
-                
             
             SpawnPlayer();
             SpawnItems();

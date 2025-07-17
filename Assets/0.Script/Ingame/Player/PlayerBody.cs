@@ -56,14 +56,14 @@ namespace Jamcat.Ingame.Player
         }
 #endif
         
-        public void Init(HardwareRig rig, NetworkRig networkRig)
+        public void Init(HardwareRig hardwareRig, NetworkRig networkRig)
         {
             var leftHand = networkRig.leftHand;
             var rightHand = networkRig.rightHand;
             _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
             
-            var grabbers = rig.GetComponentsInChildren<PlayerGrabber>();
+            var grabbers = hardwareRig.GetComponentsInChildren<PlayerGrabber>();
             foreach (var grabber in grabbers)
             {
                 grabber.onGrabbed += (g) =>
@@ -86,16 +86,13 @@ namespace Jamcat.Ingame.Player
             //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
             //왼손 <-> 오른손 바꿀 수 있게끔 해줄 필요 있음
             var character = GetComponent<BaseCharacter>();
-
-            // 네트워크 권한이 있는 경우에만 무기 스폰
-            if (!character.Object.HasStateAuthority) return;
-            
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
 
             var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation).GetComponent<Gun>();
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
-            gun.SetFirePoint(rig.leftHand.transform);
+            var position = hardwareRig.leftHand.GetComponent<GunAttacher>().GetPosition(gunData.id);
+            gun.SetFirePoint(hardwareRig.leftHand.transform);
                 
             var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
             var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation).GetComponent<Melee>();
