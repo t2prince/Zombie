@@ -91,8 +91,8 @@ namespace Jamcat.Ingame.Player
             var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation).GetComponent<Gun>();
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
-            var position = hardwareRig.leftHand.GetComponent<GunAttacher>().GetPosition(gunData.id);
-            gun.SetFirePoint(hardwareRig.leftHand.transform);
+            var position = hardwareRig.leftHand.GetComponentInChildren<GunAttacher>().GetPosition(gunData.id);
+            gun.SetFirePoint(position);
                 
             var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
             var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation).GetComponent<Melee>();
