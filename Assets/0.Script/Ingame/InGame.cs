@@ -45,10 +45,12 @@ namespace Jamcat.Ingame
             playerID = Runner.LocalPlayer.PlayerId - 1;
             
             SpawnPlayer(player);
+            EffectController.Instance.fadeInOut.FadeIn();
+
+            if (!Runner.IsSharedModeMasterClient) return;
+            
             SpawnItems();
             SpawnMaterials();
-            
-            EffectController.Instance.fadeInOut.FadeIn();
         }
         
         private void SpawnPlayer(PlayerRef playerRef)
@@ -101,10 +103,7 @@ namespace Jamcat.Ingame
             }
             
             // 처음 생성한 클라이언트(Host/Master Client)만 스폰하도록 수정
-            if (Runner.IsServer || Runner.IsSharedModeMasterClient)
-            {
-                _materialSpawner.Initialize(Runner);
-            }
+            _materialSpawner.Initialize(Runner);
         }
 
         private void LoadController()
