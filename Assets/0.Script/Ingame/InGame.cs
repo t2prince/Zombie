@@ -100,7 +100,11 @@ namespace Jamcat.Ingame
                 _materialSpawner = spawnerObject.AddComponent<MaterialSpawner>();
             }
             
-            _materialSpawner.Initialize(Runner);
+            // 처음 생성한 클라이언트(Host/Master Client)만 스폰하도록 수정
+            if (Runner.IsServer || Runner.IsSharedModeMasterClient)
+            {
+                _materialSpawner.Initialize(Runner);
+            }
         }
 
         private void LoadController()

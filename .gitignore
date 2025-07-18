@@ -23,6 +23,8 @@
 *.mdb
 *.opendb
 *.VC.db
+M_Skybox.mat
+M_Cloud.mat
 sysinfo.txt
 추가된 파일들 무시 적용
 이미 커밋된 항목은 .gitignore만 추가해도 무시되지 않습니다. 이전에 커밋된 항목을 무시하려면 다음 명령어를 실행하세요:
