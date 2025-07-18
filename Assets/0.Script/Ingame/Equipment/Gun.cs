@@ -12,7 +12,7 @@ namespace Jamcat.Ingame.Equipment
     {
         [SerializeField] float interval = 1f;
         [SerializeField] float bulletSpeed = 20f;
-        [SerializeField] private Weapon_ProjectileDataBuffer_Hitscan _fireData;
+        [SerializeField] private ProjectileDataBuffer _fireData;
         
         public Transform FirePoint { get; set; } 
         
