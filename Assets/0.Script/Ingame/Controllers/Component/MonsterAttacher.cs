@@ -56,7 +56,7 @@ namespace Jamcat.Ingame.Controllers.Component
             var currentWave = waveInfos[currentWaveNumber];
             yield return Util.Coroutine.WaitForSeconds(currentWave.startDelay);
             
-            while (currentWaveNumber >= waveInfos[currentWaveNumber].count)
+            while (currentCount < waveInfos[currentWaveNumber].count)
             {
                 var monster = InGame.Monster.GetMonster(currentWave.monsterId, currentWave.level);
                 monster.SetMainTarget(InGame.Map.Camp);
@@ -67,7 +67,7 @@ namespace Jamcat.Ingame.Controllers.Component
                     monsters.Remove(monster);
                 };
                 monsters.Add(monster);
-                currentWaveNumber++;
+                currentCount++;
                 
                 
                 yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
