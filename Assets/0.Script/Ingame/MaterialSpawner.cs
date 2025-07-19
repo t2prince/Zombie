@@ -102,6 +102,12 @@ namespace Jamcat.Ingame
                 return;
             }
 
+            // 마스터 클라이언트에서만 스폰
+            if (!_runner.IsSharedModeMasterClient)
+            {
+                return;
+            }
+
             foreach (var data in materialData)
             {
                 SpawnMaterialType(data);
