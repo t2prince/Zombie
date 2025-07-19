@@ -317,8 +317,10 @@ MonoBehaviour:
   _fireTransform: {fileID: 3008895541771263355}
   _fireClip: {fileID: 8300000, guid: 53dfb554abbcb4703ae21e369a6cc50a, type: 3}
   _fireSoundSourcesRoot: {fileID: 3008895541771263355}
-  _hitMask:
+  hitMask:
     serializedVersion: 2
     m_Bits: 129
-  _hitImpulse: 50
-  _dummyProjectilePrefab: {fileID: -5766378943921523141, guid: 5460e1ffc0e90fa4e95a4d7e4700fdfe, type: 3}
+  hitImpulse: 10
+  dummyProjectilePrefab: {fileID: -5766378943921523141, guid: 5460e1ffc0e90fa4e95a4d7e4700fdfe, type: 3}
+  damage: 10
+  pingInterval: 1
