@@ -15,6 +15,7 @@ namespace Jamcat.Ingame.Controllers.Component
             public int level;
             public float startDelay;
             public float interval;
+            public int count;
         }
         
         [SerializeField] private int waveStartNumber;
@@ -22,6 +23,7 @@ namespace Jamcat.Ingame.Controllers.Component
         private List<Monster> monsters = new List<Monster>();
         
         private int currentWaveNumber;
+        private int currentCount;
         
         public List<waveInfo> waveInfos;
 
@@ -45,6 +47,7 @@ namespace Jamcat.Ingame.Controllers.Component
                 monster.Kill();
             }
             StopAllCoroutines();
+            currentCount = 0;
         }
         
         private IEnumerator StartWave()
@@ -53,7 +56,7 @@ namespace Jamcat.Ingame.Controllers.Component
             var currentWave = waveInfos[currentWaveNumber];
             yield return Util.Coroutine.WaitForSeconds(currentWave.startDelay);
             
-            while (true)
+            while (currentWaveNumber >= waveInfos[currentWaveNumber].count)
             {
                 var monster = InGame.Monster.GetMonster(currentWave.monsterId, currentWave.level);
                 monster.SetMainTarget(InGame.Map.Camp);
@@ -64,6 +67,7 @@ namespace Jamcat.Ingame.Controllers.Component
                     monsters.Remove(monster);
                 };
                 monsters.Add(monster);
+                currentWaveNumber++;
                 
                 
                 yield return Util.Coroutine.WaitForSeconds(currentWave.interval);
