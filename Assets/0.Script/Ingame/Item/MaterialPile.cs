@@ -38,15 +38,7 @@ namespace Jamcat.Ingame.Item
                     Random.Range(0f, 360f),
                     Random.Range(0f, 360f)
                 );
-                InGame.Instance.Runner.Spawn(material, spawnPos, randomRotation, onBeforeSpawned: (runner, obj) =>
-                {
-                    // NetworkRigidbody가 있는 경우 master client에게 authority 할당
-                    var networkRigidbody = obj.GetComponent<Fusion.Addons.Physics.NetworkRigidbody3D>();
-                    if (networkRigidbody != null)
-                    {
-                        obj.RequestStateAuthority();
-                    }
-                });
+                InGame.Instance.Runner.Spawn(material, spawnPos, randomRotation);
             }
         }
     }

@@ -144,21 +144,18 @@ namespace Projectiles.NetworkObjectFireData
 			// InputAuthority가 없거나 LagCompensation이 실패하면 Physics.Raycast 사용
 			if (!lagCompHit)
 			{
-				if (Object.HasStateAuthority) // StateAuthority에서만 Physics 기반 충돌 처리
+				RaycastHit physicsHitInfo;
+				if (Physics.Raycast(previousPosition, direction, out physicsHitInfo, distance, _hitMask))
 				{
-					RaycastHit physicsHitInfo;
-					if (Physics.Raycast(previousPosition, direction, out physicsHitInfo, distance, _hitMask))
-					{
-						Debug.Log("[FireDataProjectile] Using Physics.Raycast (StateAuthority mode)");
-						
-						// LagCompensatedHit 형태로 변환
-						hit = new LagCompensatedHit();
-						hit.Point = physicsHitInfo.point;
-						hit.Normal = physicsHitInfo.normal;
-						hit.Collider = physicsHitInfo.collider;
-						hit.GameObject = physicsHitInfo.collider.gameObject;
-						lagCompHit = true;
-					}
+					Debug.Log("[FireDataProjectile] Using Physics.Raycast");
+					
+					// LagCompensatedHit 형태로 변환
+					hit = new LagCompensatedHit();
+					hit.Point = physicsHitInfo.point;
+					hit.Normal = physicsHitInfo.normal;
+					hit.Collider = physicsHitInfo.collider;
+					hit.GameObject = physicsHitInfo.collider.gameObject;
+					lagCompHit = true;
 				}
 			}
 			
