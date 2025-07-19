@@ -71,6 +71,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cc30702c813404fc0ac12f45634207b6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8699398306566702587}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cc30702c813404fc0ac12f45634207b6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3881410853608478439}
   m_SourcePrefab: {fileID: 100100000, guid: cc30702c813404fc0ac12f45634207b6, type: 3}
 --- !u!1 &1423521717037261309 stripped
 GameObject:
@@ -91,8 +94,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 500
   CurrentHp: 0
-  energy: 0
-  CurrentEnergy: 0
   _hitSource: {fileID: -3643402923630179982}
   _deathSource: {fileID: -266186566267355789}
   defence: 50
@@ -116,6 +117,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 136551201067926533}
+  - {fileID: 3881410853608478439}
   ForceRemoteRenderTimeframe: 0
 --- !u!82 &-266186566267355789
 AudioSource:
@@ -332,3 +334,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7286087, y: 0.9230751, z: 0.7975705}
   m_Center: {x: 0.0023685843, y: 0.46153754, z: 0.012306213}
+--- !u!114 &3881410853608478439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423521717037261309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0.15
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0

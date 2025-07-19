@@ -62,7 +62,7 @@ namespace Jamcat.Ingame.Controllers.Component
                 monster.SetMainTarget(InGame.Map.Camp);
                 monster.Spawn();
                 monster.SetPosition(transform.position);
-                monster.OnKilled += (attacker) =>
+                monster.OnKilled += (attacker) =
                 {
                     monsters.Remove(monster);
                 };
