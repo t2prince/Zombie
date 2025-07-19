@@ -281,7 +281,17 @@ namespace Jamcat.Ingame
                     return false;
                 }
 
-                var spawnedObject = _runner.Spawn(prefab, position, Quaternion.identity);
+                var spawnedObject = _runner.Spawn(prefab, position, Quaternion.identity, onBeforeSpawned: (runner, obj) =>
+                {
+                    // NetworkRigidbody가 있는 경우 master client에게 authority 할당
+                    var networkRigidbody = obj.GetComponent<Fusion.Addons.Physics.NetworkRigidbody3D>();
+                    if (networkRigidbody != null)
+                    {
+                        // Master client가 authority를 가지도록 설정
+                        obj.RequestStateAuthority();
+                    }
+                });
+                
                 if (spawnedObject != null)
                 {
                     var item = spawnedObject.GetComponent<Item.Item>();
