@@ -200,7 +200,11 @@ MonoBehaviour:
   onGrab:
     m_PersistentCalls:
       m_Calls: []
-  ownerName: {fileID: 0}
+  quantity: 0
+  id: 0
+  type: 0
+  space: 0
+  quality: 0
 --- !u!114 &-6737165247060947807
 MonoBehaviour:
   m_ObjectHideFlags: 0

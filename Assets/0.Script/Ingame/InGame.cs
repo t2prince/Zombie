@@ -46,8 +46,13 @@ namespace Jamcat.Ingame
                 
             
             SpawnPlayer();
-            SpawnItems();
-            SpawnMaterials();
+            
+            // Host만 아이템과 머터리얼 스폰
+            if (Runner.IsServer)
+            {
+                SpawnItems();
+                SpawnMaterials();
+            }
             
             EffectController.Instance.fadeInOut.FadeIn();
         }

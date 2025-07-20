@@ -91,7 +91,12 @@ namespace Jamcat.Ingame
         public void Initialize(NetworkRunner gameRunner)
         {
             _runner = gameRunner;
-            SpawnAllMaterials();
+            
+            // 서버에서만 머터리얼 스폰 실행
+            if (_runner.IsServer)
+            {
+                SpawnAllMaterials();
+            }
         }
 
         private void SpawnAllMaterials()
@@ -99,6 +104,13 @@ namespace Jamcat.Ingame
             if (_runner == null)
             {
                 Debug.LogError("NetworkRunner가 설정되지 않았습니다.");
+                return;
+            }
+
+            // 서버에서만 실행
+            if (!_runner.IsServer)
+            {
+                Debug.LogWarning("MaterialSpawner: 서버가 아닌 클라이언트에서 SpawnAllMaterials 호출됨");
                 return;
             }
 
@@ -272,6 +284,13 @@ namespace Jamcat.Ingame
 
         private bool SpawnMaterial(string prefabName, Vector3 position)
         {
+            // 서버에서만 실행
+            if (!_runner.IsServer)
+            {
+                Debug.LogError("MaterialSpawner: 서버가 아닌 클라이언트에서 SpawnMaterial 호출됨");
+                return false;
+            }
+
             try
             {
                 var prefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Items, prefabName);

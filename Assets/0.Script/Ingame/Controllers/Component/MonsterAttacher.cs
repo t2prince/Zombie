@@ -27,7 +27,7 @@ namespace Jamcat.Ingame.Controllers.Component
 
         public void SpawnMonster()
         {
-            if (!InGame.Instance.Runner.IsSharedModeMasterClient) return;
+            if (!InGame.Instance.Runner.IsServer) return;
             currentWaveNumber++;
 
             if (waveStartNumber > currentWaveNumber ||
@@ -38,7 +38,7 @@ namespace Jamcat.Ingame.Controllers.Component
         }
         public void StopWave()
         {
-            if (!InGame.Instance.Runner.IsSharedModeMasterClient) return;
+            if (!InGame.Instance.Runner.IsServer) return;
             foreach (var monster in monsters)
             {
                 if (monster == null || monster.NetworkObject == null || !monster.NetworkObject.IsValid) continue;
