@@ -55,7 +55,7 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 				ProcessFireImmediate(origin, direction);
 				
 				// 모든 클라이언트에 발사 정보 전송
-				Rpc_FireProjectile(origin, direction, _lastFireTime);
+				Rpc_FireProjectile(origin, direction);
 			}
 		}
 		
@@ -159,13 +159,8 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 		}
 		
 		[Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false, Channel = RpcChannel.Unreliable)]
-		public void Rpc_FireProjectile(Vector3 origin, Vector3 direction, float fireTime)
+		public void Rpc_FireProjectile(Vector3 origin, Vector3 direction)
 		{
-			float delay = Time.time - fireTime;
-			
-			// RPC 지연 시간 측정 및 평균 계산
-			UpdateAverageDelay(delay);
-			
 			// 발사자가 아닌 클라이언트들만 처리 (발사자는 이미 처리함)
 			if (!Object.HasInputAuthority)
 			{
