@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System;
 using Fusion;
 using Jamcat.Ingame.Character;
 using Jamcat.Ingame.Equipment;
@@ -6,141 +6,201 @@ using UnityEngine;
 
 namespace Projectiles.ProjectileDataBuffer_Hitscan
 {
+	// Using projectile data buffer is the most versatile solution that can scale very well with the project.
+	// In this example we use hitscan projectiles and the added complexity over Example 03 is minimal.
+	// Hitscan projectiles are very easy to implement and are the most efficient. You can trick the player
+	// that the projectile is flying through the air by using dummy flying projectile.
+	// However if kinematic projectiles are needed, the solution needs to be more complex, proceed to Example 05.
 	public class ProjectileDataBuffer : WeaponBase
 	{
-		[Header("Weapon Settings")]
-		[SerializeField] private LayerMask hitMask;
-		[SerializeField] private float hitImpulse = 50f;
-		[SerializeField] private DummyFlyingProjectile dummyProjectilePrefab;
-		[SerializeField] private float damage = 10f;
-		
-		[Header("Network Sync")]
-		[SerializeField] private float pingInterval = 1f;
+		[SerializeField]
+		private LayerMask _hitMask;
+		[SerializeField]
+		private float _hitImpulse = 50f;
+		[SerializeField]
+		private DummyFlyingProjectile _dummyProjectilePrefab;
 
-		[Networked] private int fireCount { get; set; }
-		[Networked, Capacity(32)] private NetworkArray<ProjectileData> projectileData { get; }
+		[SerializeField] private float _damage = 10f;
+		[SerializeField] private float _maxRpcDelay = 0.1f; // 100ms 이상 지연시 fallback 사용 
 
-		private int visibleFireCount;
-		private float averageRpcDelay = 0.05f;
-		private float lastPingTime;
-		private int delayMeasurements = 0;
-		private Gun gun;
+		[Networked]
+		private int _fireCount { get; set; }
+		[Networked, Capacity(32)]
+		private NetworkArray<ProjectileData> _projectileData { get; }
 
-		#region Unity/Fusion Lifecycle
+		private int _visibleFireCount;
+		private float _lastFireTime;
+		private float _averageRpcDelay = 0.05f; // 기본값 50ms
+		private int _delayMeasurements = 0;
 
-		private void Awake()
-		{
-			gun = GetComponent<Gun>();
-		}
+		private Gun _gun;
 
-		public override void Spawned()
-		{
-			visibleFireCount = fireCount;
-			lastPingTime = Time.time;
-		}
-
-		public override void Render()
-		{
-			visibleFireCount = fireCount;
-			
-			// 주기적 핑 측정
-			if (Time.time - lastPingTime >= pingInterval && Object.HasInputAuthority)
-			{
-				lastPingTime = Time.time;
-				Rpc_PingMeasurement(Time.time);
-			}
-		}
-
-		#endregion
-
-		#region Weapon Interface
+		// WeaponBase INTERFACE
 
 		public override void Fire()
 		{
-			if (!Object.HasInputAuthority) return;
-
 			var origin = FireTransform.position;
-			var direction = FireTransform.forward;			
-			ProcessFireImmediate(origin, direction);
-			Rpc_FireProjectile(origin, direction);
+			var direction = FireTransform.forward;
+
+			// 발사자 클라이언트에서만 처리
+			if (Object.HasInputAuthority)
+			{
+				_lastFireTime = Time.time;
+				Debug.Log($"Fire initiated by {Runner.LocalPlayer} at time: {_lastFireTime}");
+				
+				// 로컬에서 즉시 예측 처리 (지연 없음)
+				ProcessFireImmediate(origin, direction);
+				
+				// 모든 클라이언트에 발사 정보 전송
+				Rpc_FireProjectile(origin, direction, _lastFireTime);
+			}
 		}
-
-		#endregion
-
-		#region Fire Processing
-
+		
 		private void ProcessFireImmediate(Vector3 origin, Vector3 direction)
 		{
-			if (Physics.Raycast(origin, direction, out RaycastHit hit, 100f, hitMask))
+			// 로컬 클라이언트에서 즉시 레이캐스트 및 처리
+			if (Physics.Raycast(origin, direction, out RaycastHit hit, 100f, _hitMask))
 			{
 				var hitPosition = hit.point;
-				
-				// 데미지는 항상 즉시 적용
+
+				// 즉시 공격 처리 (데미지는 지연 없이)
 				var target = hit.collider.GetComponent<BaseCharacter>();
 				if (target != null)
 				{
-					gun.Attack(target);
-					Debug.Log("Attack");
+					_gun.Attack(target);
 				}
 
-				// 타겟 소유권에 따른 처리
-				var targetNetObj = hit.collider.GetComponent<NetworkObject>();
-				bool isMyTarget = targetNetObj != null && targetNetObj.HasInputAuthority;
+				// 타겟 오브젝트의 Authority 확인
+				var targetNetworkObject = hit.collider.GetComponent<NetworkObject>();
+				bool isMyTarget = targetNetworkObject != null && targetNetworkObject.HasInputAuthority;
 				
 				if (isMyTarget)
 				{
-					// 내 타겟: 모든 처리를 지연 (다른 클라이언트와 동기화)
-					Util.Coroutine.DelayedAction(() => 
-						ApplyPhysicsAndEffects(origin, direction, hitPosition, hit.collider), 
-						averageRpcDelay);
+					// 내 오브젝트면 즉시 처리
+					ApplyPhysicsAndEffects(origin, direction, hitPosition, hit.collider);
 				}
 				else
 				{
-					// 남의 타겟: RPC 지연만큼 지연
-					StartCoroutine(DelayedEffectsCoroutine(origin, direction, hitPosition, hit.collider, averageRpcDelay));
+					// 남의 오브젝트면 RPC 지연만큼 지연 (다른 클라이언트와 동기화)
+					StartCoroutine(DelayedEffectsCoroutine(origin, direction, hitPosition, hit.collider, _averageRpcDelay));
 				}
-
-				SaveProjectileData(hitPosition);
+				
+				// 데이터 버퍼에 저장
+				_projectileData.Set(_fireCount % _projectileData.Length, new ProjectileData()
+				{
+					HitPosition = hitPosition,
+				});
 			}
 			else
 			{
-				ProcessFireEffect(origin, direction, Vector3.zero, null);
+				// 빗나간 경우는 항상 즉시 처리
+				ProcessFireEffect(origin, direction, Vector3.zero);
 			}
 			
-			fireCount++;
+			// 발사자의 fireCount 증가
+			_fireCount++;
 		}
-
+		
+		private System.Collections.IEnumerator DelayedEffectsCoroutine(Vector3 origin, Vector3 direction, Vector3 hitPosition, Collider hitCollider, float delay)
+		{
+			yield return new WaitForSeconds(delay);
+			ApplyPhysicsAndEffects(origin, direction, hitPosition, hitCollider);
+		}
+		
+		private System.Collections.IEnumerator DelayedEffectsOnlyCoroutine(Vector3 origin, Vector3 direction, Vector3 hitPosition, float delay)
+		{
+			yield return new WaitForSeconds(delay);
+			ProcessFireEffect(origin, direction, hitPosition);
+		}
+		
 		private void ApplyPhysicsAndEffects(Vector3 origin, Vector3 direction, Vector3 hitPosition, Collider hitCollider)
 		{
-			ApplyPhysics(direction, hitCollider);
-			ProcessFireEffect(origin, direction, hitPosition, hitCollider);
-		}
-
-		private void ApplyPhysics(Vector3 direction, Collider hitCollider)
-		{
+			// 물리 처리
 			if (hitCollider != null && hitCollider.attachedRigidbody != null)
 			{
-				hitCollider.attachedRigidbody.AddForce(direction * hitImpulse, ForceMode.Impulse);
+				hitCollider.attachedRigidbody.AddForce(direction * _hitImpulse, ForceMode.Impulse);
+			}
+			
+			// 시각적 효과 처리
+			ProcessFireEffect(origin, direction, hitPosition);
+		}
+		
+		private void ApplyPhysicsOnly(Vector3 direction, Collider hitCollider)
+		{
+			// 물리 처리만 (이펙트 제외)
+			if (hitCollider != null && hitCollider.attachedRigidbody != null)
+			{
+				hitCollider.attachedRigidbody.AddForce(direction * _hitImpulse, ForceMode.Impulse);
 			}
 		}
-
-		private void ProcessFireEffect(Vector3 origin, Vector3 direction, Vector3 hitPosition, Collider hitTarget = null)
+		
+		private void UpdateAverageDelay(float delay)
 		{
+			_delayMeasurements++;
+			// 이동 평균 계산 (최근 10개 측정값 기준)
+			float weight = Mathf.Min(1f / _delayMeasurements, 0.1f);
+			_averageRpcDelay = _averageRpcDelay * (1f - weight) + delay * weight;
+		}
+		
+		[Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false, Channel = RpcChannel.Unreliable)]
+		public void Rpc_FireProjectile(Vector3 origin, Vector3 direction, float fireTime)
+		{
+			float delay = Time.time - fireTime;
+			
+			// RPC 지연 시간 측정 및 평균 계산
+			UpdateAverageDelay(delay);
+			
+			Debug.Log($"RPC received on client: {Runner.LocalPlayer}, HasAuthority: {Object.HasInputAuthority}, Delay: {delay:F3}s, Avg: {_averageRpcDelay:F3}s");
+			
+			// 발사자가 아닌 클라이언트들만 처리 (발사자는 이미 처리함)
+			if (!Object.HasInputAuthority)
+			{
+				if (Physics.Raycast(origin, direction, out RaycastHit hit, 100f, _hitMask))
+				{
+					var hitPosition = hit.point;
+					
+					// 타겟 오브젝트의 Authority 확인
+					var targetNetworkObject = hit.collider.GetComponent<NetworkObject>();
+					bool isMyTarget = targetNetworkObject != null && targetNetworkObject.HasInputAuthority;
+					
+					if (isMyTarget)
+					{
+						// 내 타겟이면 즉시 처리 (발사자보다 빠름)
+						ApplyPhysicsAndEffects(origin, direction, hitPosition, hit.collider);
+					}
+					else
+					{
+						// 남의 타겟이면 물리는 즉시, 이펙트는 지연
+						ApplyPhysicsOnly(direction, hit.collider);
+						StartCoroutine(DelayedEffectsOnlyCoroutine(origin, direction, hitPosition, delay));
+					}
+
+					// 데이터 버퍼에 저장
+					_projectileData.Set(_fireCount % _projectileData.Length, new ProjectileData()
+					{
+						HitPosition = hitPosition,
+					});
+				}
+				else
+				{
+					// 빗나간 경우는 즉시 이펙트 처리
+					ProcessFireEffect(origin, direction, Vector3.zero);
+				}
+				
+				_fireCount++;
+			}
+		}
+		
+		private void ProcessFireEffect(Vector3 origin, Vector3 direction, Vector3 hitPosition)
+		{
+			// 즉시 발사 효과 재생
 			PlayFireEffect();
 			
-			if (dummyProjectilePrefab != null)
+			// 즉시 더미 프로젝타일 생성
+			if (_dummyProjectilePrefab != null)
 			{
-				var dummyProjectile = Instantiate(dummyProjectilePrefab, origin, Quaternion.LookRotation(direction));
+				var dummyProjectile = Instantiate(_dummyProjectilePrefab, origin, Quaternion.LookRotation(direction));
 				dummyProjectile.SetHitPosition(hitPosition);
-
-				// 맞은 타겟이 있으면 자식으로 붙임
-				if (hitTarget != null && hitPosition != Vector3.zero)
-				{
-					// 탄환을 맞은 오브젝트의 자식으로 설정
-					dummyProjectile.transform.SetParent(hitTarget.transform);
-					// 월드 좌표를 로컬 좌표로 변환하여 위치 유지
-					dummyProjectile.transform.position = hitPosition;
-				}
 
 				if (Runner.Config.PeerMode == NetworkProjectConfig.PeerModes.Multiple)
 				{
@@ -149,95 +209,46 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 				}
 			}
 		}
-
-		private void SaveProjectileData(Vector3 hitPosition)
+		
+		[Rpc(RpcSources.InputAuthority, RpcTargets.All)]
+		public void Rpc_ReceiveHit(NetworkId targetId, Vector3 force)
 		{
-			projectileData.Set(fireCount % projectileData.Length, new ProjectileData
+			if (Runner.TryFindObject(targetId, out var target))
 			{
-				HitPosition = hitPosition
-			});
-		}
-
-		#endregion
-
-		#region RPC Handlers
-
-		[Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false, Channel = RpcChannel.Unreliable)]
-		public void Rpc_FireProjectile(Vector3 origin, Vector3 direction)
-		{
-			if (Object.HasInputAuthority) return;
-
-			if (Physics.Raycast(origin, direction, out RaycastHit hit, 100f, hitMask))
-			{
-				var hitPosition = hit.point;
-				var targetNetObj = hit.collider.GetComponent<NetworkObject>();
-				bool isMyTarget = targetNetObj != null && targetNetObj.HasInputAuthority;
-				
-				if (isMyTarget)
+				if (target.TryGetComponent(out Rigidbody rb))
 				{
-					// 내 타겟만 처리 (즉시 반응)
-					ApplyPhysicsAndEffects(origin, direction, hitPosition, hit.collider);
+					rb.linearVelocity = Vector3.zero; // 초기화 (중복 방지)
+					rb.AddForce(force, ForceMode.Impulse);
 				}
-				else
-				{
-					// 남의 타겟: 이펙트만 지연 표시 (동기화를 위해)
-					StartCoroutine(DelayedEffectsOnlyCoroutine(origin, direction, hitPosition, hit.collider, averageRpcDelay));
-				}
-
-				SaveProjectileData(hitPosition);
 			}
-			else
-			{
-				// 빗나간 경우: 이펙트만 표시
-				ProcessFireEffect(origin, direction, Vector3.zero, null);
-			}
-			
-			fireCount++;
 		}
 
-		[Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false, Channel = RpcChannel.Unreliable)]
-		public void Rpc_PingMeasurement(float sendTime)
+		public override void Spawned()
 		{
-			float pingTime = Time.time - sendTime;
-			UpdateAverageDelay(pingTime);
+			_visibleFireCount = _fireCount;
 		}
 
-		#endregion
-
-		#region Delay Management
-
-		private void UpdateAverageDelay(float delay)
+		public override void Render()
 		{
-			delayMeasurements++;
-			float weight = Mathf.Min(1f / delayMeasurements, 0.1f);
-			averageRpcDelay = averageRpcDelay * (1f - weight) + delay * weight;
+			// RPC로 즉시 처리되므로 Render에서는 동기화만 확인
+			_visibleFireCount = _fireCount;
 		}
 
-		#endregion
-
-		#region Coroutines
-
-		private IEnumerator DelayedEffectsCoroutine(Vector3 origin, Vector3 direction, Vector3 hitPosition, Collider hitCollider, float delay)
-		{
-			yield return Util.Coroutine.WaitForSeconds(delay);
-			ApplyPhysicsAndEffects(origin, direction, hitPosition, hitCollider);
-		}
-
-		private IEnumerator DelayedEffectsOnlyCoroutine(Vector3 origin, Vector3 direction, Vector3 hitPosition, Collider hitTarget, float delay)
-		{
-			yield return Util.Coroutine.WaitForSeconds(delay);
-			ProcessFireEffect(origin, direction, hitPosition, hitTarget);
-		}
-
-		#endregion
-
-		#region Data Structures
+		// DATA STRUCTURES
 
 		private struct ProjectileData : INetworkStruct
 		{
 			public Vector3 HitPosition;
+
+			// ProjectileData struct can be expanded with additional data
+			// like ImpactNormal, ImpactType to better reconstruct projectile effects on all clients
+			// See ProjectileManager in the Projectiles Advanced.
+			// It is however best practice to keep the ProjectileData struct as small as possible.
 		}
 
-		#endregion
+		private void Awake()
+		{
+			_gun = GetComponent<Gun>();
+		}
 	}
 }
