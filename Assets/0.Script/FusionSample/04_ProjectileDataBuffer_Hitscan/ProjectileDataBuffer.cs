@@ -52,19 +52,27 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 				Debug.Log($"Fire initiated by {Runner.LocalPlayer} at time: {_lastFireTime}");
 				
 				// 로컬에서 즉시 예측 처리 (지연 없음)
-				ProcessFireImmediate(origin, direction);
+				var fireResult = ProcessFireImmediate(origin, direction);
 				
-				// 모든 클라이언트에 발사 정보 전송
-				Rpc_FireProjectile(origin, direction);
+				// 모든 클라이언트에 raycast 결과 전송
+				Rpc_FireProjectile(origin, direction, fireResult.hitPosition, fireResult.hitObjectId, fireResult.hasHit);
 			}
 		}
 		
-		private void ProcessFireImmediate(Vector3 origin, Vector3 direction)
+		private FireResult ProcessFireImmediate(Vector3 origin, Vector3 direction)
 		{
 			// 로컬 클라이언트에서 즉시 레이캐스트 및 처리
 			if (Physics.Raycast(origin, direction, out RaycastHit hit, 100f, _hitMask))
 			{
 				var hitPosition = hit.point;
+				var hitObjectId = default(NetworkId);
+				
+				// NetworkObject가 있는 경우 NetworkId 가져오기
+				var targetNetworkObject = hit.collider.GetComponent<NetworkObject>();
+				if (targetNetworkObject != null)
+				{
+					hitObjectId = targetNetworkObject.Id;
+				}
 
 				// 즉시 공격 처리 (데미지는 지연 없이)
 				var target = hit.collider.GetComponent<BaseCharacter>();
@@ -74,7 +82,6 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 				}
 
 				// 타겟 오브젝트의 Authority 확인
-				var targetNetworkObject = hit.collider.GetComponent<NetworkObject>();
 				bool isMyTarget = targetNetworkObject != null && targetNetworkObject.HasStateAuthority;
 				
 				if (isMyTarget)
@@ -93,15 +100,34 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 				{
 					HitPosition = hitPosition,
 				});
+				
+				// 발사자의 fireCount 증가
+				_fireCount++;
+				
+				return new FireResult
+				{
+					hitPosition = hitPosition,
+					hitObjectId = hitObjectId,
+					hasHit = true,
+					hitCollider = hit.collider
+				};
 			}
 			else
 			{
 				// 빗나간 경우는 항상 즉시 처리
 				ProcessFireEffect(origin, direction, Vector3.zero);
+				
+				// 발사자의 fireCount 증가
+				_fireCount++;
+				
+				return new FireResult
+				{
+					hitPosition = Vector3.zero,
+					hitObjectId = default(NetworkId),
+					hasHit = false,
+					hitCollider = null
+				};
 			}
-			
-			// 발사자의 fireCount 증가
-			_fireCount++;
 		}
 		
 		private System.Collections.IEnumerator DelayedEffectsCoroutine(Vector3 origin, Vector3 direction, Vector3 hitPosition, Collider hitCollider, float delay)
@@ -159,29 +185,40 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 		}
 		
 		[Rpc(RpcSources.InputAuthority, RpcTargets.All, InvokeLocal = false, Channel = RpcChannel.Unreliable)]
-		public void Rpc_FireProjectile(Vector3 origin, Vector3 direction)
+		public void Rpc_FireProjectile(Vector3 origin, Vector3 direction, Vector3 hitPosition, NetworkId hitObjectId, bool hasHit)
 		{
 			// 발사자가 아닌 클라이언트들만 처리 (발사자는 이미 처리함)
 			if (!Object.HasInputAuthority)
 			{
-				if (Physics.Raycast(origin, direction, out RaycastHit hit, 100f, _hitMask))
+				if (hasHit)
 				{
-					var hitPosition = hit.point;
+					// 로컬에서 계산된 hit 결과 사용 (raycast 중복 제거)
+					Collider hitCollider = null;
 					
-					// 타겟 오브젝트의 Authority 확인
-					var targetNetworkObject = hit.collider.GetComponent<NetworkObject>();
-					bool isMyTarget = targetNetworkObject != null && targetNetworkObject.HasStateAuthority;
-					
-					if (isMyTarget)
+					// NetworkId로 타겟 오브젝트 찾기
+					if (hitObjectId != default(NetworkId) && Runner.TryFindObject(hitObjectId, out var hitNetworkObject))
 					{
-						// 내 타겟이면 즉시 처리 (발사자보다 빠름)
-						ApplyPhysicsAndEffects(origin, direction, hitPosition, hit.collider);
+						hitCollider = hitNetworkObject.GetComponent<Collider>();
+						
+						// 타겟 오브젝트의 Authority 확인
+						bool isMyTarget = hitNetworkObject.HasInputAuthority;
+						
+						if (isMyTarget)
+						{
+							// 내 타겟이면 즉시 처리 (발사자보다 빠름)
+							ApplyPhysicsAndEffects(origin, direction, hitPosition, hitCollider);
+						}
+						else
+						{
+							// 남의 타겟이면 물리는 즉시, 이펙트는 사전 계산된 딜레이 사용
+							ApplyPhysicsOnly(direction, hitCollider);
+							StartCoroutine(DelayedEffectsOnlyCoroutine(origin, direction, hitPosition, GetPredictedDelay(), hitCollider));
+						}
 					}
 					else
 					{
-						// 남의 타겟이면 물리는 즉시, 이펙트는 사전 계산된 딜레이 사용
-						ApplyPhysicsOnly(direction, hit.collider);
-						StartCoroutine(DelayedEffectsOnlyCoroutine(origin, direction, hitPosition, GetPredictedDelay(), hit.collider));
+						// NetworkObject가 없는 정적 오브젝트 처리
+						ProcessFireEffect(origin, direction, hitPosition);
 					}
 
 					// 데이터 버퍼에 저장
@@ -253,6 +290,14 @@ namespace Projectiles.ProjectileDataBuffer_Hitscan
 		}
 
 		// DATA STRUCTURES
+
+		private struct FireResult
+		{
+			public Vector3 hitPosition;
+			public NetworkId hitObjectId;
+			public bool hasHit;
+			public Collider hitCollider;
+		}
 
 		private struct ProjectileData : INetworkStruct
 		{
