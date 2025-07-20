@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Fusion;
 using Fusion.XR.Shared.Rig;
 using Jamcat.Core;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace Jamcat.Ingame
 {
-    public partial class InGame : SimulationBehaviour, IPlayerJoined
+    public partial class InGame : SimulationBehaviour, INetworkRunnerCallbacks
     {
         public static InGame Instance;
 
@@ -27,6 +28,8 @@ namespace Jamcat.Ingame
         public static MapController Map => Instance._mapController;
         public static MonsterController Monster => Instance._monsterController;
         
+        private Dictionary<PlayerRef, NetworkObject> _players = new(32);
+        
         public static int playerID;
 
         private void Awake()
@@ -39,50 +42,57 @@ namespace Jamcat.Ingame
             LoadController();
         }
 
-        public void PlayerJoined(PlayerRef player)
+        public void OnPlayerJoined(NetworkRunner runner, PlayerRef playerRef)
         {
-            if (player != Runner.LocalPlayer) return;
-            playerID = Runner.LocalPlayer.PlayerId - 1;
-                
-            
-            SpawnPlayer();
-            
-            // Host만 아이템과 머터리얼 스폰
-            if (Runner.IsServer)
+            if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
+                return;
+
+            var playerObj = SpawnPlayer(playerRef);
+
+            if (runner.IsServer)
             {
                 SpawnItems();
                 SpawnMaterials();
             }
-            
+
+            _players.Add(playerRef, playerObj);
             EffectController.Instance.fadeInOut.FadeIn();
         }
-        
-        private void SpawnPlayer()
+
+        public void OnPlayerLeft(NetworkRunner runner, PlayerRef playerRef)
         {
-            //충돌, 물리, 로코모션을 담당하는 프리팹
+            if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
+                return;
+
+            if (_players.TryGetValue(playerRef, out var player))
+            {
+                runner.Despawn(player);
+                _players.Remove(playerRef);
+            }
+        }
+        
+        private NetworkObject SpawnPlayer(PlayerRef playerRef)
+        {
             var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
-            
-            //카메라, 컨트롤러 연동을 담당하는 프리팹
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
-            
-            //맵에서 스폰 위치 가져오기
             var spot = _mapController.GetSpawnPosition(playerID);
-            
-            //rig 및 body 스폰
-            var networkRig =  Runner.Spawn(rigPrefab,spot.position,spot.rotation).GetComponent<NetworkRig>();
-            var body = Runner.Spawn(player,spot.position,spot.rotation).GetComponent<PlayerBody>();
-            
-            //플레이어 body를 따라오는 카메라 및 HardwareRig
+
+            var networkRig = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef)
+                .GetComponent<NetworkRig>();
+
+            var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
+                .GetComponent<PlayerBody>();
+
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
             var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-            
+
             body.Init(hardwareRig, networkRig);
             playerCamera.Init(body.Head);
-            
-            
-            //body의 로코모션에 컨트롤러 정보 전달
+
             var locomotion = body.GetComponent<Locomotion.Locomotion>();
             locomotion.Init(networkRig, hardwareRig);
+
+            return networkRig.GetComponent<NetworkObject>();
         }
 
         private void SpawnItems()
