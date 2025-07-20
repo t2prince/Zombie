@@ -320,7 +320,7 @@ MonoBehaviour:
   _hitMask:
     serializedVersion: 2
     m_Bits: 129
-  _hitImpulse: 50
+  _hitImpulse: 10
   _dummyProjectilePrefab: {fileID: -5766378943921523141, guid: 5460e1ffc0e90fa4e95a4d7e4700fdfe, type: 3}
   _damage: 10
   _maxRpcDelay: 0.1
