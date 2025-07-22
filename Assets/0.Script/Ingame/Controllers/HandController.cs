@@ -234,21 +234,27 @@ public class HandController : NetworkBehaviour
 #region Hand Animations
     private void UpdateHand()
     {
+#if !UNITY_EDITOR
         if (Object == null || !Object.HasStateAuthority)
             return;
+#endif
         
         CheckButtonPress();
         
         if (handedness == Handedness.Left)
         {
-            ChangeHandFingerPose(HandFingerPose.GripPress, leftGripAction.ReadValue<float>());
-            ChangeHandFingerPose(HandFingerPose.TriggerPress, leftTriggerAction.ReadValue<float>());
+            if (leftGripAction != null)
+                ChangeHandFingerPose(HandFingerPose.GripPress, leftGripAction.ReadValue<float>());
+            if (leftTriggerAction != null)
+                ChangeHandFingerPose(HandFingerPose.TriggerPress, leftTriggerAction.ReadValue<float>());
         }
         
         if (handedness == Handedness.Right)
         {
-            ChangeHandFingerPose(HandFingerPose.GripPress, rightGripAction.ReadValue<float>());
-            ChangeHandFingerPose(HandFingerPose.TriggerPress, rightTriggerAction.ReadValue<float>());
+            if (rightGripAction != null)
+                ChangeHandFingerPose(HandFingerPose.GripPress, rightGripAction.ReadValue<float>());
+            if (rightTriggerAction != null)
+                ChangeHandFingerPose(HandFingerPose.TriggerPress, rightTriggerAction.ReadValue<float>());
         }
     }
     

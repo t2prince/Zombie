@@ -97,7 +97,7 @@ namespace Jamcat.Locomotion
             return transformToModify.position + transformToModify.rotation * offsetVector;
         }
 
-        private void Update()
+        public void FixedUpdateNetwork()
         {
             if (leftHandTransform == null || rightHandTransform == null) return;
             
@@ -105,6 +105,21 @@ namespace Jamcat.Locomotion
             // 네트워크 권한이 없으면 로코모션을 실행하지 않음
             if (character != null && !character.Object.HasInputAuthority) return;
 #endif
+            
+            PerformLocomotion();
+        }
+        
+        private void Update()
+        {
+#if UNITY_EDITOR
+            // 에디터에서만 Update에서 실행
+            if (leftHandTransform == null || rightHandTransform == null) return;
+            PerformLocomotion();
+#endif
+        }
+        
+        private void PerformLocomotion()
+        {
             
             bool leftHandColliding = false;
             bool rightHandColliding = false;
@@ -122,7 +137,8 @@ namespace Jamcat.Locomotion
             
             //중력을 감안한 손의 이동 거리.
             //중력을 왜 고려해야하는지 체크해봐야 겠음
-            Vector3 distanceTraveled = CurrentLeftHandPosition() - lastLeftHandPosition + Vector3.down * 2f * 9.8f * Time.deltaTime * Time.deltaTime;
+            float deltaTime = Application.isEditor ? Time.deltaTime : (character?.Object?.Runner?.DeltaTime ?? Time.deltaTime);
+            Vector3 distanceTraveled = CurrentLeftHandPosition() - lastLeftHandPosition + Vector3.down * 2f * 9.8f * deltaTime * deltaTime;
             
             if (IterativeCollisionSphereCast(lastLeftHandPosition, minimumRaycastDistance, distanceTraveled, defaultPrecision, out finalPosition, true))
             {
@@ -142,7 +158,7 @@ namespace Jamcat.Locomotion
 
             //right hand
 
-            distanceTraveled = CurrentRightHandPosition() - lastRightHandPosition + Vector3.down * 2f * 9.8f * Time.deltaTime * Time.deltaTime;
+            distanceTraveled = CurrentRightHandPosition() - lastRightHandPosition + Vector3.down * 2f * 9.8f * deltaTime * deltaTime;
 
             if (IterativeCollisionSphereCast(lastRightHandPosition, minimumRaycastDistance, distanceTraveled, defaultPrecision, out finalPosition, true))
             {
@@ -186,7 +202,21 @@ namespace Jamcat.Locomotion
 
             if (rigidBodyMovement != Vector3.zero)
             {
-                transform.position += rigidBodyMovement;
+                Vector3 newPosition = transform.position + rigidBodyMovement;
+                
+                // 네트워크에서는 TeleportToPosition 사용, 에디터에서는 직접 이동
+                if (Application.isEditor)
+                {
+                    transform.position = newPosition;
+                }
+                else if (playerRigidBody != null)
+                {
+                    playerRigidBody.Teleport(newPosition, transform.rotation);
+                }
+                else
+                {
+                    transform.position = newPosition;
+                }
                 
                 // PlayerBody 회전 로직 추가
                 if (playerBody != null)
@@ -198,7 +228,7 @@ namespace Jamcat.Locomotion
                         if (Vector3.Angle(lastMovementDirection, targetDirection) > 10f)
                         {
                             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-                            playerBody.Body.rotation = Quaternion.Slerp(playerBody.Body.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                            playerBody.Body.rotation = Quaternion.Slerp(playerBody.Body.rotation, targetRotation, rotationSpeed * deltaTime);
                             lastMovementDirection = targetDirection;
                         }
                     }
@@ -390,10 +420,11 @@ namespace Jamcat.Locomotion
 
         private void StoreVelocities()
         {
+            float deltaTime = Application.isEditor ? Time.deltaTime : (character?.Object?.Runner?.DeltaTime ?? Time.deltaTime);
             velocityIndex = (velocityIndex + 1) % velocityHistorySize;
             Vector3 oldestVelocity = velocityHistory[velocityIndex];
-            currentVelocity = (transform.position - lastPosition) / Time.deltaTime;
-            denormalizedVelocityAverage += (currentVelocity - oldestVelocity) / (float)velocityHistorySize;
+            currentVelocity = (transform.position - lastPosition) / deltaTime;
+            denormalizedVelocityAverage += (currentVelocity - oldestVelocity) / velocityHistorySize;
             velocityHistory[velocityIndex] = currentVelocity;
             lastPosition = transform.position;
         }

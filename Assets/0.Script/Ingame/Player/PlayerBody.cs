@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 
 namespace Jamcat.Ingame.Player
 {
-    public class PlayerBody : MonoBehaviour
+    public class PlayerBody : NetworkBehaviour
     {
         [SerializeField] private Transform _head;
         [SerializeField] private Transform _body;
@@ -24,8 +24,7 @@ namespace Jamcat.Ingame.Player
         private Melee currentMelee;
         private Barrier currentBarrier;
         private Booster currentBooster;
-
-        
+        private BaseCharacter character;
 
 #if UNITY_EDITOR
         private InputAction arrowKeyAction;
@@ -40,19 +39,36 @@ namespace Jamcat.Ingame.Player
                 .With("Left", "<Keyboard>/leftArrow")
                 .With("Right", "<Keyboard>/rightArrow");
             arrowKeyAction.Enable();
+            
+            character = GetComponent<BaseCharacter>();
+        }
+        
+        public override void FixedUpdateNetwork()
+        {
+            // 네트워크 권한이 없으면 이동 로직을 실행하지 않음
+            if (character != null && !character.Object.HasInputAuthority) return;
+            
+            PerformMovement();
         }
         
         private void Update()
         {
+            // 에디터에서만 Update에서 실행
+            PerformMovement();
+        }
+        
+        private void PerformMovement()
+        {
             // 방향 키 입력 값 읽기
             var input = arrowKeyAction.ReadValue<Vector2>();
-            var move = Vector3.forward * input.y * moveSpeed * Time.deltaTime;
+            float deltaTime = Application.isEditor ? Time.deltaTime : (character?.Object?.Runner?.DeltaTime ?? Time.deltaTime);
+            var move = Vector3.forward * input.y * moveSpeed * deltaTime;
 
             // 앞뒤 이동 (로컬 좌표계 기준)
             transform.Translate(move, Space.Self);
 
             // 좌우 회전
-            var rotation = input.x * moveSpeed * 100f * Time.deltaTime;
+            var rotation = input.x * moveSpeed * 100f * deltaTime;
             transform.Rotate(Vector3.up, rotation);
         }
 #endif
@@ -86,7 +102,7 @@ namespace Jamcat.Ingame.Player
             
             //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
             //왼손 <-> 오른손 바꿀 수 있게끔 해줄 필요 있음
-            var character = GetComponent<BaseCharacter>();
+            character = GetComponent<BaseCharacter>();
             var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
 
             var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, playerRef).GetComponent<Gun>();
