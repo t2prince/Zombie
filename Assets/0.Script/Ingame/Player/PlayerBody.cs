@@ -21,9 +21,11 @@ namespace Jamcat.Ingame.Player
         public Transform Head => _head;
         public Transform Body => _body;
 
-        [Networked] public int GunId { get; set; }
-        [Networked] public int MeleeId { get; set; }
-        [Networked] public int BoosterId { get; set; }
+        [Networked] public int GunId { get; set; } = -1;
+        [Networked] public int MeleeId { get; set; } = -1;
+        [Networked] public int BoosterId { get; set; } = -1;
+        
+        private bool _weaponsSpawned = false;
 
         private Gun currentGun;
         private Melee currentMelee;
@@ -31,6 +33,7 @@ namespace Jamcat.Ingame.Player
         private Booster currentBooster;
         private BaseCharacter character;
         private NetworkRig _networkRig;
+        private HardwareRig _hardwareRig;
 
 #if UNITY_EDITOR
         private InputAction arrowKeyAction;
@@ -82,8 +85,7 @@ namespace Jamcat.Ingame.Player
         public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
             _networkRig = networkRig;
-            var leftHand = networkRig.leftHand;
-            var rightHand = networkRig.rightHand;
+            _hardwareRig = hardwareRig;
             _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
             
@@ -108,29 +110,51 @@ namespace Jamcat.Ingame.Player
             }
             
             character = GetComponent<BaseCharacter>();
+            
+            // 로컬 플레이어인 경우에만 무기 정보 설정 및 스폰
+            if (playerRef == InGame.Instance.Runner.LocalPlayer)
+            {
+                var weapons = PlayerManager.GetWeapons();
+                GunId = weapons.gunId;
+                MeleeId = weapons.meleeId; 
+                BoosterId = weapons.boosterId;
+                
+                Debug.Log($"[PlayerBody] Init - Spawning weapons for local player - GunId:{GunId}, MeleeId:{MeleeId}, BoosterId:{BoosterId}");
+                SpawnWeapons();
+                _weaponsSpawned = true;
+            }
+            else
+            {
+                Debug.Log($"[PlayerBody] Init - Remote player, waiting for weapon data sync");
+            }
         }
 
         public override void Spawned()
         {
             base.Spawned();
 
-            // InputAuthority가 있는 플레이어(로컬 플레이어)인 경우 무기 정보 설정
+            // InputAuthority가 있는 플레이어(로컬 플레이어)인 경우 카메라 설정
             if (Object.HasInputAuthority)
             {
-                var weapons = PlayerManager.GetWeapons();
-                GunId = weapons.gunId;
-                MeleeId = weapons.meleeId;
-                BoosterId = weapons.boosterId;
-                
                 var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
                 if (playerCamera != null)
                 {
                     playerCamera.Init(_head);
                 }
             }
+        }
+        
+        public override void Render()
+        {
+            base.Render();
             
-            // 무기 스폰 (모든 플레이어)
-            SpawnWeapons();
+            // 원격 플레이어의 무기 정보가 동기화되면 스폰
+            if (!_weaponsSpawned && GunId >= 0 && MeleeId >= 0 && BoosterId >= 0)
+            {
+                Debug.Log($"[PlayerBody] Render - Spawning weapons for remote player - GunId:{GunId}, MeleeId:{MeleeId}, BoosterId:{BoosterId}");
+                SpawnWeapons();
+                _weaponsSpawned = true;
+            }
         }
         
         private void SpawnWeapons()
@@ -150,6 +174,12 @@ namespace Jamcat.Ingame.Player
             var gun = Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, Object.InputAuthority).GetComponent<Gun>();
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
+            
+            if (_hardwareRig != null)
+            {
+                var position = _hardwareRig.leftHand.GetComponentInChildren<GunAttacher>().GetPosition(gunData.id);
+                gun.SetFirePoint(position);
+            }
             
             // Melee 스폰
             var meleeData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Melee, MeleeId);
