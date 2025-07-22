@@ -82,9 +82,13 @@ public class HandController : NetworkBehaviour
         controller = GameObject.FindGameObjectWithTag(handedness == Handedness.Right ? "rightController" : "leftController").GetComponent<Controller>();
         rayInteractor = controller.GetComponentInChildren<RayInteractor>();
         grabInteractor = controller.GetComponentInChildren<GrabInteractor>();
+
+        if (rayInteractor != null)
+        {
+            rayInteractor.gameObject.SetActive(false);
+            grabInteractor.gameObject.SetActive(false);    
+        }
         
-        rayInteractor.gameObject.SetActive(false);
-        grabInteractor.gameObject.SetActive(false);
         
         rayInteractor.WhenStateChanged += HandleRayStateChanged;
         grabInteractor.WhenStateChanged += HandleGrabStateChanged;
@@ -145,8 +149,8 @@ public class HandController : NetworkBehaviour
     {
         UpdateHand();
 #if UNITY_EDITOR
+        if (wasdAction == null) return;
         var wasdValue = wasdAction.ReadValue<Vector2>();
-
         if (wasdValue.y > 0) // W 키
         {
             OnLeftTriggerPressed?.Invoke(true);
