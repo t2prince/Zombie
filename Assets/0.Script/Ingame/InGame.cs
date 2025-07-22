@@ -85,8 +85,13 @@ namespace Jamcat.Ingame
             var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<PlayerBody>();
 
-            var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-            var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+            HardwareRig hardwareRig = null;
+            
+            if (networkRig.IsLocalNetworkRig)
+            {
+                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+                hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+            }
 
             body.Init(hardwareRig, networkRig, playerRef);
 

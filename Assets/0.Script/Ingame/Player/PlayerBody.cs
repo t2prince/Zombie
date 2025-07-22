@@ -6,6 +6,7 @@ using Jamcat.Ingame.Character;
 using Jamcat.Ingame.Controllers.Component;
 using Jamcat.Ingame.Equipment;
 using Jamcat.Managers.Weapon;
+using Jamcat.Managers.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,11 +21,16 @@ namespace Jamcat.Ingame.Player
         public Transform Head => _head;
         public Transform Body => _body;
 
+        [Networked] public int GunId { get; set; }
+        [Networked] public int MeleeId { get; set; }
+        [Networked] public int BoosterId { get; set; }
+
         private Gun currentGun;
         private Melee currentMelee;
         private Barrier currentBarrier;
         private Booster currentBooster;
         private BaseCharacter character;
+        private NetworkRig _networkRig;
 
 #if UNITY_EDITOR
         private InputAction arrowKeyAction;
@@ -75,65 +81,89 @@ namespace Jamcat.Ingame.Player
         
         public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
+            _networkRig = networkRig;
             var leftHand = networkRig.leftHand;
             var rightHand = networkRig.rightHand;
             _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
             
-            var grabbers = hardwareRig.GetComponentsInChildren<PlayerGrabber>();
-            foreach (var grabber in grabbers)
+            if (hardwareRig != null)
             {
-                grabber.onGrabbed += (g) =>
+                var grabbers = hardwareRig.GetComponentsInChildren<PlayerGrabber>();
+                foreach (var grabber in grabbers)
                 {
-                    var item = grabber.GetComponent<Item.Item>();
-                    if (item == null || item.type == Item.Item.ITemType.Use) return;
+                    grabber.onGrabbed += (g) =>
+                    {
+                        var item = grabber.GetComponent<Item.Item>();
+                        if (item == null || item.type == Item.Item.ITemType.Use) return;
+                        
+                        _pocket.gameObject.SetActive(true);
+                    };    
                     
-                    _pocket.gameObject.SetActive(true);
-                };    
-                
-                grabber.onUngrabbed += (g) =>
-                {
-                    _pocket.gameObject.SetActive(false);
-                };   
+                    grabber.onUngrabbed += (g) =>
+                    {
+                        _pocket.gameObject.SetActive(false);
+                    };   
+                }
             }
-
-            var leftController = leftHand.GetComponentInChildren<HandController>();
-            var rightController = rightHand.GetComponentInChildren<HandController>();
             
-            //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
-            //왼손 <-> 오른손 바꿀 수 있게끔 해줄 필요 있음
             character = GetComponent<BaseCharacter>();
-            var gunData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Gun);
-
-            var gun = InGame.Instance.Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, playerRef).GetComponent<Gun>();
-            gun.transform.SetParent(leftHand.transform);
-            gun.Init(character, leftController);
-            var position = hardwareRig.leftHand.GetComponentInChildren<GunAttacher>().GetPosition(gunData.id);
-            gun.SetFirePoint(position);
-                
-            var meleeData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Melee);
-            var meleeWeapon = InGame.Instance.Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation, playerRef).GetComponent<Melee>();
-            meleeWeapon.transform.SetParent(rightHand.transform);
-            meleeWeapon.Init(character, rightController);
-                
-            var boosterData = WeaponManager.GetCurrentWeaponData(WeaponData.WeaponType.Booster);
-            var boosterAttacher = networkRig.GetComponentInChildren<Attacher>();
-            var booster = InGame.Instance.Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation).GetComponent<Booster>();
-            booster.transform.SetParent(boosterAttacher.transform);
-            booster.Init(this, leftController, rightController);
-            booster.PlayerBody = networkRig.GetComponentInChildren<NetworkHeadset>().transform;
         }
 
         public override void Spawned()
         {
             base.Spawned();
 
-            if (!Object.HasInputAuthority) return;
-            var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-            if (playerCamera != null)
+            // InputAuthority가 있는 플레이어(로컬 플레이어)인 경우 무기 정보 설정
+            if (Object.HasInputAuthority)
             {
-                playerCamera.Init(_head);
+                var weapons = PlayerManager.GetWeapons();
+                GunId = weapons.gunId;
+                MeleeId = weapons.meleeId;
+                BoosterId = weapons.boosterId;
+                
+                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+                if (playerCamera != null)
+                {
+                    playerCamera.Init(_head);
+                }
             }
+            
+            // 무기 스폰 (모든 플레이어)
+            SpawnWeapons();
+        }
+        
+        private void SpawnWeapons()
+        {
+            if (_networkRig == null) return;
+            
+            var leftHand = _networkRig.leftHand;
+            var rightHand = _networkRig.rightHand;
+            var leftController = leftHand.GetComponentInChildren<HandController>();
+            var rightController = rightHand.GetComponentInChildren<HandController>();
+            
+            //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
+            //왼손 <-> 오른손 바꿀 수 있게끔 해줄 필요 있음
+            
+            // Gun 스폰
+            var gunData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Gun, GunId);
+            var gun = Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, Object.InputAuthority).GetComponent<Gun>();
+            gun.transform.SetParent(leftHand.transform);
+            gun.Init(character, leftController);
+            
+            // Melee 스폰
+            var meleeData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Melee, MeleeId);
+            var meleeWeapon = Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation, Object.InputAuthority).GetComponent<Melee>();
+            meleeWeapon.transform.SetParent(rightHand.transform);
+            meleeWeapon.Init(character, rightController);
+            
+            // Booster 스폰
+            var boosterData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Booster, BoosterId);
+            var boosterAttacher = _networkRig.GetComponentInChildren<Attacher>();
+            var booster = Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation).GetComponent<Booster>();
+            booster.transform.SetParent(boosterAttacher.transform);
+            booster.Init(this, leftController, rightController);
+            booster.PlayerBody = _networkRig.GetComponentInChildren<NetworkHeadset>().transform;
         }
     }
 }
