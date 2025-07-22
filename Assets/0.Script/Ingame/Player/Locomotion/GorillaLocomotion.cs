@@ -5,6 +5,7 @@ using Fusion.Addons.Physics;
 using Fusion.XR.Shared.Rig;
 using UnityEngine;
 using Jamcat.Ingame.Player;
+using Jamcat.Ingame.Character;
 
 namespace Jamcat.Locomotion
 {
@@ -43,11 +44,12 @@ namespace Jamcat.Locomotion
         public Vector3 leftHandOffset;
 
         public LayerMask locomotionEnabledLayers;
-        public bool disableMovement = false;
+        public bool disableMovement;
         
         private Vector3 lastMovementDirection;
         public float rotationSpeed = 5f;
         private PlayerBody playerBody;
+        private BaseCharacter character;
 
         protected override void InitializeValues()
         {
@@ -61,6 +63,7 @@ namespace Jamcat.Locomotion
             lastPosition = transform.position;
             
             playerBody = GetComponent<PlayerBody>();
+            character = GetComponent<BaseCharacter>();
         }
 
         private Vector3 CurrentLeftHandPosition()
@@ -97,6 +100,11 @@ namespace Jamcat.Locomotion
         private void Update()
         {
             if (leftHandTransform == null || rightHandTransform == null) return;
+            
+#if !UNITY_EDITOR
+            // 네트워크 권한이 없으면 로코모션을 실행하지 않음
+            if (character != null && !character.Object.HasInputAuthority) return;
+#endif
             
             bool leftHandColliding = false;
             bool rightHandColliding = false;

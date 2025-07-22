@@ -9,7 +9,8 @@ namespace Jamcat.Ingame.Equipment
     {
         private GamePlayer _gamePlayer;
         private NetworkRigidbody3D _rigidbody;
-        private bool isBoosting = false;
+        private bool isBoostingUp = false;
+        private bool isBoostingForward = false;
         [SerializeField] private float boostForce = 10f;
         [SerializeField] private float boostEnergy = 5f;
         
@@ -20,33 +21,52 @@ namespace Jamcat.Ingame.Equipment
         {
             _rigidbody = body.GetComponent<NetworkRigidbody3D>();
             _gamePlayer = body.GetComponent<GamePlayer>();
-            leftHand.OnLeftSecondaryButtonPressed += BoostStart;
-            leftHand.OnLeftSecondaryButtonReleased += BoostEnd;
+            leftHand.OnLeftSecondaryButtonPressed += BoostUpStart;
+            leftHand.OnLeftSecondaryButtonReleased += BoostUpEnd;
+            
+            rightHand.OnLeftSecondaryButtonPressed += BoostForwardStart;
+            rightHand.OnLeftSecondaryButtonReleased += BoostForwardEnd;
         }
 
         private void FixedUpdate()
         {
-            if (isBoosting && _rigidbody != null)
+            if ((isBoostingUp || isBoostingForward) && _rigidbody != null)
             {
                 // 위 방향으로 힘을 가함
                 const float boostRate = 10f;
-                _rigidbody.Rigidbody.AddForce((Vector3.up + PlayerBody.transform.forward * 0.2f)* boostForce, ForceMode.Force);
+                var direction = Vector3.zero;
+                if(isBoostingUp) direction += Vector3.up;
+                if(isBoostingForward) direction += PlayerBody.transform.forward;
+                _rigidbody.Rigidbody.AddForce(direction * (0.2f * boostForce), ForceMode.Force);
                 if (_gamePlayer.UseBooster(Time.fixedDeltaTime * boostEnergy * boostRate)) return;
-                isBoosting = false;
+                isBoostingUp = false;
             }
         }
 
-        public void BoostStart()
+        public void BoostUpStart()
         {
             if (_gamePlayer.IsBoostable())
             {
-                isBoosting = true;
+                isBoostingUp = true;
             }
         }
 
-        public void BoostEnd()
+        public void BoostUpEnd()
         {
-            isBoosting = false;
+            isBoostingUp = false;
+        }
+        
+        public void BoostForwardStart()
+        {
+            if (_gamePlayer.IsBoostable())
+            {
+                isBoostingUp = true;
+            }
+        }
+
+        public void BoostForwardEnd()
+        {
+            isBoostingUp = false;
         }
     }
 }
