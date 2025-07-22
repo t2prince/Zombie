@@ -127,14 +127,12 @@ namespace Jamcat.Ingame.Player
         public override void Spawned()
         {
             base.Spawned();
-            
-            if (Object.HasInputAuthority)
+
+            if (!Object.HasInputAuthority) return;
+            var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+            if (playerCamera != null)
             {
-                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-                if (playerCamera != null)
-                {
-                    playerCamera.Init(_head);
-                }
+                playerCamera.Init(_head);
             }
         }
     }
