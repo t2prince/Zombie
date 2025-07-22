@@ -80,18 +80,6 @@ public class HandController : NetworkBehaviour
     private void Start()
     {
         controller = GameObject.FindGameObjectWithTag(handedness == Handedness.Right ? "rightController" : "leftController").GetComponent<Controller>();
-        rayInteractor = controller.GetComponentInChildren<RayInteractor>();
-        grabInteractor = controller.GetComponentInChildren<GrabInteractor>();
-
-        if (rayInteractor != null)
-        {
-            rayInteractor.gameObject.SetActive(false);
-            grabInteractor.gameObject.SetActive(false);    
-        }
-        
-        
-        rayInteractor.WhenStateChanged += HandleRayStateChanged;
-        grabInteractor.WhenStateChanged += HandleGrabStateChanged;
         
 #if UNITY_EDITOR            
         // WASD 키 입력 액션 초기화
