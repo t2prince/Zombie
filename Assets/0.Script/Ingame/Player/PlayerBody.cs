@@ -123,5 +123,19 @@ namespace Jamcat.Ingame.Player
             booster.Init(this, leftController, rightController);
             booster.PlayerBody = networkRig.GetComponentInChildren<NetworkHeadset>().transform;
         }
+
+        public override void Spawned()
+        {
+            base.Spawned();
+            
+            if (Object.HasInputAuthority)
+            {
+                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+                if (playerCamera != null)
+                {
+                    playerCamera.Init(_head);
+                }
+            }
+        }
     }
 }

@@ -89,7 +89,11 @@ namespace Jamcat.Ingame
             var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
 
             body.Init(hardwareRig, networkRig, playerRef);
-            playerCamera.Init(body.Head);
+            
+            if (networkRig.IsLocalNetworkRig)
+            {
+                playerCamera.Init(body.Head);
+            }
 
             var locomotion = body.GetComponent<Locomotion.Locomotion>();
             locomotion.Init(networkRig, hardwareRig);
