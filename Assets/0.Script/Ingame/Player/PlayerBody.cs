@@ -26,6 +26,7 @@ namespace Jamcat.Ingame.Player
         [Networked] public int BoosterId { get; set; } = -1;
         
         private bool _weaponsSpawned = false;
+        private PlayerRef _playerRef;
 
         private Gun currentGun;
         private Melee currentMelee;
@@ -86,6 +87,7 @@ namespace Jamcat.Ingame.Player
         {
             _networkRig = networkRig;
             _hardwareRig = hardwareRig;
+            _playerRef = playerRef;
             _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
             
@@ -171,7 +173,7 @@ namespace Jamcat.Ingame.Player
             
             // Gun 스폰
             var gunData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Gun, GunId);
-            var gun = Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, Object.InputAuthority).GetComponent<Gun>();
+            var gun = Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, _playerRef).GetComponent<Gun>();
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
             
@@ -183,14 +185,14 @@ namespace Jamcat.Ingame.Player
             
             // Melee 스폰
             var meleeData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Melee, MeleeId);
-            var meleeWeapon = Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation, Object.InputAuthority).GetComponent<Melee>();
+            var meleeWeapon = Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation, _playerRef).GetComponent<Melee>();
             meleeWeapon.transform.SetParent(rightHand.transform);
             meleeWeapon.Init(character, rightController);
             
             // Booster 스폰
             var boosterData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Booster, BoosterId);
             var boosterAttacher = _networkRig.GetComponentInChildren<Attacher>();
-            var booster = Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation).GetComponent<Booster>();
+            var booster = Runner.Spawn(boosterData.weaponPrefab, boosterAttacher.transform.position, boosterAttacher.transform.rotation, _playerRef).GetComponent<Booster>();
             booster.transform.SetParent(boosterAttacher.transform);
             booster.Init(this, leftController, rightController);
             booster.PlayerBody = _networkRig.GetComponentInChildren<NetworkHeadset>().transform;
