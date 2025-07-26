@@ -35,6 +35,7 @@ namespace Jamcat.Ingame.Player
         private BaseCharacter character;
         private NetworkRig _networkRig;
         private HardwareRig _hardwareRig;
+        private bool _isInitialized = false;
 
 #if UNITY_EDITOR
         private InputAction arrowKeyAction;
@@ -83,10 +84,13 @@ namespace Jamcat.Ingame.Player
         }
 #endif
         
-        [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+        [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
         public void RPC_InitializeBody(NetworkRig networkRig, PlayerRef playerRef)
         {
-            // 각 클라이언트에서 자신의 hardwareRig을 찾아서 초기화
+            // 이미 초기화되었으면 스킵
+            if (_isInitialized) return;
+
+            // 자신의 NetworkRig인 경우에만 hardwareRig을 찾아서 초기화
             HardwareRig hardwareRig = null;
             
             if (networkRig.IsLocalNetworkRig)
@@ -154,6 +158,8 @@ namespace Jamcat.Ingame.Player
             {
                 Debug.Log($"[PlayerBody] Init - Remote player, waiting for weapon data sync");
             }
+            
+            _isInitialized = true;
         }
 
         public override void Spawned()
