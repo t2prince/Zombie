@@ -83,6 +83,31 @@ namespace Jamcat.Ingame.Player
         }
 #endif
         
+        [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+        public void RPC_InitializeBody(NetworkRig networkRig, PlayerRef playerRef)
+        {
+            // 각 클라이언트에서 자신의 hardwareRig을 찾아서 초기화
+            HardwareRig hardwareRig = null;
+            
+            if (networkRig.IsLocalNetworkRig)
+            {
+                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+                if (playerCamera != null)
+                {
+                    hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+                }
+            }
+            
+            Init(hardwareRig, networkRig, playerRef);
+            
+            // Locomotion도 같이 초기화
+            var locomotion = GetComponent<Locomotion.Locomotion>();
+            if (locomotion != null)
+            {
+                locomotion.Init(networkRig, hardwareRig);
+            }
+        }
+
         public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
             _networkRig = networkRig;

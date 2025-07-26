@@ -32,8 +32,6 @@ namespace Jamcat.Ingame
         
         private Dictionary<PlayerRef, NetworkObject> _players = new(32);
         
-        public static int playerID;
-
         private void Awake()
         {
             Instance = this;
@@ -77,7 +75,7 @@ namespace Jamcat.Ingame
         {
             var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
-            var spot = _mapController.GetSpawnPosition(playerID);
+            var spot = _mapController.GetSpawnPosition(playerRef.PlayerId - 1);
 
             var networkRig = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<NetworkRig>();
@@ -85,18 +83,8 @@ namespace Jamcat.Ingame
             var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<PlayerBody>();
 
-            HardwareRig hardwareRig = null;
-            
-            if (networkRig.IsLocalNetworkRig)
-            {
-                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-                hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-            }
-
-            body.Init(hardwareRig, networkRig, playerRef);
-
-            var locomotion = body.GetComponent<Locomotion.Locomotion>();
-            locomotion.Init(networkRig, hardwareRig);
+            // RPC를 통해 각 클라이언트에서 자신의 hardwareRig으로 초기화
+            body.RPC_InitializeBody(networkRig, playerRef);
 
             return networkRig.GetComponent<NetworkObject>();
         }
