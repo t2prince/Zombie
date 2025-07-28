@@ -114,17 +114,12 @@ namespace Jamcat.Ingame.Player
             
             character = GetComponent<BaseCharacter>();
             
-            // 로컬 플레이어인 경우에만 무기 정보 설정 및 스폰
+            // 로컬 플레이어인 경우에만 무기 정보 설정 후 호스트에 스폰 요청
             if (playerRef == InGame.Instance.Runner.LocalPlayer)
             {
                 var weapons = PlayerManager.GetWeapons();
-                GunId = weapons.gunId;
-                MeleeId = weapons.meleeId; 
-                BoosterId = weapons.boosterId;
-                
-                Debug.Log($"[PlayerBody] Init - Spawning weapons for local player - GunId:{GunId}, MeleeId:{MeleeId}, BoosterId:{BoosterId}");
-                SpawnWeapons();
-                _weaponsSpawned = true;
+                Debug.Log($"[PlayerBody] Init - Requesting weapon spawn for local player - GunId:{weapons.gunId}, MeleeId:{weapons.meleeId}, BoosterId:{weapons.boosterId}");
+                RPC_RequestWeaponSpawn(weapons.gunId, weapons.meleeId, weapons.boosterId);
             }
             else
             {
@@ -189,9 +184,31 @@ namespace Jamcat.Ingame.Player
             }
         }
         
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_RequestWeaponSpawn(int gunId, int meleeId, int boosterId)
+        {
+            Debug.Log($"[PlayerBody] RPC_RequestWeaponSpawn - GunId:{gunId}, MeleeId:{meleeId}, BoosterId:{boosterId}");
+            
+            // 무기 정보 설정
+            GunId = gunId;
+            MeleeId = meleeId;
+            BoosterId = boosterId;
+            
+            // 호스트에서 무기 스폰
+            SpawnWeapons();
+            _weaponsSpawned = true;
+        }
+        
         private void SpawnWeapons()
         {
             if (_networkRig == null) return;
+            
+            // 호스트 권한이 있을 때만 스폰
+            if (!Object.HasStateAuthority)
+            {
+                Debug.LogWarning("[PlayerBody] SpawnWeapons - Only host can spawn weapons");
+                return;
+            }
             
             var leftHand = _networkRig.leftHand;
             var rightHand = _networkRig.rightHand;
