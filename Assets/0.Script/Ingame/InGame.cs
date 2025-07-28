@@ -83,8 +83,8 @@ namespace Jamcat.Ingame
             var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<PlayerBody>();
 
-            // RPC를 통해 각 클라이언트에서 자신의 hardwareRig으로 초기화
-            body.RPC_InitializeBody(networkRig, playerRef);
+            // RPC를 통해 각 클라이언트에서 NetworkRig 설정
+            body.RPC_SetNetworkRig(networkRig);
 
             return networkRig.GetComponent<NetworkObject>();
         }

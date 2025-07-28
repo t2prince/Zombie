@@ -35,7 +35,6 @@ namespace Jamcat.Ingame.Player
         private BaseCharacter character;
         private NetworkRig _networkRig;
         private HardwareRig _hardwareRig;
-        private bool _isInitialized = false;
 
 #if UNITY_EDITOR
         private InputAction arrowKeyAction;
@@ -84,33 +83,6 @@ namespace Jamcat.Ingame.Player
         }
 #endif
         
-        [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
-        public void RPC_InitializeBody(NetworkRig networkRig, PlayerRef playerRef)
-        {
-            // 이미 초기화되었으면 스킵
-            if (_isInitialized) return;
-
-            // 자신의 NetworkRig인 경우에만 hardwareRig을 찾아서 초기화
-            HardwareRig hardwareRig = null;
-            
-            if (networkRig.IsLocalNetworkRig)
-            {
-                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-                if (playerCamera != null)
-                {
-                    hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-                }
-            }
-            
-            Init(hardwareRig, networkRig, playerRef);
-            
-            // Locomotion도 같이 초기화
-            var locomotion = GetComponent<Locomotion.Locomotion>();
-            if (locomotion != null)
-            {
-                locomotion.Init(networkRig, hardwareRig);
-            }
-        }
 
         public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
@@ -158,8 +130,6 @@ namespace Jamcat.Ingame.Player
             {
                 Debug.Log($"[PlayerBody] Init - Remote player, waiting for weapon data sync");
             }
-            
-            _isInitialized = true;
         }
 
         public override void Spawned()
@@ -173,6 +143,35 @@ namespace Jamcat.Ingame.Player
                 if (playerCamera != null)
                 {
                     playerCamera.Init(_head);
+                }
+            }
+        }
+        
+        [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
+        public void RPC_SetNetworkRig(NetworkRig networkRig)
+        {
+            // 이미 초기화되었으면 스킵
+            if (_networkRig != null) return;
+
+            // InputAuthority가 있는 클라이언트에서만 실행
+            if (Object.HasInputAuthority)
+            {
+                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+                HardwareRig hardwareRig = null;
+                
+                if (playerCamera != null)
+                {
+                    hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+                }
+                
+                // 초기화 실행
+                Init(hardwareRig, networkRig, Object.InputAuthority);
+                
+                // Locomotion도 같이 초기화
+                var locomotion = GetComponent<Locomotion.Locomotion>();
+                if (locomotion != null)
+                {
+                    locomotion.Init(networkRig, hardwareRig);
                 }
             }
         }
