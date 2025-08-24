@@ -11,7 +11,7 @@ namespace Projectiles
 
 		public Transform FireTransform
 		{
-			get => _fireTransform;
+			protected get => _fireTransform;
 			set => _fireTransform = value;
 		}
 

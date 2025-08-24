@@ -30,11 +30,11 @@ namespace Jamcat.Ingame.Player
         [Networked] public int GunId { get; set; } = -1;
         [Networked] public int MeleeId { get; set; } = -1;
         [Networked] public int BoosterId { get; set; } = -1;
-        [Networked] public NetworkBool WeaponsSpawned { get; set; } = false;
         #endregion
         
         #region Private Fields
         private Pocket _pocket;
+        private bool _weaponsSpawned = false;
         private PlayerRef _playerRef;
         private BaseCharacter _character;
         private NetworkRig _networkRig;
@@ -217,14 +217,11 @@ namespace Jamcat.Ingame.Player
         
         private void CheckAndSpawnWeaponsForRemotePlayer()
         {
-            // 호스트에서만 실행
-            if (!Object.HasStateAuthority) return;
-            
-            if (!WeaponsSpawned && HasValidWeaponIds())
+            if (!_weaponsSpawned && HasValidWeaponIds())
             {
-                Debug.Log($"[PlayerBody] Host spawning weapons for player {_playerRef} - GunId:{GunId}, MeleeId:{MeleeId}, BoosterId:{BoosterId}");
+                Debug.Log($"[PlayerBody] Spawning weapons for remote player - GunId:{GunId}, MeleeId:{MeleeId}, BoosterId:{BoosterId}");
                 SpawnWeapons();
-                WeaponsSpawned = true;
+                _weaponsSpawned = true;
             }
         }
 
@@ -242,7 +239,7 @@ namespace Jamcat.Ingame.Player
             
             SetWeaponIds(gunId, meleeId, boosterId);
             SpawnWeapons();
-            WeaponsSpawned = true;
+            _weaponsSpawned = true;
         }
 
         private void SetWeaponIds(int gunId, int meleeId, int boosterId)
@@ -265,9 +262,11 @@ namespace Jamcat.Ingame.Player
 
         private bool CanSpawnWeapons()
         {
-            if (_networkRig == null) 
+            if (_networkRig == null) return false;
+            
+            if (!Object.HasStateAuthority)
             {
-                Debug.LogWarning("[PlayerBody] NetworkRig is null, cannot spawn weapons");
+                Debug.LogWarning("[PlayerBody] Only host can spawn weapons");
                 return false;
             }
             
@@ -294,8 +293,6 @@ namespace Jamcat.Ingame.Player
             
             SetGunFirePoint(gun, gunData);
             _currentGun = gun;
-            
-            Debug.Log($"[PlayerBody] Gun spawned for player {_playerRef} by host");
         }
 
         private void SetGunFirePoint(Gun gun, WeaponData gunData)
@@ -316,8 +313,6 @@ namespace Jamcat.Ingame.Player
             meleeWeapon.transform.SetParent(rightHand.transform);
             meleeWeapon.Init(_character, rightController);
             _currentMelee = meleeWeapon;
-            
-            Debug.Log($"[PlayerBody] Melee spawned for player {_playerRef} by host");
         }
 
         private void SpawnBooster(HandController leftController, HandController rightController)
@@ -330,8 +325,6 @@ namespace Jamcat.Ingame.Player
             booster.Init(this, leftController, rightController);
             booster.PlayerBody = _networkRig.GetComponentInChildren<NetworkHeadset>().transform;
             _currentBooster = booster;
-            
-            Debug.Log($"[PlayerBody] Booster spawned for player {_playerRef} by host");
         }
         #endregion
     }
