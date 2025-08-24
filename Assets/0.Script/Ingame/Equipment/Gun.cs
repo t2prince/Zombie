@@ -43,16 +43,44 @@ namespace Jamcat.Ingame.Equipment
         {
             if (isPressed)
             {
-                Fire();
+                if (Object.HasInputAuthority)
+                {
+                    RPC_RequestFire();
+                }
             }
+        }
+        
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        private void RPC_RequestFire()
+        {
+            Fire();
         }
             
         private void Fire()
         {
             if (Time.time - _lastFireTime < interval) return;
+            if (!Object.HasStateAuthority) return; // 호스트만 발사
+            
             _lastFireTime = Time.time;
-
-            _fireData.Fire();    
+            
+            // 호스트에서 총알 스폰
+            SpawnBullet();
+        }
+        
+        private void SpawnBullet()
+        {
+            if (bulletPrefab == null || _fireData.FireTransform == null) return;
+            
+            var bulletObj = Runner.Spawn(bulletPrefab, 
+                _fireData.FireTransform.position, 
+                _fireData.FireTransform.rotation, 
+                Object.InputAuthority);
+                
+            var fireDataProjectile = bulletObj.GetComponent<FireDataProjectile>();
+            if (fireDataProjectile != null)
+            {
+                fireDataProjectile.Fire(_fireData.FireTransform.position, _fireData.FireTransform.forward);
+            }
         }
     }
 }

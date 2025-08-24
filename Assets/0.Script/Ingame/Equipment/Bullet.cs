@@ -35,36 +35,46 @@ namespace Jamcat.Ingame.Equipment
             transform.forward = MoveDirection;
             _fireSound.Play();
 
-            // 일정 시간 후 Despawn
-            Util.Coroutine.DelayedAction(() =>
+            // 호스트만 일정 시간 후 Despawn
+            if (HasStateAuthority)
             {
-                if (Object != null && Object.IsValid && Object.HasStateAuthority)
-                    InGame.Instance.Runner.Despawn(Object);
-            }, 5.0f);
+                Util.Coroutine.DelayedAction(() =>
+                {
+                    if (Object != null && Object.IsValid && HasStateAuthority)
+                        Runner.Despawn(Object);
+                }, 5.0f);
+            }
         }
 
         public override void FixedUpdateNetwork()
         {
-            if (HasStateAuthority || HasInputAuthority)
+            if (HasStateAuthority) // 호스트만 위치 업데이트
             {
-                transform.position += MoveDirection * _speed * InGame.Instance.Runner.DeltaTime;
+                transform.position += MoveDirection * _speed * Runner.DeltaTime;
             }
         }
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!HasStateAuthority) return; // 호스트만 충돌 처리
             if (other.tag.Equals(_owner.tag)) return;
             
             var target = other.GetComponentInParent<BaseCharacter>();
-            Hit();
             
-            if (target == null) return;
-            target.TakeDamage(_owner, _damage,_knockBackPower);
+            if (target != null)
+            {
+                target.TakeDamage(_owner, _damage, _knockBackPower);
+            }
+            
+            Hit();
         }
 
         private void Hit()
         {
-            InGame.Instance.Runner.Despawn(Object);
+            if (HasStateAuthority) // 호스트만 Despawn
+            {
+                Runner.Despawn(Object);
+            }
             onHit?.Invoke();
         }
     }
