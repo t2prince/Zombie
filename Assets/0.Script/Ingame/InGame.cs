@@ -83,7 +83,7 @@ namespace Jamcat.Ingame
             var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<PlayerBody>();
 
-            // RPC를 통해 각 클라이언트에서 NetworkRig 설정
+            // 스폰 로직 완료 후 클라이언트에게 NetworkRig 설정 및 카메라 따라가기 호출
             body.RPC_SetNetworkRig(networkRig);
 
             return networkRig.GetComponent<NetworkObject>();
