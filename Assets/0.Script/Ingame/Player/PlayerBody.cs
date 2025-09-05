@@ -157,8 +157,8 @@ namespace Jamcat.Ingame.Player
                 if (playerCamera != null)
                 {
                     hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-                    // NetworkRig가 플레이어 카메라를 따라가도록 설정
-                    SetNetworkRigFollowCamera(networkRig, playerCamera.transform);
+                    // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
+                    SetupNetworkRigCameraFollowing(networkRig, playerCamera);
                 }
                 
                 // 초기화 실행
@@ -173,15 +173,21 @@ namespace Jamcat.Ingame.Player
             }
         }
         
-        private void SetNetworkRigFollowCamera(NetworkRig networkRig, Transform cameraTransform)
+        private void SetupNetworkRigCameraFollowing(NetworkRig networkRig, PlayerFollowerCamera playerCamera)
         {
-            if (networkRig == null || cameraTransform == null) return;
+            if (networkRig == null || playerCamera == null) return;
             
-            // NetworkRig의 위치와 회전을 카메라에 맞춤
-            networkRig.transform.position = cameraTransform.position;
-            networkRig.transform.rotation = cameraTransform.rotation;
+            // NetworkRig에 카메라 따라가기 컴포넌트 추가 또는 가져오기
+            var cameraFollower = networkRig.GetComponent<NetworkRigCameraFollower>();
+            if (cameraFollower == null)
+            {
+                cameraFollower = networkRig.gameObject.AddComponent<NetworkRigCameraFollower>();
+            }
             
-            Debug.Log($"[PlayerBody] NetworkRig positioned to follow camera at {cameraTransform.position}");
+            // 카메라 따라가기 초기화
+            cameraFollower.Init(playerCamera.transform);
+            
+            Debug.Log($"[PlayerBody] NetworkRig set to follow camera continuously");
         }
         
         public override void Render()

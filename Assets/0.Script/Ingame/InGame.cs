@@ -77,6 +77,7 @@ namespace Jamcat.Ingame
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
             var spot = _mapController.GetSpawnPosition(playerRef.PlayerId - 1);
 
+            // NetworkRig를 해당 플레이어의 InputAuthority로 스폰 (클라이언트가 위치 제어 가능)
             var networkRig = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<NetworkRig>();
 
@@ -84,6 +85,7 @@ namespace Jamcat.Ingame
                 .GetComponent<PlayerBody>();
 
             // 스폰 로직 완료 후 클라이언트에게 NetworkRig 설정 및 카메라 따라가기 호출
+            // 클라이언트에서 자신의 씬 위치로 NetworkRig를 이동시킴
             body.RPC_SetNetworkRig(networkRig);
 
             return networkRig.GetComponent<NetworkObject>();
