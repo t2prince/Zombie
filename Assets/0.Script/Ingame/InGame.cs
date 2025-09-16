@@ -44,7 +44,7 @@ namespace Jamcat.Ingame
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef playerRef)
         {
-            Debug.Log($"[InGame] OnPlayerJoined - PlayerRef: {playerRef.PlayerId}, IsHost: {runner.IsHost}, IsServer: {runner.IsServer}, IsClient: {runner.IsClient}");
+            Debug.Log($"[InGame] OnPlayerJoined - PlayerRef: {playerRef.PlayerId}, IsServer: {runner.IsServer}, IsClient: {runner.IsClient}");
             
             if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
             {
@@ -81,7 +81,7 @@ namespace Jamcat.Ingame
         
         private NetworkObject SpawnPlayer(PlayerRef playerRef)
         {
-            Debug.Log($"[InGame] SpawnPlayer - Starting spawn for PlayerRef: {playerRef.PlayerId}, IsHost: {Runner.IsHost}");
+            Debug.Log($"[InGame] SpawnPlayer - Starting spawn for PlayerRef: {playerRef.PlayerId}");
             
             var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
