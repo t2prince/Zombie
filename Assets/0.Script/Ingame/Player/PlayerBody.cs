@@ -86,6 +86,8 @@ namespace Jamcat.Ingame.Player
 
         public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
+            Debug.Log($"[PlayerBody] Init - Starting initialization for PlayerRef: {playerRef.PlayerId}, HasInputAuthority: {Object.HasInputAuthority}, HasStateAuthority: {Object.HasStateAuthority}");
+            
             _networkRig = networkRig;
             _hardwareRig = hardwareRig;
             _playerRef = playerRef;
@@ -94,6 +96,7 @@ namespace Jamcat.Ingame.Player
             
             if (hardwareRig != null)
             {
+                Debug.Log($"[PlayerBody] Init - Setting up grabber events for PlayerRef: {playerRef.PlayerId}");
                 var grabbers = hardwareRig.GetComponentsInChildren<PlayerGrabber>();
                 foreach (var grabber in grabbers)
                 {
@@ -111,56 +114,88 @@ namespace Jamcat.Ingame.Player
                     };   
                 }
             }
+            else
+            {
+                Debug.Log($"[PlayerBody] Init - No HardwareRig provided for PlayerRef: {playerRef.PlayerId}");
+            }
             
             character = GetComponent<BaseCharacter>();
+            Debug.Log($"[PlayerBody] Init - BaseCharacter component found: {character != null} for PlayerRef: {playerRef.PlayerId}");
             
             // 로컬 플레이어인 경우에만 무기 정보 설정 후 호스트에 스폰 요청
             if (playerRef == InGame.Instance.Runner.LocalPlayer)
             {
+                Debug.Log($"[PlayerBody] Init - Local player detected, requesting weapon spawn for PlayerRef: {playerRef.PlayerId}");
                 var weapons = PlayerManager.GetWeapons();
                 Debug.Log($"[PlayerBody] Init - Requesting weapon spawn for local player - GunId:{weapons.gunId}, MeleeId:{weapons.meleeId}, BoosterId:{weapons.boosterId}");
                 RPC_RequestWeaponSpawn(weapons.gunId, weapons.meleeId, weapons.boosterId);
             }
             else
             {
-                Debug.Log($"[PlayerBody] Init - Remote player, waiting for weapon data sync");
+                Debug.Log($"[PlayerBody] Init - Remote player, waiting for weapon data sync for PlayerRef: {playerRef.PlayerId}");
             }
+            
+            Debug.Log($"[PlayerBody] Init - Initialization completed for PlayerRef: {playerRef.PlayerId}");
         }
 
         public override void Spawned()
         {
             base.Spawned();
+            Debug.Log($"[PlayerBody] Spawned - PlayerRef: {Object.InputAuthority.PlayerId}, HasInputAuthority: {Object.HasInputAuthority}, HasStateAuthority: {Object.HasStateAuthority}");
 
             // InputAuthority가 있는 플레이어(로컬 플레이어)인 경우 카메라 설정
             if (Object.HasInputAuthority)
             {
+                Debug.Log($"[PlayerBody] Spawned - Local player, setting up camera for PlayerRef: {Object.InputAuthority.PlayerId}");
                 var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
                 if (playerCamera != null)
                 {
                     playerCamera.Init(_head);
+                    Debug.Log($"[PlayerBody] Spawned - Camera initialized for PlayerRef: {Object.InputAuthority.PlayerId}");
                 }
+                else
+                {
+                    Debug.LogWarning($"[PlayerBody] Spawned - PlayerCamera not found for PlayerRef: {Object.InputAuthority.PlayerId}");
+                }
+            }
+            else
+            {
+                Debug.Log($"[PlayerBody] Spawned - Remote player, skipping camera setup for PlayerRef: {Object.InputAuthority.PlayerId}");
             }
         }
         
         [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
         public void RPC_SetNetworkRig(NetworkRig networkRig)
         {
+            Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Called for PlayerRef: {Object.InputAuthority.PlayerId}, HasInputAuthority: {Object.HasInputAuthority}");
+            
             // 이미 초기화되었으면 스킵
-            if (_networkRig != null) return;
+            if (_networkRig != null) 
+            {
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Already initialized, skipping for PlayerRef: {Object.InputAuthority.PlayerId}");
+                return;
+            }
 
             // InputAuthority가 있는 클라이언트에서만 실행
             if (Object.HasInputAuthority)
             {
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Processing for local player PlayerRef: {Object.InputAuthority.PlayerId}");
                 var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
                 HardwareRig hardwareRig = null;
                 
                 if (playerCamera != null)
                 {
+                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Found PlayerCamera for PlayerRef: {Object.InputAuthority.PlayerId}");
                     hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
                     // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                     SetupNetworkRigCameraFollowing(networkRig, playerCamera);
                 }
+                else
+                {
+                    Debug.LogWarning($"[PlayerBody] RPC_SetNetworkRig - PlayerCamera not found for PlayerRef: {Object.InputAuthority.PlayerId}");
+                }
                 
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Calling Init for PlayerRef: {Object.InputAuthority.PlayerId}");
                 // 초기화 실행
                 Init(hardwareRig, networkRig, Object.InputAuthority);
                 
@@ -168,8 +203,13 @@ namespace Jamcat.Ingame.Player
                 var locomotion = GetComponent<Locomotion.Locomotion>();
                 if (locomotion != null)
                 {
+                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Initializing Locomotion for PlayerRef: {Object.InputAuthority.PlayerId}");
                     locomotion.Init(networkRig, hardwareRig);
                 }
+            }
+            else
+            {
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - No InputAuthority, skipping for PlayerRef: {Object.InputAuthority.PlayerId}");
             }
         }
         

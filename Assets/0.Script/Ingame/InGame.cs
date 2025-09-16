@@ -44,19 +44,27 @@ namespace Jamcat.Ingame
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef playerRef)
         {
+            Debug.Log($"[InGame] OnPlayerJoined - PlayerRef: {playerRef.PlayerId}, IsHost: {runner.IsHost}, IsServer: {runner.IsServer}, IsClient: {runner.IsClient}");
+            
             if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
+            {
+                Debug.Log($"[InGame] OnPlayerJoined - Client-Server topology, skipping spawn on client");
                 return;
+            }
 
+            Debug.Log($"[InGame] OnPlayerJoined - Starting player spawn process for PlayerRef: {playerRef.PlayerId}");
             var playerObj = SpawnPlayer(playerRef);
 
             if (runner.IsServer)
             {
+                Debug.Log($"[InGame] OnPlayerJoined - Server spawning items and materials");
                 SpawnItems();
                 SpawnMaterials();
             }
 
             _players.Add(playerRef, playerObj);
             EffectController.Instance.fadeInOut.FadeIn();
+            Debug.Log($"[InGame] OnPlayerJoined - Player spawn process completed for PlayerRef: {playerRef.PlayerId}");
         }
 
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef playerRef)
@@ -73,21 +81,27 @@ namespace Jamcat.Ingame
         
         private NetworkObject SpawnPlayer(PlayerRef playerRef)
         {
+            Debug.Log($"[InGame] SpawnPlayer - Starting spawn for PlayerRef: {playerRef.PlayerId}, IsHost: {Runner.IsHost}");
+            
             var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
             var spot = _mapController.GetSpawnPosition(playerRef.PlayerId - 1);
 
+            Debug.Log($"[InGame] SpawnPlayer - Spawning NetworkRig for PlayerRef: {playerRef.PlayerId} at position: {spot.position}");
             // NetworkRig를 해당 플레이어의 InputAuthority로 스폰 (클라이언트가 위치 제어 가능)
             var networkRig = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<NetworkRig>();
 
+            Debug.Log($"[InGame] SpawnPlayer - Spawning PlayerBody for PlayerRef: {playerRef.PlayerId} at position: {spot.position}");
             var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<PlayerBody>();
 
+            Debug.Log($"[InGame] SpawnPlayer - Calling RPC_SetNetworkRig for PlayerRef: {playerRef.PlayerId}");
             // 스폰 로직 완료 후 클라이언트에게 NetworkRig 설정 및 카메라 따라가기 호출
             // 클라이언트에서 자신의 씬 위치로 NetworkRig를 이동시킴
             body.RPC_SetNetworkRig(networkRig);
 
+            Debug.Log($"[InGame] SpawnPlayer - Spawn completed for PlayerRef: {playerRef.PlayerId}");
             return networkRig.GetComponent<NetworkObject>();
         }
 
