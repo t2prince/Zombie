@@ -87,9 +87,9 @@ namespace Jamcat.Ingame
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
             var spot = _mapController.GetSpawnPosition(playerRef.PlayerId - 1);
 
-            Debug.Log($"[InGame] SpawnPlayer - Spawning NetworkRig for PlayerRef: {playerRef.PlayerId} at position: {spot.position}");
-            // NetworkRig를 해당 플레이어의 InputAuthority로 스폰 (클라이언트가 위치 제어 가능)
-            var networkRig = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef)
+            Debug.Log($"[InGame] SpawnPlayer - Spawning NetworkRig for PlayerRef: {playerRef.PlayerId} at origin (0,0,0)");
+            // NetworkRig는 VR 플레이 영역을 나타내므로 원점에서 스폰 후 클라이언트가 위치 제어
+            var networkRig = Runner.Spawn(rigPrefab, Vector3.zero, Quaternion.identity, inputAuthority: playerRef)
                 .GetComponent<NetworkRig>();
 
             Debug.Log($"[InGame] SpawnPlayer - Spawning PlayerBody for PlayerRef: {playerRef.PlayerId} at position: {spot.position}");
