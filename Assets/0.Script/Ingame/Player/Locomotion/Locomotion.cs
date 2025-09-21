@@ -26,22 +26,44 @@ namespace Jamcat.Locomotion
         
         public void Init(NetworkRig rig, HardwareRig hardwareRig)
         {
-            leftHandFollower = rig.leftHand.transform;
-            rightHandFollower = rig.rightHand.transform;
+            if (rig != null)
+            {
+                leftHandFollower = rig.leftHand.transform;
+                rightHandFollower = rig.rightHand.transform;
+            }
 
-            leftHandTransform = hardwareRig.leftHand.transform;
-            rightHandTransform = hardwareRig.rightHand.transform;
-            
+            if (hardwareRig != null)
+            {
+                leftHandTransform = hardwareRig.leftHand.transform;
+                rightHandTransform = hardwareRig.rightHand.transform;
+            }
+            else
+            {
+                // HardwareRig가 없는 경우 NetworkRig의 hand를 사용
+                Debug.LogWarning("[Locomotion] HardwareRig is null, using NetworkRig hands for locomotion");
+                if (rig != null)
+                {
+                    leftHandTransform = rig.leftHand.transform;
+                    rightHandTransform = rig.rightHand.transform;
+                }
+            }
+
             InitializeValues();
         }
         
         protected virtual void InitializeValues()
         {
-            leftHandTransform.localPosition = Vector3.zero;
-            rightHandTransform.localPosition = Vector3.zero;
-            
-            leftHandTransform.localRotation = Quaternion.identity;
-            rightHandTransform.localRotation = Quaternion.identity;
+            if (leftHandTransform != null)
+            {
+                leftHandTransform.localPosition = Vector3.zero;
+                leftHandTransform.localRotation = Quaternion.identity;
+            }
+
+            if (rightHandTransform != null)
+            {
+                rightHandTransform.localPosition = Vector3.zero;
+                rightHandTransform.localRotation = Quaternion.identity;
+            }
         }
     }
 }

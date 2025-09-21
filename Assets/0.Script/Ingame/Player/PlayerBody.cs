@@ -163,11 +163,11 @@ namespace Jamcat.Ingame.Player
                     // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                     SetupNetworkRigCameraFollowing(networkRig, playerCamera);
 
-                    // 클라이언트의 HardwareRig 위치를 서버에 전송하여 NetworkRig 위치 설정
+                    // NetworkRig에 HardwareRig 직접 할당
                     if (hardwareRig != null)
                     {
-                        var rigState = hardwareRig.RigState;
-                        RPC_SetNetworkRigPosition(rigState.playAreaPosition, rigState.playAreaRotation);
+                        Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Setting HardwareRig for NetworkRig");
+                        networkRig.hardwareRig = hardwareRig;
                     }
                 }
 
@@ -185,17 +185,6 @@ namespace Jamcat.Ingame.Player
             }
         }
 
-        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-        public void RPC_SetNetworkRigPosition(Vector3 position, Quaternion rotation)
-        {
-            Debug.Log($"[PlayerBody] RPC_SetNetworkRigPosition - Setting NetworkRig position to {position} for PlayerRef: {Object.InputAuthority.PlayerId}");
-
-            if (_networkRig != null)
-            {
-                _networkRig.transform.position = position;
-                _networkRig.transform.rotation = rotation;
-            }
-        }
         
         private void SetupNetworkRigCameraFollowing(NetworkRig networkRig, PlayerFollowerCamera playerCamera)
         {
