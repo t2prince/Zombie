@@ -44,27 +44,21 @@ namespace Jamcat.Ingame
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef playerRef)
         {
-            Debug.Log($"[InGame] OnPlayerJoined - PlayerRef: {playerRef.PlayerId}, IsServer: {runner.IsServer}, IsClient: {runner.IsClient}");
-            
             if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
             {
-                Debug.Log($"[InGame] OnPlayerJoined - Client-Server topology, skipping spawn on client");
                 return;
             }
 
-            Debug.Log($"[InGame] OnPlayerJoined - Starting player spawn process for PlayerRef: {playerRef.PlayerId}");
             var playerObj = SpawnPlayer(playerRef);
 
             if (runner.IsServer)
             {
-                Debug.Log($"[InGame] OnPlayerJoined - Server spawning items and materials");
                 SpawnItems();
                 SpawnMaterials();
             }
 
             _players.Add(playerRef, playerObj);
             EffectController.Instance.fadeInOut.FadeIn();
-            Debug.Log($"[InGame] OnPlayerJoined - Player spawn process completed for PlayerRef: {playerRef.PlayerId}");
         }
 
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef playerRef)
@@ -81,8 +75,6 @@ namespace Jamcat.Ingame
         
         private NetworkObject SpawnPlayer(PlayerRef playerRef)
         {
-            Debug.Log($"[InGame] SpawnPlayer - Starting spawn for PlayerRef: {playerRef.PlayerId}");
-            
             var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
             var spot = _mapController.GetSpawnPosition(playerRef.PlayerId - 1);
@@ -92,7 +84,6 @@ namespace Jamcat.Ingame
             var networkRig = Runner.Spawn(rigPrefab, Vector3.zero, Quaternion.identity, inputAuthority: playerRef)
                 .GetComponent<NetworkRig>();
 
-            Debug.Log($"[InGame] SpawnPlayer - Spawning PlayerBody for PlayerRef: {playerRef.PlayerId} at position: {spot.position}");
             var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<PlayerBody>();
 
@@ -101,7 +92,6 @@ namespace Jamcat.Ingame
             // 클라이언트에서 자신의 씬 위치로 NetworkRig를 이동시킴
             body.RPC_SetNetworkRig(networkRig);
 
-            Debug.Log($"[InGame] SpawnPlayer - Spawn completed for PlayerRef: {playerRef.PlayerId}");
             return networkRig.GetComponent<NetworkObject>();
         }
 
@@ -137,18 +127,14 @@ namespace Jamcat.Ingame
         
          #region INetworkRunnerCallbacks (debug log only)
         public void OnConnectedToServer(NetworkRunner runner) {
-            Debug.Log("OnConnectedToServer");
 
         }
         public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
         {
-            Debug.Log("Shutdown: " + shutdownReason);
         }
         public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) {
-            Debug.Log("OnDisconnectedFromServer: "+ reason);
         }
         public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) {
-            Debug.Log("OnConnectFailed: " + reason);
         }
         #endregion
 

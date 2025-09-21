@@ -86,81 +86,54 @@ namespace Jamcat.Ingame.Player
 
         public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
-            Debug.Log($"[PlayerBody] Init - Starting initialization for PlayerRef: {playerRef.PlayerId}, HasInputAuthority: {Object.HasInputAuthority}, HasStateAuthority: {Object.HasStateAuthority}");
-            
             _networkRig = networkRig;
             _hardwareRig = hardwareRig;
             _playerRef = playerRef;
             _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
-            
+
             if (hardwareRig != null)
             {
-                Debug.Log($"[PlayerBody] Init - Setting up grabber events for PlayerRef: {playerRef.PlayerId}");
                 var grabbers = hardwareRig.GetComponentsInChildren<PlayerGrabber>();
                 foreach (var grabber in grabbers)
                 {
-                    grabber.onGrabbed += (g) =>
+                    grabber.onGrabbed += (_) =>
                     {
                         var item = grabber.GetComponent<Item.Item>();
                         if (item == null || item.type == Item.Item.ITemType.Use) return;
-                        
+
                         _pocket.gameObject.SetActive(true);
-                    };    
-                    
-                    grabber.onUngrabbed += (g) =>
+                    };
+
+                    grabber.onUngrabbed += (_) =>
                     {
                         _pocket.gameObject.SetActive(false);
-                    };   
+                    };
                 }
             }
-            else
-            {
-                Debug.Log($"[PlayerBody] Init - No HardwareRig provided for PlayerRef: {playerRef.PlayerId}");
-            }
-            
+
             character = GetComponent<BaseCharacter>();
-            Debug.Log($"[PlayerBody] Init - BaseCharacter component found: {character != null} for PlayerRef: {playerRef.PlayerId}");
-            
+
             // 로컬 플레이어인 경우에만 무기 정보 설정 후 호스트에 스폰 요청
             if (playerRef == InGame.Instance.Runner.LocalPlayer)
             {
-                Debug.Log($"[PlayerBody] Init - Local player detected, requesting weapon spawn for PlayerRef: {playerRef.PlayerId}");
                 var weapons = PlayerManager.GetWeapons();
-                Debug.Log($"[PlayerBody] Init - Requesting weapon spawn for local player - GunId:{weapons.gunId}, MeleeId:{weapons.meleeId}, BoosterId:{weapons.boosterId}");
                 RPC_RequestWeaponSpawn(weapons.gunId, weapons.meleeId, weapons.boosterId);
             }
-            else
-            {
-                Debug.Log($"[PlayerBody] Init - Remote player, waiting for weapon data sync for PlayerRef: {playerRef.PlayerId}");
-            }
-            
-            Debug.Log($"[PlayerBody] Init - Initialization completed for PlayerRef: {playerRef.PlayerId}");
         }
 
         public override void Spawned()
         {
             base.Spawned();
-            Debug.Log($"[PlayerBody] Spawned - PlayerRef: {Object.InputAuthority.PlayerId}, HasInputAuthority: {Object.HasInputAuthority}, HasStateAuthority: {Object.HasStateAuthority}");
 
-            // InputAuthority가 있는 플레이어(로컬 플레이어)인 경우 카메라 설정
-            if (Object.HasInputAuthority)
+            // 모든 클라이언트에서 자신의 로컬 플레이어인지 확인
+            if (Object.InputAuthority == Runner.LocalPlayer)
             {
-                Debug.Log($"[PlayerBody] Spawned - Local player, setting up camera for PlayerRef: {Object.InputAuthority.PlayerId}");
                 var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
                 if (playerCamera != null)
                 {
                     playerCamera.Init(_head);
-                    Debug.Log($"[PlayerBody] Spawned - Camera initialized for PlayerRef: {Object.InputAuthority.PlayerId}");
                 }
-                else
-                {
-                    Debug.LogWarning($"[PlayerBody] Spawned - PlayerCamera not found for PlayerRef: {Object.InputAuthority.PlayerId}");
-                }
-            }
-            else
-            {
-                Debug.Log($"[PlayerBody] Spawned - Remote player, skipping camera setup for PlayerRef: {Object.InputAuthority.PlayerId}");
             }
         }
         
@@ -168,21 +141,21 @@ namespace Jamcat.Ingame.Player
         public void RPC_SetNetworkRig(NetworkRig networkRig)
         {
             Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Called for PlayerRef: {Object.InputAuthority.PlayerId}, HasInputAuthority: {Object.HasInputAuthority}");
-            
+
             // 이미 초기화되었으면 스킵
-            if (_networkRig != null) 
+            if (_networkRig != null)
             {
                 Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Already initialized, skipping for PlayerRef: {Object.InputAuthority.PlayerId}");
                 return;
             }
 
-            // InputAuthority가 있는 클라이언트에서만 실행
-            if (Object.HasInputAuthority)
+            // 로컬 플레이어인 경우에만 실행
+            if (Object.InputAuthority == Runner.LocalPlayer)
             {
                 Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Processing for local player PlayerRef: {Object.InputAuthority.PlayerId}");
                 var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
                 HardwareRig hardwareRig = null;
-                
+
                 if (playerCamera != null)
                 {
                     Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Found PlayerCamera for PlayerRef: {Object.InputAuthority.PlayerId}");
@@ -190,15 +163,11 @@ namespace Jamcat.Ingame.Player
                     // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                     SetupNetworkRigCameraFollowing(networkRig, playerCamera);
                 }
-                else
-                {
-                    Debug.LogWarning($"[PlayerBody] RPC_SetNetworkRig - PlayerCamera not found for PlayerRef: {Object.InputAuthority.PlayerId}");
-                }
-                
+
                 Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Calling Init for PlayerRef: {Object.InputAuthority.PlayerId}");
                 // 초기화 실행
                 Init(hardwareRig, networkRig, Object.InputAuthority);
-                
+
                 // Locomotion도 같이 초기화
                 var locomotion = GetComponent<Locomotion.Locomotion>();
                 if (locomotion != null)
@@ -206,10 +175,6 @@ namespace Jamcat.Ingame.Player
                     Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Initializing Locomotion for PlayerRef: {Object.InputAuthority.PlayerId}");
                     locomotion.Init(networkRig, hardwareRig);
                 }
-            }
-            else
-            {
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - No InputAuthority, skipping for PlayerRef: {Object.InputAuthority.PlayerId}");
             }
         }
         
@@ -227,7 +192,6 @@ namespace Jamcat.Ingame.Player
             // 카메라 따라가기 초기화
             cameraFollower.Init(playerCamera.transform);
             
-            Debug.Log($"[PlayerBody] NetworkRig set to follow camera continuously");
         }
         
         public override void Render()
@@ -237,7 +201,6 @@ namespace Jamcat.Ingame.Player
             // 원격 플레이어의 무기 정보가 동기화되면 스폰
             if (!_weaponsSpawned && GunId >= 0 && MeleeId >= 0 && BoosterId >= 0)
             {
-                Debug.Log($"[PlayerBody] Render - Spawning weapons for remote player - GunId:{GunId}, MeleeId:{MeleeId}, BoosterId:{BoosterId}");
                 SpawnWeapons();
                 _weaponsSpawned = true;
             }
@@ -246,13 +209,11 @@ namespace Jamcat.Ingame.Player
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
         public void RPC_RequestWeaponSpawn(int gunId, int meleeId, int boosterId)
         {
-            Debug.Log($"[PlayerBody] RPC_RequestWeaponSpawn - GunId:{gunId}, MeleeId:{meleeId}, BoosterId:{boosterId}");
-            
             // 무기 정보 설정
             GunId = gunId;
             MeleeId = meleeId;
             BoosterId = boosterId;
-            
+
             // 호스트에서 무기 스폰
             SpawnWeapons();
             _weaponsSpawned = true;
@@ -265,7 +226,6 @@ namespace Jamcat.Ingame.Player
             // 호스트 권한이 있을 때만 스폰
             if (!Object.HasStateAuthority)
             {
-                Debug.LogWarning("[PlayerBody] SpawnWeapons - Only host can spawn weapons");
                 return;
             }
             
