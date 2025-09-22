@@ -17,19 +17,58 @@ namespace Jamcat.Ingame.Player
             if (IsLocalNetworkRig)
             {
                 Debug.Log($"[CustomNetworkRig] {name} - Searching for HardwareRig as local player");
-                hardwareRig = FindObjectOfType<HardwareRig>();
-                if (hardwareRig == null)
+
+                // PlayerFollowerCamera를 통해 HardwareRig 찾기
+                var playerCamera = FindObjectOfType<PlayerFollowerCamera>();
+                if (playerCamera != null)
                 {
-                    Debug.LogError($"[CustomNetworkRig] {name} - Missing HardwareRig in the scene");
+                    hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+                    if (hardwareRig != null)
+                    {
+                        Debug.Log($"[CustomNetworkRig] {name} - Found HardwareRig through PlayerCamera: {hardwareRig.name}");
+
+                        // NetworkRig 하위에 있는 Locomotion 초기화
+                        InitializeLocomotion();
+                    }
+                    else
+                    {
+                        Debug.LogError($"[CustomNetworkRig] {name} - HardwareRig not found in PlayerCamera");
+                    }
                 }
                 else
                 {
-                    Debug.Log($"[CustomNetworkRig] {name} - Found HardwareRig: {hardwareRig.name}");
+                    // 백업: 씬에서 직접 찾기
+                    Debug.LogWarning($"[CustomNetworkRig] {name} - PlayerCamera not found, searching scene for HardwareRig");
+                    hardwareRig = FindObjectOfType<HardwareRig>();
+                    if (hardwareRig != null)
+                    {
+                        Debug.Log($"[CustomNetworkRig] {name} - Found HardwareRig in scene: {hardwareRig.name}");
+                        InitializeLocomotion();
+                    }
+                    else
+                    {
+                        Debug.LogError($"[CustomNetworkRig] {name} - Missing HardwareRig in the scene");
+                    }
                 }
             }
             else
             {
                 Debug.Log($"[CustomNetworkRig] {name} - Remote NetworkRig, skipping HardwareRig setup");
+            }
+        }
+
+        private void InitializeLocomotion()
+        {
+            // NetworkRig 하위의 Locomotion 컴포넌트 찾기
+            var locomotion = GetComponentInChildren<Jamcat.Locomotion.Locomotion>();
+            if (locomotion != null)
+            {
+                Debug.Log($"[CustomNetworkRig] {name} - Initializing Locomotion with HardwareRig: {hardwareRig.name}");
+                locomotion.Init(this, hardwareRig);
+            }
+            else
+            {
+                Debug.LogWarning($"[CustomNetworkRig] {name} - Locomotion component not found in children");
             }
         }
 

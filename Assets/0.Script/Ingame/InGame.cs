@@ -30,7 +30,7 @@ namespace Jamcat.Ingame
         public static MapController Map => Instance._mapController;
         public static MonsterController Monster => Instance._monsterController;
         
-        private Dictionary<PlayerRef, NetworkObject> _players = new(32);
+        private Dictionary<PlayerRef, (NetworkObject networkRig, NetworkObject gamePlayer)> _players = new(32);
         
         private void Awake()
         {
@@ -57,7 +57,8 @@ namespace Jamcat.Ingame
                 SpawnMaterials();
             }
 
-            _players.Add(playerRef, playerObj);
+            var gamePlayerObj = body.GetComponent<NetworkObject>();
+            _players.Add(playerRef, (playerObj, gamePlayerObj));
             EffectController.Instance.fadeInOut.FadeIn();
         }
 
@@ -66,10 +67,30 @@ namespace Jamcat.Ingame
             if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
                 return;
 
-            if (_players.TryGetValue(playerRef, out var player))
+            if (_players.TryGetValue(playerRef, out var playerObjects))
             {
-                runner.Despawn(player);
+                Debug.Log($"[InGame] OnPlayerLeft - Despawning NetworkRig and GamePlayer for PlayerRef: {playerRef.PlayerId}");
+
+                // NetworkRig 디스폰
+                if (playerObjects.networkRig != null)
+                {
+                    Debug.Log($"[InGame] OnPlayerLeft - Despawning NetworkRig: {playerObjects.networkRig.name}");
+                    runner.Despawn(playerObjects.networkRig);
+                }
+
+                // GamePlayer 디스폰
+                if (playerObjects.gamePlayer != null)
+                {
+                    Debug.Log($"[InGame] OnPlayerLeft - Despawning GamePlayer: {playerObjects.gamePlayer.name}");
+                    runner.Despawn(playerObjects.gamePlayer);
+                }
+
                 _players.Remove(playerRef);
+                Debug.Log($"[InGame] OnPlayerLeft - Player cleanup completed for PlayerRef: {playerRef.PlayerId}");
+            }
+            else
+            {
+                Debug.LogWarning($"[InGame] OnPlayerLeft - Player not found in dictionary for PlayerRef: {playerRef.PlayerId}");
             }
         }
         

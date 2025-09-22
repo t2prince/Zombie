@@ -163,28 +163,8 @@ namespace Jamcat.Ingame.Player
                     // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                     SetupNetworkRigCameraFollowing(networkRig, playerCamera);
 
-                    // NetworkRig에 HardwareRig 직접 할당 - 클라이언트에서만 설정
-                    if (hardwareRig != null)
-                    {
-                        Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Setting HardwareRig for NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
-
-                        // CustomNetworkRig인 경우 전용 메서드 사용
-                        var customNetworkRig = networkRig as Jamcat.Ingame.Player.CustomNetworkRig;
-                        if (customNetworkRig != null)
-                        {
-                            customNetworkRig.SetHardwareRig(hardwareRig);
-                        }
-                        else
-                        {
-                            networkRig.hardwareRig = hardwareRig;
-                        }
-
-                        Debug.Log($"[PlayerBody] RPC_SetNetworkRig - HardwareRig set successfully for NetworkRig: {networkRig.name}");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"[PlayerBody] RPC_SetNetworkRig - HardwareRig not found for NetworkRig: {networkRig.name}");
-                    }
+                    // CustomNetworkRig는 자동으로 HardwareRig를 초기화하므로 여기서는 설정하지 않음
+                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - CustomNetworkRig will auto-initialize HardwareRig for: {networkRig.name}");
                 }
                 else
                 {
@@ -195,13 +175,8 @@ namespace Jamcat.Ingame.Player
                 // 초기화 실행
                 Init(hardwareRig, networkRig, Object.InputAuthority);
 
-                // Locomotion도 같이 초기화
-                var locomotion = GetComponent<Locomotion.Locomotion>();
-                if (locomotion != null)
-                {
-                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Initializing Locomotion for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
-                    locomotion.Init(networkRig, hardwareRig);
-                }
+                // Locomotion은 CustomNetworkRig에서 자동으로 초기화됨
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - CustomNetworkRig will handle Locomotion initialization for: {networkRig.name}");
             }
         }
 
