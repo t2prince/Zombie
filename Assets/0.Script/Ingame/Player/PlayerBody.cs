@@ -140,38 +140,46 @@ namespace Jamcat.Ingame.Player
         [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
         public void RPC_SetNetworkRig(NetworkRig networkRig)
         {
-            Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Called for PlayerRef: {Object.InputAuthority.PlayerId}, HasInputAuthority: {Object.HasInputAuthority}");
+            Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Called for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}, HasInputAuthority: {Object.HasInputAuthority}");
 
             // 이미 초기화되었으면 스킵
             if (_networkRig != null)
             {
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Already initialized, skipping for PlayerRef: {Object.InputAuthority.PlayerId}");
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Already initialized, skipping for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
                 return;
             }
 
             // 로컬 플레이어인 경우에만 실행
             if (Object.InputAuthority == Runner.LocalPlayer)
             {
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Processing for local player PlayerRef: {Object.InputAuthority.PlayerId}");
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Processing for local player PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
                 var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
                 HardwareRig hardwareRig = null;
 
                 if (playerCamera != null)
                 {
-                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Found PlayerCamera for PlayerRef: {Object.InputAuthority.PlayerId}");
+                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Found PlayerCamera for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
                     hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
                     // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                     SetupNetworkRigCameraFollowing(networkRig, playerCamera);
 
-                    // NetworkRig에 HardwareRig 직접 할당
+                    // NetworkRig에 HardwareRig 직접 할당 - 서버에 알림
                     if (hardwareRig != null)
                     {
-                        Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Setting HardwareRig for NetworkRig");
-                        networkRig.hardwareRig = hardwareRig;
+                        Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Setting HardwareRig for NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
+                        RPC_SetNetworkRigHardwareRig(networkRig, hardwareRig);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[PlayerBody] RPC_SetNetworkRig - HardwareRig not found for NetworkRig: {networkRig.name}");
                     }
                 }
+                else
+                {
+                    Debug.LogWarning($"[PlayerBody] RPC_SetNetworkRig - PlayerCamera not found for NetworkRig: {networkRig.name}");
+                }
 
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Calling Init for PlayerRef: {Object.InputAuthority.PlayerId}");
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Calling Init for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
                 // 초기화 실행
                 Init(hardwareRig, networkRig, Object.InputAuthority);
 
@@ -179,9 +187,24 @@ namespace Jamcat.Ingame.Player
                 var locomotion = GetComponent<Locomotion.Locomotion>();
                 if (locomotion != null)
                 {
-                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Initializing Locomotion for PlayerRef: {Object.InputAuthority.PlayerId}");
+                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Initializing Locomotion for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
                     locomotion.Init(networkRig, hardwareRig);
                 }
+            }
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_SetNetworkRigHardwareRig(NetworkRig networkRig, HardwareRig hardwareRig)
+        {
+            Debug.Log($"[PlayerBody] RPC_SetNetworkRigHardwareRig - Setting HardwareRig on server for NetworkRig: {networkRig.name}");
+            if (networkRig != null && hardwareRig != null)
+            {
+                networkRig.hardwareRig = hardwareRig;
+                Debug.Log($"[PlayerBody] RPC_SetNetworkRigHardwareRig - Successfully set HardwareRig for NetworkRig: {networkRig.name}");
+            }
+            else
+            {
+                Debug.LogError($"[PlayerBody] RPC_SetNetworkRigHardwareRig - Failed to set HardwareRig: NetworkRig={networkRig?.name}, HardwareRig={hardwareRig?.name}");
             }
         }
 

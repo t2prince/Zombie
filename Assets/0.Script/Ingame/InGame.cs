@@ -83,9 +83,11 @@ namespace Jamcat.Ingame
             // NetworkRig를 GamePlayer와 같은 스폰 위치에 스폰
             var networkRig = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<NetworkRig>();
+            networkRig.name = $"NetworkRig_{playerRef.PlayerId}";
 
             var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
                 .GetComponent<PlayerBody>();
+            body.name = $"GamePlayer_{playerRef.PlayerId}";
 
             Debug.Log($"[InGame] SpawnPlayer - Calling RPC_SetNetworkRig for PlayerRef: {playerRef.PlayerId}");
             // 스폰 로직 완료 후 클라이언트에게 NetworkRig 설정 및 카메라 따라가기 호출
