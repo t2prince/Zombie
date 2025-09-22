@@ -167,7 +167,18 @@ namespace Jamcat.Ingame.Player
                     if (hardwareRig != null)
                     {
                         Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Setting HardwareRig for NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
-                        networkRig.hardwareRig = hardwareRig;
+
+                        // CustomNetworkRig인 경우 전용 메서드 사용
+                        var customNetworkRig = networkRig as Jamcat.Ingame.Player.CustomNetworkRig;
+                        if (customNetworkRig != null)
+                        {
+                            customNetworkRig.SetHardwareRig(hardwareRig);
+                        }
+                        else
+                        {
+                            networkRig.hardwareRig = hardwareRig;
+                        }
+
                         Debug.Log($"[PlayerBody] RPC_SetNetworkRig - HardwareRig set successfully for NetworkRig: {networkRig.name}");
                     }
                     else
