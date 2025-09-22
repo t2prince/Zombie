@@ -163,11 +163,12 @@ namespace Jamcat.Ingame.Player
                     // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                     SetupNetworkRigCameraFollowing(networkRig, playerCamera);
 
-                    // NetworkRig에 HardwareRig 직접 할당 - 서버에 알림
+                    // NetworkRig에 HardwareRig 직접 할당 - 클라이언트에서만 설정
                     if (hardwareRig != null)
                     {
                         Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Setting HardwareRig for NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
-                        RPC_SetNetworkRigHardwareRig(networkRig, hardwareRig);
+                        networkRig.hardwareRig = hardwareRig;
+                        Debug.Log($"[PlayerBody] RPC_SetNetworkRig - HardwareRig set successfully for NetworkRig: {networkRig.name}");
                     }
                     else
                     {
@@ -193,20 +194,6 @@ namespace Jamcat.Ingame.Player
             }
         }
 
-        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-        public void RPC_SetNetworkRigHardwareRig(NetworkRig networkRig, HardwareRig hardwareRig)
-        {
-            Debug.Log($"[PlayerBody] RPC_SetNetworkRigHardwareRig - Setting HardwareRig on server for NetworkRig: {networkRig.name}");
-            if (networkRig != null && hardwareRig != null)
-            {
-                networkRig.hardwareRig = hardwareRig;
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRigHardwareRig - Successfully set HardwareRig for NetworkRig: {networkRig.name}");
-            }
-            else
-            {
-                Debug.LogError($"[PlayerBody] RPC_SetNetworkRigHardwareRig - Failed to set HardwareRig: NetworkRig={networkRig?.name}, HardwareRig={hardwareRig?.name}");
-            }
-        }
 
         
         private void SetupNetworkRigCameraFollowing(NetworkRig networkRig, PlayerFollowerCamera playerCamera)
