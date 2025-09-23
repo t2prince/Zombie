@@ -8,21 +8,20 @@ namespace Jamcat.Ingame.Player
         // InputAuthority 기반으로 로컬 NetworkRig 판단
         public override bool IsLocalNetworkRig =>
             Object &&
-            Object.InputAuthority == Runner.LocalPlayer &&
-            Object.InputAuthority.IsValid;
+            Object.InputAuthority == Runner.LocalPlayer;
 
         public override void Spawned()
         {
             base.Spawned();
-            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsHost: {Runner.IsHost}, IsClient: {Runner.IsClient}");
+            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsServer: {Runner.IsServer}, IsClient: {Runner.IsClient}");
 
             // 로컬 플레이어인 경우에만 HardwareRig 초기화
             if (IsLocalNetworkRig)
             {
-                // 호스트인 경우 자신의 NetworkRig(ID=1)만 초기화
-                if (Runner.IsHost && Object.InputAuthority.PlayerId != 1)
+                // 서버인 경우 자신의 NetworkRig(ID=1)만 초기화
+                if (Runner.IsServer && Object.InputAuthority.PlayerId != 1)
                 {
-                    Debug.Log($"[CustomNetworkRig] {name} - Host detected, but this is not host's NetworkRig (ID: {Object.InputAuthority.PlayerId}), skipping initialization");
+                    Debug.Log($"[CustomNetworkRig] {name} - Server detected, but this is not server's NetworkRig (ID: {Object.InputAuthority.PlayerId}), skipping initialization");
                     return;
                 }
 
@@ -52,7 +51,7 @@ namespace Jamcat.Ingame.Player
             }
 
             // PlayerFollowerCamera를 통해 HardwareRig 찾기
-            var playerCamera = FindObjectOfType<PlayerFollowerCamera>();
+            var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
             if (playerCamera != null)
             {
                 hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
