@@ -103,12 +103,12 @@ namespace Jamcat.Ingame
             // NetworkRig를 GamePlayer와 같은 스폰 위치에 스폰
             var networkRigObject = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef);
             var networkRig = networkRigObject.GetComponent<NetworkRig>();
-            networkRig.name = $"NetworkRig_{playerRef.PlayerId}";
+            // 이름은 각 클라이언트에서 동기화되므로 호스트에서는 PlayerId만 설정
             networkRig.PlayerId = playerRef.PlayerId;
 
             var gamePlayerObject = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef);
             var body = gamePlayerObject.GetComponent<PlayerBody>();
-            body.name = $"GamePlayer_{playerRef.PlayerId}";
+            // 이름은 각 클라이언트에서 동기화되므로 호스트에서는 설정하지 않음
 
             Debug.Log($"[InGame] SpawnPlayer - PlayerBody will find and initialize its own NetworkRig for PlayerRef: {playerRef.PlayerId}");
 
