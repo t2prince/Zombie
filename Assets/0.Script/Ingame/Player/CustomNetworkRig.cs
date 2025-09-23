@@ -1,3 +1,4 @@
+using Fusion;
 using Fusion.XR.Shared.Rig;
 using UnityEngine;
 
@@ -14,10 +15,11 @@ namespace Jamcat.Ingame.Player
         {
             base.Spawned();
 
-            // PlayerId 설정 (StateAuthority만 설정 가능)
-            if (Object.HasStateAuthority)
+            // PlayerId 설정 (InputAuthority가 있는 클라이언트가 설정)
+            if (Object.HasInputAuthority)
             {
-                PlayerId = Object.InputAuthority.PlayerId;
+                // RPC를 통해 호스트에게 PlayerId 설정 요청
+                RPC_SetPlayerId(Object.InputAuthority.PlayerId);
             }
 
             Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, PlayerId: {PlayerId}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsServer: {Runner.IsServer}, IsClient: {Runner.IsClient}");
@@ -28,14 +30,15 @@ namespace Jamcat.Ingame.Player
                 // 서버(호스트)인 경우 자신의 첫번째 NetworkRig에만 초기화
                 if (Runner.IsServer)
                 {
-                    // 호스트의 경우 PlayerId가 1이고, 이미 다른 NetworkRig에서 초기화가 되었는지 확인
+                    // 호스트의 경우 이미 다른 NetworkRig에서 초기화가 되었는지 확인
                     var existingRigs = FindObjectsByType<CustomNetworkRig>(FindObjectsSortMode.None);
                     bool alreadyInitialized = false;
 
                     foreach (var existingRig in existingRigs)
                     {
                         if (existingRig != this &&
-                            existingRig.PlayerId == Object.InputAuthority.PlayerId &&
+                            existingRig.Object != null &&
+                            existingRig.Object.InputAuthority == Object.InputAuthority &&
                             existingRig.hardwareRig != null)
                         {
                             alreadyInitialized = true;
@@ -155,6 +158,13 @@ namespace Jamcat.Ingame.Player
             {
                 Debug.LogWarning($"[CustomNetworkRig] {name} - Cannot set HardwareRig on remote NetworkRig");
             }
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_SetPlayerId(int playerId)
+        {
+            PlayerId = playerId;
+            Debug.Log($"[CustomNetworkRig] RPC_SetPlayerId - PlayerId set to: {playerId} for {name}");
         }
     }
 }
