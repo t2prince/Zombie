@@ -13,16 +13,41 @@ namespace Jamcat.Ingame.Player
         public override void Spawned()
         {
             base.Spawned();
-            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsServer: {Runner.IsServer}, IsClient: {Runner.IsClient}");
+
+            // PlayerId 설정 (StateAuthority만 설정 가능)
+            if (Object.HasStateAuthority)
+            {
+                PlayerId = Object.InputAuthority.PlayerId;
+            }
+
+            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, PlayerId: {PlayerId}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsServer: {Runner.IsServer}, IsClient: {Runner.IsClient}");
 
             // 로컬 플레이어인 경우에만 HardwareRig 초기화
             if (IsLocalNetworkRig)
             {
-                // 서버인 경우 자신의 NetworkRig(ID=1)만 초기화
-                if (Runner.IsServer && Object.InputAuthority.PlayerId != 1)
+                // 서버(호스트)인 경우 자신의 첫번째 NetworkRig에만 초기화
+                if (Runner.IsServer)
                 {
-                    Debug.Log($"[CustomNetworkRig] {name} - Server detected, but this is not server's NetworkRig (ID: {Object.InputAuthority.PlayerId}), skipping initialization");
-                    return;
+                    // 호스트의 경우 PlayerId가 1이고, 이미 다른 NetworkRig에서 초기화가 되었는지 확인
+                    var existingRigs = FindObjectsByType<CustomNetworkRig>(FindObjectsSortMode.None);
+                    bool alreadyInitialized = false;
+
+                    foreach (var existingRig in existingRigs)
+                    {
+                        if (existingRig != this &&
+                            existingRig.PlayerId == Object.InputAuthority.PlayerId &&
+                            existingRig.hardwareRig != null)
+                        {
+                            alreadyInitialized = true;
+                            Debug.Log($"[CustomNetworkRig] {name} - Server's HardwareRig already initialized in another NetworkRig: {existingRig.name}, skipping");
+                            break;
+                        }
+                    }
+
+                    if (alreadyInitialized)
+                    {
+                        return;
+                    }
                 }
 
                 Debug.Log($"[CustomNetworkRig] {name} - This is MY NetworkRig (Player ID: {Object.InputAuthority.PlayerId}), initializing HardwareRig");

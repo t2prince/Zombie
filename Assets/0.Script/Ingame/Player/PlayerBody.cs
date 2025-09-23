@@ -156,21 +156,36 @@ namespace Jamcat.Ingame.Player
             NetworkRig myNetworkRig = null;
             int maxAttempts = 10;
             int attempts = 0;
+            int myPlayerId = Runner.LocalPlayer.PlayerId;
 
             while (myNetworkRig == null && attempts < maxAttempts)
             {
                 yield return new WaitForSeconds(0.1f);
                 attempts++;
 
-                // 씬에서 자신의 NetworkRig 찾기 (InputAuthority 기준)
+                // 씬에서 자신의 NetworkRig 찾기 (PlayerId 기준)
                 var allNetworkRigs = FindObjectsByType<NetworkRig>(FindObjectsSortMode.None);
                 foreach (var rig in allNetworkRigs)
                 {
-                    if (rig.Object != null && rig.Object.InputAuthority == Runner.LocalPlayer)
+                    if (rig.Object != null && rig.PlayerId == myPlayerId)
                     {
                         myNetworkRig = rig;
-                        Debug.Log($"[PlayerBody] Found my NetworkRig: {rig.name} for Player: {Runner.LocalPlayer.PlayerId}");
+                        Debug.Log($"[PlayerBody] Found my NetworkRig by PlayerId: {rig.name} for Player: {myPlayerId}");
                         break;
+                    }
+                }
+
+                // 백업: InputAuthority로도 확인 (PlayerId가 아직 설정되지 않은 경우)
+                if (myNetworkRig == null)
+                {
+                    foreach (var rig in allNetworkRigs)
+                    {
+                        if (rig.Object != null && rig.Object.InputAuthority == Runner.LocalPlayer)
+                        {
+                            myNetworkRig = rig;
+                            Debug.Log($"[PlayerBody] Found my NetworkRig by InputAuthority (fallback): {rig.name} for Player: {myPlayerId}");
+                            break;
+                        }
                     }
                 }
             }

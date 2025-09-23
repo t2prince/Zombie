@@ -20,7 +20,9 @@ namespace Fusion.XR.Shared.Rig
     public class NetworkRig : NetworkBehaviour
     {
         public const int EXECUTION_ORDER = 100;
-        
+
+        [Networked] public int PlayerId { get; set; } = -1;
+
         public HardwareRig hardwareRig;
         public NetworkHand leftHand;
         public NetworkHand rightHand;
