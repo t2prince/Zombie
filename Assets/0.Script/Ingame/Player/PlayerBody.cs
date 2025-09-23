@@ -87,10 +87,16 @@ namespace Jamcat.Ingame.Player
         public void Init(HardwareRig hardwareRig, NetworkRig networkRig, PlayerRef playerRef)
         {
             _networkRig = networkRig;
-            _hardwareRig = hardwareRig;
             _playerRef = playerRef;
             _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
+
+            // HardwareRig는 NetworkRig에 직접 설정되었으므로, NetworkRig에서 가져옴
+            if (hardwareRig == null && networkRig != null)
+            {
+                hardwareRig = networkRig.hardwareRig;
+                Debug.Log($"[PlayerBody] Init - Using HardwareRig from NetworkRig: {hardwareRig?.name}");
+            }
 
             if (hardwareRig != null)
             {
@@ -110,6 +116,10 @@ namespace Jamcat.Ingame.Player
                         _pocket.gameObject.SetActive(false);
                     };
                 }
+            }
+            else
+            {
+                Debug.LogWarning($"[PlayerBody] Init - No HardwareRig available for player: {playerRef.PlayerId}");
             }
 
             character = GetComponent<BaseCharacter>();
@@ -181,17 +191,37 @@ namespace Jamcat.Ingame.Player
             Debug.Log($"[PlayerBody] InitializeNetworkRig - Starting initialization for NetworkRig: {networkRig.name}");
 
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-            HardwareRig hardwareRig = null;
 
             if (playerCamera != null)
             {
                 Debug.Log($"[PlayerBody] InitializeNetworkRig - Found PlayerCamera for NetworkRig: {networkRig.name}");
-                hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+                var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+
                 // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                 SetupNetworkRigCameraFollowing(networkRig, playerCamera);
 
-                // CustomNetworkRig는 자동으로 HardwareRig를 초기화하므로 여기서는 설정하지 않음
-                Debug.Log($"[PlayerBody] InitializeNetworkRig - CustomNetworkRig will auto-initialize HardwareRig for: {networkRig.name}");
+                // 클라이언트가 자신의 NetworkRig에 HardwareRig 직접 설정
+                if (hardwareRig != null)
+                {
+                    Debug.Log($"[PlayerBody] InitializeNetworkRig - Setting HardwareRig for NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
+
+                    // CustomNetworkRig인 경우 전용 메서드 사용
+                    var customNetworkRig = networkRig as CustomNetworkRig;
+                    if (customNetworkRig != null)
+                    {
+                        customNetworkRig.SetHardwareRig(hardwareRig);
+                        Debug.Log($"[PlayerBody] InitializeNetworkRig - CustomNetworkRig.SetHardwareRig called for: {networkRig.name}");
+                    }
+                    else
+                    {
+                        networkRig.hardwareRig = hardwareRig;
+                        Debug.Log($"[PlayerBody] InitializeNetworkRig - Direct hardwareRig assignment for: {networkRig.name}");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"[PlayerBody] InitializeNetworkRig - HardwareRig not found in PlayerCamera for: {networkRig.name}");
+                }
             }
             else
             {
@@ -199,11 +229,10 @@ namespace Jamcat.Ingame.Player
             }
 
             Debug.Log($"[PlayerBody] InitializeNetworkRig - Calling Init for NetworkRig: {networkRig.name}");
-            // 초기화 실행
-            Init(hardwareRig, networkRig, Object.InputAuthority);
+            // 초기화 실행 (hardwareRig는 이제 NetworkRig에 설정되었으므로 null을 전달)
+            Init(null, networkRig, Object.InputAuthority);
 
-            // Locomotion은 CustomNetworkRig에서 자동으로 초기화됨
-            Debug.Log($"[PlayerBody] InitializeNetworkRig - CustomNetworkRig will handle Locomotion initialization for: {networkRig.name}");
+            Debug.Log($"[PlayerBody] InitializeNetworkRig - NetworkRig initialization completed for: {networkRig.name}");
         }
         
 
