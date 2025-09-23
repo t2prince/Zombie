@@ -49,7 +49,7 @@ namespace Jamcat.Ingame
                 return;
             }
 
-            var playerObj = SpawnPlayer(playerRef);
+            var (networkRigObj, gamePlayerObj) = SpawnPlayer(playerRef);
 
             if (runner.IsServer)
             {
@@ -57,8 +57,7 @@ namespace Jamcat.Ingame
                 SpawnMaterials();
             }
 
-            var gamePlayerObj = body.GetComponent<NetworkObject>();
-            _players.Add(playerRef, (playerObj, gamePlayerObj));
+            _players.Add(playerRef, (networkRigObj, gamePlayerObj));
             EffectController.Instance.fadeInOut.FadeIn();
         }
 
@@ -94,7 +93,7 @@ namespace Jamcat.Ingame
             }
         }
         
-        private NetworkObject SpawnPlayer(PlayerRef playerRef)
+        private (NetworkObject networkRig, NetworkObject gamePlayer) SpawnPlayer(PlayerRef playerRef)
         {
             var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
             var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
@@ -102,12 +101,12 @@ namespace Jamcat.Ingame
 
             Debug.Log($"[InGame] SpawnPlayer - Spawning NetworkRig for PlayerRef: {playerRef.PlayerId} at position: {spot.position}");
             // NetworkRig를 GamePlayer와 같은 스폰 위치에 스폰
-            var networkRig = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef)
-                .GetComponent<NetworkRig>();
+            var networkRigObject = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef);
+            var networkRig = networkRigObject.GetComponent<NetworkRig>();
             networkRig.name = $"NetworkRig_{playerRef.PlayerId}";
 
-            var body = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef)
-                .GetComponent<PlayerBody>();
+            var gamePlayerObject = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef);
+            var body = gamePlayerObject.GetComponent<PlayerBody>();
             body.name = $"GamePlayer_{playerRef.PlayerId}";
 
             Debug.Log($"[InGame] SpawnPlayer - Calling RPC_SetNetworkRig for PlayerRef: {playerRef.PlayerId}");
@@ -115,7 +114,7 @@ namespace Jamcat.Ingame
             // 클라이언트에서 자신의 씬 위치로 NetworkRig를 이동시킴
             body.RPC_SetNetworkRig(networkRig);
 
-            return networkRig.GetComponent<NetworkObject>();
+            return (networkRigObject, gamePlayerObject);
         }
 
         private void SpawnItems()
