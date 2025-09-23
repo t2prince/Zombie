@@ -6,54 +6,69 @@ namespace Jamcat.Ingame.Player
     public class CustomNetworkRig : NetworkRig
     {
         // InputAuthority 기반으로 로컬 NetworkRig 판단
-        public override bool IsLocalNetworkRig => Object && Object.InputAuthority == Runner.LocalPlayer;
+        public override bool IsLocalNetworkRig =>
+            Object &&
+            Object.InputAuthority == Runner.LocalPlayer &&
+            Object.InputAuthority.IsValid;
 
         public override void Spawned()
         {
             base.Spawned();
-            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}");
+            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsHost: {Runner.IsHost}, IsClient: {Runner.IsClient}");
 
-            // InputAuthority 기반으로 HardwareRig 찾기
+            // 로컬 플레이어인 경우에만 HardwareRig 초기화
             if (IsLocalNetworkRig)
             {
-                Debug.Log($"[CustomNetworkRig] {name} - Searching for HardwareRig as local player");
-
-                // PlayerFollowerCamera를 통해 HardwareRig 찾기
-                var playerCamera = FindObjectOfType<PlayerFollowerCamera>();
-                if (playerCamera != null)
+                // 호스트인 경우 자신의 NetworkRig(ID=1)만 초기화
+                if (Runner.IsHost && Object.InputAuthority.PlayerId != 1)
                 {
-                    hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-                    if (hardwareRig != null)
-                    {
-                        Debug.Log($"[CustomNetworkRig] {name} - Found HardwareRig through PlayerCamera: {hardwareRig.name}");
+                    Debug.Log($"[CustomNetworkRig] {name} - Host detected, but this is not host's NetworkRig (ID: {Object.InputAuthority.PlayerId}), skipping initialization");
+                    return;
+                }
 
-                        // NetworkRig 하위에 있는 Locomotion 초기화
-                        InitializeLocomotion();
-                    }
-                    else
-                    {
-                        Debug.LogError($"[CustomNetworkRig] {name} - HardwareRig not found in PlayerCamera");
-                    }
+                Debug.Log($"[CustomNetworkRig] {name} - This is MY NetworkRig (Player ID: {Object.InputAuthority.PlayerId}), initializing HardwareRig");
+
+                // 지연 초기화: 다음 프레임에서 초기화 (PlayerCamera가 준비될 때까지 대기)
+                StartCoroutine(DelayedInitialization());
+            }
+            else
+            {
+                Debug.Log($"[CustomNetworkRig] {name} - Remote NetworkRig (InputAuthority: {Object.InputAuthority.PlayerId}), skipping HardwareRig setup");
+            }
+        }
+
+        private System.Collections.IEnumerator DelayedInitialization()
+        {
+            // 1프레임 대기
+            yield return null;
+
+            Debug.Log($"[CustomNetworkRig] {name} - Starting delayed initialization for local player");
+
+            // 다시 한번 로컬 플레이어인지 확인
+            if (!IsLocalNetworkRig)
+            {
+                Debug.LogWarning($"[CustomNetworkRig] {name} - No longer local NetworkRig, aborting initialization");
+                yield break;
+            }
+
+            // PlayerFollowerCamera를 통해 HardwareRig 찾기
+            var playerCamera = FindObjectOfType<PlayerFollowerCamera>();
+            if (playerCamera != null)
+            {
+                hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+                if (hardwareRig != null)
+                {
+                    Debug.Log($"[CustomNetworkRig] {name} - Found HardwareRig through PlayerCamera: {hardwareRig.name}");
+                    InitializeLocomotion();
                 }
                 else
                 {
-                    // 백업: 씬에서 직접 찾기
-                    Debug.LogWarning($"[CustomNetworkRig] {name} - PlayerCamera not found, searching scene for HardwareRig");
-                    hardwareRig = FindObjectOfType<HardwareRig>();
-                    if (hardwareRig != null)
-                    {
-                        Debug.Log($"[CustomNetworkRig] {name} - Found HardwareRig in scene: {hardwareRig.name}");
-                        InitializeLocomotion();
-                    }
-                    else
-                    {
-                        Debug.LogError($"[CustomNetworkRig] {name} - Missing HardwareRig in the scene");
-                    }
+                    Debug.LogError($"[CustomNetworkRig] {name} - HardwareRig not found in PlayerCamera");
                 }
             }
             else
             {
-                Debug.Log($"[CustomNetworkRig] {name} - Remote NetworkRig, skipping HardwareRig setup");
+                Debug.LogError($"[CustomNetworkRig] {name} - PlayerCamera not found for local player");
             }
         }
 
