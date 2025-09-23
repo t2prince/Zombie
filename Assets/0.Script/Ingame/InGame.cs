@@ -109,10 +109,7 @@ namespace Jamcat.Ingame
             var body = gamePlayerObject.GetComponent<PlayerBody>();
             body.name = $"GamePlayer_{playerRef.PlayerId}";
 
-            Debug.Log($"[InGame] SpawnPlayer - Calling RPC_SetNetworkRig for PlayerRef: {playerRef.PlayerId}");
-            // 스폰 로직 완료 후 클라이언트에게 NetworkRig 설정 및 카메라 따라가기 호출
-            // 클라이언트에서 자신의 씬 위치로 NetworkRig를 이동시킴
-            body.RPC_SetNetworkRig(networkRig);
+            Debug.Log($"[InGame] SpawnPlayer - PlayerBody will find and initialize its own NetworkRig for PlayerRef: {playerRef.PlayerId}");
 
             return (networkRigObject, gamePlayerObject);
         }

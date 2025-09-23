@@ -134,51 +134,78 @@ namespace Jamcat.Ingame.Player
                 {
                     playerCamera.Init(_head);
                 }
+
+                // 자신의 NetworkRig를 찾아서 초기화
+                StartCoroutine(FindAndInitializeMyNetworkRig());
             }
+        }
+
+        private System.Collections.IEnumerator FindAndInitializeMyNetworkRig()
+        {
+            // NetworkRig가 스폰될 때까지 대기
+            NetworkRig myNetworkRig = null;
+            int maxAttempts = 10;
+            int attempts = 0;
+
+            while (myNetworkRig == null && attempts < maxAttempts)
+            {
+                yield return new WaitForSeconds(0.1f);
+                attempts++;
+
+                // 씬에서 자신의 NetworkRig 찾기 (InputAuthority 기준)
+                var allNetworkRigs = FindObjectsByType<NetworkRig>(FindObjectsSortMode.None);
+                foreach (var rig in allNetworkRigs)
+                {
+                    if (rig.Object != null && rig.Object.InputAuthority == Runner.LocalPlayer)
+                    {
+                        myNetworkRig = rig;
+                        Debug.Log($"[PlayerBody] Found my NetworkRig: {rig.name} for Player: {Runner.LocalPlayer.PlayerId}");
+                        break;
+                    }
+                }
+            }
+
+            if (myNetworkRig != null)
+            {
+                // NetworkRig 초기화
+                InitializeNetworkRig(myNetworkRig);
+            }
+            else
+            {
+                Debug.LogError($"[PlayerBody] Could not find NetworkRig for Player: {Runner.LocalPlayer.PlayerId}");
+            }
+        }
+
+        private void InitializeNetworkRig(NetworkRig networkRig)
+        {
+            Debug.Log($"[PlayerBody] InitializeNetworkRig - Starting initialization for NetworkRig: {networkRig.name}");
+
+            var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
+            HardwareRig hardwareRig = null;
+
+            if (playerCamera != null)
+            {
+                Debug.Log($"[PlayerBody] InitializeNetworkRig - Found PlayerCamera for NetworkRig: {networkRig.name}");
+                hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
+                // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
+                SetupNetworkRigCameraFollowing(networkRig, playerCamera);
+
+                // CustomNetworkRig는 자동으로 HardwareRig를 초기화하므로 여기서는 설정하지 않음
+                Debug.Log($"[PlayerBody] InitializeNetworkRig - CustomNetworkRig will auto-initialize HardwareRig for: {networkRig.name}");
+            }
+            else
+            {
+                Debug.LogWarning($"[PlayerBody] InitializeNetworkRig - PlayerCamera not found for NetworkRig: {networkRig.name}");
+            }
+
+            Debug.Log($"[PlayerBody] InitializeNetworkRig - Calling Init for NetworkRig: {networkRig.name}");
+            // 초기화 실행
+            Init(hardwareRig, networkRig, Object.InputAuthority);
+
+            // Locomotion은 CustomNetworkRig에서 자동으로 초기화됨
+            Debug.Log($"[PlayerBody] InitializeNetworkRig - CustomNetworkRig will handle Locomotion initialization for: {networkRig.name}");
         }
         
-        [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
-        public void RPC_SetNetworkRig(NetworkRig networkRig)
-        {
-            Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Called for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}, HasInputAuthority: {Object.HasInputAuthority}");
-
-            // 이미 초기화되었으면 스킵
-            if (_networkRig != null)
-            {
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Already initialized, skipping for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
-                return;
-            }
-
-            // 로컬 플레이어인 경우에만 실행
-            if (Object.InputAuthority == Runner.LocalPlayer)
-            {
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Processing for local player PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
-                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-                HardwareRig hardwareRig = null;
-
-                if (playerCamera != null)
-                {
-                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Found PlayerCamera for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
-                    hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-                    // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
-                    SetupNetworkRigCameraFollowing(networkRig, playerCamera);
-
-                    // CustomNetworkRig는 자동으로 HardwareRig를 초기화하므로 여기서는 설정하지 않음
-                    Debug.Log($"[PlayerBody] RPC_SetNetworkRig - CustomNetworkRig will auto-initialize HardwareRig for: {networkRig.name}");
-                }
-                else
-                {
-                    Debug.LogWarning($"[PlayerBody] RPC_SetNetworkRig - PlayerCamera not found for NetworkRig: {networkRig.name}");
-                }
-
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - Calling Init for PlayerRef: {Object.InputAuthority.PlayerId}, NetworkRig: {networkRig.name}");
-                // 초기화 실행
-                Init(hardwareRig, networkRig, Object.InputAuthority);
-
-                // Locomotion은 CustomNetworkRig에서 자동으로 초기화됨
-                Debug.Log($"[PlayerBody] RPC_SetNetworkRig - CustomNetworkRig will handle Locomotion initialization for: {networkRig.name}");
-            }
-        }
 
 
         
