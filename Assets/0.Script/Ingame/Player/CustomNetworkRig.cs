@@ -6,6 +6,8 @@ namespace Jamcat.Ingame.Player
 {
     public class CustomNetworkRig : NetworkRig
     {
+        private bool _playerIdInitialized = false;
+
         // InputAuthority 기반으로 로컬 NetworkRig 판단
         public override bool IsLocalNetworkRig =>
             Object &&
@@ -15,14 +17,7 @@ namespace Jamcat.Ingame.Player
         {
             base.Spawned();
 
-            // PlayerId 설정 (InputAuthority가 있는 클라이언트가 설정)
-            if (Object.HasInputAuthority)
-            {
-                // RPC를 통해 호스트에게 PlayerId 설정 요청
-                RPC_SetPlayerId(Object.InputAuthority.PlayerId);
-            }
-
-            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, PlayerId: {PlayerId}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsServer: {Runner.IsServer}, IsClient: {Runner.IsClient}");
+            Debug.Log($"[CustomNetworkRig] Spawned - Name: {name}, PlayerId: {PlayerId}, IsLocalNetworkRig: {IsLocalNetworkRig}, InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}, IsServer: {Runner.IsServer}, IsClient: {Runner.IsClient}, HasStateAuthority: {Object.HasStateAuthority}");
 
             // 로컬 플레이어인 경우에만 HardwareRig 초기화
             if (IsLocalNetworkRig)
@@ -118,6 +113,25 @@ namespace Jamcat.Ingame.Player
         {
             base.FixedUpdateNetwork();
 
+            // PlayerId가 아직 설정되지 않았다면 설정
+            if (!_playerIdInitialized && PlayerId == -1)
+            {
+                // StateAuthority 또는 서버에서 설정
+                if (Object.HasStateAuthority || Runner.IsServer)
+                {
+                    PlayerId = Object.InputAuthority.PlayerId;
+                    _playerIdInitialized = true;
+                    Debug.Log($"[CustomNetworkRig] FixedUpdateNetwork - PlayerId set: {PlayerId} for {name} (HasStateAuthority: {Object.HasStateAuthority}, IsServer: {Runner.IsServer})");
+                }
+            }
+
+            // PlayerId가 동기화되면 모든 클라이언트에서 오브젝트 이름 설정
+            if (PlayerId != -1 && !name.Contains($"NetworkRig_{PlayerId}"))
+            {
+                name = $"NetworkRig_{PlayerId}";
+                Debug.Log($"[CustomNetworkRig] Object name synchronized: {name}");
+            }
+
             // InputAuthority 기반으로 로컬 플레이어 업데이트
             if (IsLocalNetworkRig && hardwareRig)
             {
@@ -160,11 +174,5 @@ namespace Jamcat.Ingame.Player
             }
         }
 
-        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-        public void RPC_SetPlayerId(int playerId)
-        {
-            PlayerId = playerId;
-            Debug.Log($"[CustomNetworkRig] RPC_SetPlayerId - PlayerId set to: {playerId} for {name}");
-        }
     }
 }

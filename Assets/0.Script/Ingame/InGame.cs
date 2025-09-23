@@ -104,6 +104,7 @@ namespace Jamcat.Ingame
             var networkRigObject = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef);
             var networkRig = networkRigObject.GetComponent<NetworkRig>();
             networkRig.name = $"NetworkRig_{playerRef.PlayerId}";
+            networkRig.PlayerId = playerRef.PlayerId;
 
             var gamePlayerObject = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef);
             var body = gamePlayerObject.GetComponent<PlayerBody>();

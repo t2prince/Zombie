@@ -136,6 +136,13 @@ namespace Jamcat.Ingame.Player
         {
             base.Spawned();
 
+            // 오브젝트 이름 동기화 (모든 클라이언트에서 실행)
+            if (Object.InputAuthority.PlayerId > 0)
+            {
+                name = $"GamePlayer_{Object.InputAuthority.PlayerId}";
+                Debug.Log($"[PlayerBody] Object name synchronized: {name}");
+            }
+
             // 모든 클라이언트에서 자신의 로컬 플레이어인지 확인
             if (Object.InputAuthority == Runner.LocalPlayer)
             {
@@ -163,11 +170,11 @@ namespace Jamcat.Ingame.Player
                 yield return new WaitForSeconds(0.1f);
                 attempts++;
 
-                // 씬에서 자신의 NetworkRig 찾기 (PlayerId 기준)
+                // 씬에서 자신의 NetworkRig 찾기 (PlayerId 기준, 동기화될 때까지 대기)
                 var allNetworkRigs = FindObjectsByType<NetworkRig>(FindObjectsSortMode.None);
                 foreach (var rig in allNetworkRigs)
                 {
-                    if (rig.Object != null && rig.PlayerId == myPlayerId)
+                    if (rig.Object != null && rig.PlayerId == myPlayerId && rig.PlayerId != -1)
                     {
                         myNetworkRig = rig;
                         Debug.Log($"[PlayerBody] Found my NetworkRig by PlayerId: {rig.name} for Player: {myPlayerId}");
@@ -175,7 +182,7 @@ namespace Jamcat.Ingame.Player
                     }
                 }
 
-                // 백업: InputAuthority로도 확인 (PlayerId가 아직 설정되지 않은 경우)
+                // 백업: InputAuthority로 확인 (PlayerId가 아직 동기화되지 않은 경우)
                 if (myNetworkRig == null)
                 {
                     foreach (var rig in allNetworkRigs)
@@ -183,7 +190,7 @@ namespace Jamcat.Ingame.Player
                         if (rig.Object != null && rig.Object.InputAuthority == Runner.LocalPlayer)
                         {
                             myNetworkRig = rig;
-                            Debug.Log($"[PlayerBody] Found my NetworkRig by InputAuthority (fallback): {rig.name} for Player: {myPlayerId}");
+                            Debug.Log($"[PlayerBody] Found my NetworkRig by InputAuthority (PlayerId not yet synced): {rig.name} for Player: {myPlayerId}, PlayerId: {rig.PlayerId}");
                             break;
                         }
                     }
