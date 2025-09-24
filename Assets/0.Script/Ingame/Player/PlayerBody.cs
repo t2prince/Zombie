@@ -229,6 +229,21 @@ namespace Jamcat.Ingame.Player
         {
             Debug.Log($"[PlayerBody] InitializeNetworkRig - Starting initialization for NetworkRig: {networkRig.name}");
 
+            // 자신의 NetworkRig인지 확인
+            int myPlayerId = Runner.LocalPlayer.PlayerId;
+            if (networkRig.PlayerId != myPlayerId && networkRig.PlayerId != -1)
+            {
+                Debug.LogWarning($"[PlayerBody] InitializeNetworkRig - NetworkRig PlayerId ({networkRig.PlayerId}) does not match my PlayerId ({myPlayerId}). Skipping initialization.");
+                return;
+            }
+
+            // InputAuthority도 다시 한번 확인
+            if (networkRig.Object.InputAuthority != Runner.LocalPlayer)
+            {
+                Debug.LogWarning($"[PlayerBody] InitializeNetworkRig - NetworkRig InputAuthority ({networkRig.Object.InputAuthority.PlayerId}) does not match LocalPlayer ({Runner.LocalPlayer.PlayerId}). Skipping initialization.");
+                return;
+            }
+
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
 
             if (playerCamera != null)
@@ -242,7 +257,7 @@ namespace Jamcat.Ingame.Player
                 // 클라이언트가 자신의 NetworkRig에 HardwareRig 직접 설정
                 if (hardwareRig != null)
                 {
-                    Debug.Log($"[PlayerBody] InitializeNetworkRig - Setting HardwareRig for NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
+                    Debug.Log($"[PlayerBody] InitializeNetworkRig - Setting HardwareRig for MY NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
 
                     // CustomNetworkRig인 경우 전용 메서드 사용
                     var customNetworkRig = networkRig as CustomNetworkRig;
