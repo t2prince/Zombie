@@ -105,7 +105,7 @@ namespace Jamcat.Ingame.Player
             _pocket.gameObject.SetActive(false);
 
             // HardwareRig는 NetworkRig에 직접 설정되었으므로, NetworkRig에서 가져옴
-            if (hardwareRig == null && networkRig != null)
+            if (hardwareRig == null && networkRig != null && playerRef.PlayerId == networkRig.PlayerId)
             {
                 hardwareRig = networkRig.hardwareRig;
                 Debug.Log($"[PlayerBody] Init - Using HardwareRig from NetworkRig: {hardwareRig?.name}");
@@ -176,39 +176,43 @@ namespace Jamcat.Ingame.Player
 
         private System.Collections.IEnumerator FindAndInitializeMyNetworkRig()
         {
+            // 자신의 PlayerBody가 아니면 NetworkRig 초기화하지 않음
+            if (Object.InputAuthority != Runner.LocalPlayer)
+            {
+                Debug.Log($"[PlayerBody] FindAndInitializeMyNetworkRig - This is not my PlayerBody (InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}). Skipping NetworkRig initialization.");
+                yield break;
+            }
+
             // NetworkRig가 스폰될 때까지 대기
             NetworkRig myNetworkRig = null;
             int maxAttempts = 10;
             int attempts = 0;
             int myPlayerId = Runner.LocalPlayer.PlayerId;
 
+            Debug.Log($"[PlayerBody] FindAndInitializeMyNetworkRig - Looking for MY NetworkRig for Player: {myPlayerId}");
+
             while (myNetworkRig == null && attempts < maxAttempts)
             {
                 yield return new WaitForSeconds(0.1f);
                 attempts++;
 
-                // 씬에서 자신의 NetworkRig 찾기 (PlayerId 기준, 동기화될 때까지 대기)
+                // 씬에서 자신의 NetworkRig 찾기 (PlayerId와 InputAuthority 모두 확인)
                 var allNetworkRigs = FindObjectsByType<NetworkRig>(FindObjectsSortMode.None);
                 foreach (var rig in allNetworkRigs)
                 {
-                    if (rig.Object != null && rig.PlayerId == myPlayerId && rig.PlayerId != -1)
+                    // 반드시 InputAuthority가 자신과 일치해야 함
+                    if (rig.Object != null && rig.Object.InputAuthority == Runner.LocalPlayer)
                     {
-                        myNetworkRig = rig;
-                        Debug.Log($"[PlayerBody] Found my NetworkRig by PlayerId: {rig.name} for Player: {myPlayerId}");
-                        break;
-                    }
-                }
-
-                // 백업: InputAuthority로 확인 (PlayerId가 아직 동기화되지 않은 경우)
-                if (myNetworkRig == null)
-                {
-                    foreach (var rig in allNetworkRigs)
-                    {
-                        if (rig.Object != null && rig.Object.InputAuthority == Runner.LocalPlayer)
+                        // PlayerId도 일치하거나 아직 설정되지 않은 경우
+                        if (rig.PlayerId == myPlayerId || rig.PlayerId == -1)
                         {
                             myNetworkRig = rig;
-                            Debug.Log($"[PlayerBody] Found my NetworkRig by InputAuthority (PlayerId not yet synced): {rig.name} for Player: {myPlayerId}, PlayerId: {rig.PlayerId}");
+                            Debug.Log($"[PlayerBody] Found MY NetworkRig: {rig.name} for Player: {myPlayerId}, NetworkRig PlayerId: {rig.PlayerId}, InputAuthority: {rig.Object.InputAuthority.PlayerId}");
                             break;
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[PlayerBody] Found NetworkRig with matching InputAuthority but different PlayerId: {rig.name}, NetworkRig PlayerId: {rig.PlayerId}, My PlayerId: {myPlayerId}");
                         }
                     }
                 }
@@ -216,12 +220,13 @@ namespace Jamcat.Ingame.Player
 
             if (myNetworkRig != null)
             {
+                Debug.Log($"[PlayerBody] FindAndInitializeMyNetworkRig - Initializing MY NetworkRig: {myNetworkRig.name}");
                 // NetworkRig 초기화
                 InitializeNetworkRig(myNetworkRig);
             }
             else
             {
-                Debug.LogError($"[PlayerBody] Could not find NetworkRig for Player: {Runner.LocalPlayer.PlayerId}");
+                Debug.LogError($"[PlayerBody] Could not find MY NetworkRig for Player: {Runner.LocalPlayer.PlayerId}");
             }
         }
 
