@@ -17,13 +17,17 @@ namespace Jamcat.Ingame.Player
         [SerializeField] private Transform _head;
         [SerializeField] private Transform _body;
         private Pocket _pocket;
-        
+
         public Transform Head => _head;
         public Transform Body => _body;
 
         [Networked] public int GunId { get; set; } = -1;
         [Networked] public int MeleeId { get; set; } = -1;
         [Networked] public int BoosterId { get; set; } = -1;
+
+        // 네트워크 동기화를 위한 위치와 회전
+        [Networked] public Vector3 NetworkPosition { get; set; }
+        [Networked] public Quaternion NetworkRotation { get; set; }
         
         private bool _weaponsSpawned = false;
         private PlayerRef _playerRef;
@@ -59,6 +63,10 @@ namespace Jamcat.Ingame.Player
             if (Object.InputAuthority != Runner.LocalPlayer) return;
 
             PerformMovement();
+
+            // 움직임 후 네트워크 위치 업데이트
+            NetworkPosition = transform.position;
+            NetworkRotation = transform.rotation;
         }
 
         private void Update()
@@ -140,6 +148,10 @@ namespace Jamcat.Ingame.Player
         public override void Spawned()
         {
             base.Spawned();
+
+            // 초기 네트워크 위치 설정
+            NetworkPosition = transform.position;
+            NetworkRotation = transform.rotation;
 
             // 오브젝트 이름 동기화 (모든 클라이언트에서 실행)
             if (Object.InputAuthority.PlayerId > 0)
@@ -284,7 +296,14 @@ namespace Jamcat.Ingame.Player
         public override void Render()
         {
             base.Render();
-            
+
+            // 원격 플레이어의 위치 동기화 (자신의 플레이어가 아닌 경우)
+            if (Object.InputAuthority != Runner.LocalPlayer)
+            {
+                transform.position = NetworkPosition;
+                transform.rotation = NetworkRotation;
+            }
+
             // 원격 플레이어의 무기 정보가 동기화되면 스폰
             if (!_weaponsSpawned && GunId >= 0 && MeleeId >= 0 && BoosterId >= 0)
             {
