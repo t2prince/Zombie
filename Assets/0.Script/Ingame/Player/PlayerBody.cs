@@ -49,29 +49,34 @@ namespace Jamcat.Ingame.Player
                 .With("Left", "<Keyboard>/leftArrow")
                 .With("Right", "<Keyboard>/rightArrow");
             arrowKeyAction.Enable();
-            
+
             character = GetComponent<BaseCharacter>();
         }
-        
+
         public override void FixedUpdateNetwork()
         {
-            // 네트워크 권한이 없으면 이동 로직을 실행하지 않음
-            if (character != null && !character.Object.HasInputAuthority) return;
-            
+            // 자신의 플레이어만 움직일 수 있도록 체크 (네트워크에서 실행)
+            if (Object.InputAuthority != Runner.LocalPlayer) return;
+
             PerformMovement();
         }
-        
+
         private void Update()
         {
-            // 에디터에서만 Update에서 실행
+            // 에디터에서만 Update에서 실행 (즉시 반응을 위해)
+            // 자신의 플레이어가 아니면 입력 무시
+            if (Object != null && Object.InputAuthority != Runner.LocalPlayer) return;
+
             PerformMovement();
         }
-        
+
         private void PerformMovement()
         {
             // 방향 키 입력 값 읽기
+            if (arrowKeyAction == null) return;
+
             var input = arrowKeyAction.ReadValue<Vector2>();
-            float deltaTime = Application.isEditor ? Time.deltaTime : (character?.Object?.Runner?.DeltaTime ?? Time.deltaTime);
+            float deltaTime = Application.isEditor ? Time.deltaTime : (Object?.Runner?.DeltaTime ?? Time.deltaTime);
             var move = Vector3.forward * input.y * moveSpeed * deltaTime;
 
             // 앞뒤 이동 (로컬 좌표계 기준)

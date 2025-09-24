@@ -136,8 +136,17 @@ namespace Jamcat.Ingame.Player
             if (IsLocalNetworkRig && hardwareRig)
             {
                 RigState rigState = hardwareRig.RigState;
+
+                // PlayArea 위치는 스폰 위치에 고정하고 개별 부위만 업데이트
+                var originalPosition = transform.position;
+                var originalRotation = transform.rotation;
+
                 ApplyLocalStateToRigParts(rigState);
                 ApplyLocalStateToHandPoses(rigState);
+
+                // PlayArea 위치를 다시 원래 위치로 되돌림
+                transform.position = originalPosition;
+                transform.rotation = originalRotation;
             }
         }
 
@@ -149,8 +158,10 @@ namespace Jamcat.Ingame.Player
                 // 로컬 사용자의 경우 최신 하드웨어 위치로 즉시 업데이트
                 RigState rigState = hardwareRig.RigState;
 
-                transform.position = rigState.playAreaPosition;
-                transform.rotation = rigState.playAreaRotation;
+                // PlayArea (NetworkRig 전체)는 스폰 위치에 고정하고, 개별 부위만 업데이트
+                // transform.position = rigState.playAreaPosition;  // 주석 처리
+                // transform.rotation = rigState.playAreaRotation;  // 주석 처리
+
                 leftHand.transform.position = rigState.leftHandPosition;
                 leftHand.transform.rotation = rigState.leftHandRotation;
                 rightHand.transform.position = rigState.rightHandPosition;
