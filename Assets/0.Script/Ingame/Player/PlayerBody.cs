@@ -43,9 +43,9 @@ namespace Jamcat.Ingame.Player
 #if UNITY_EDITOR
         private InputAction arrowKeyAction;
         [SerializeField] private float moveSpeed = 2f;
+
         private void Start()
         {
-            // 방향 키 입력 액션 초기화
             arrowKeyAction = new InputAction(type: InputActionType.PassThrough);
             arrowKeyAction.AddCompositeBinding("2DVector")
                 .With("Up", "<Keyboard>/upArrow")
@@ -53,46 +53,32 @@ namespace Jamcat.Ingame.Player
                 .With("Left", "<Keyboard>/leftArrow")
                 .With("Right", "<Keyboard>/rightArrow");
             arrowKeyAction.Enable();
-
             character = GetComponent<BaseCharacter>();
         }
 
         public override void FixedUpdateNetwork()
         {
-            // 자신의 플레이어만 움직일 수 있도록 체크 (네트워크에서 실행)
             if (Object.InputAuthority != Runner.LocalPlayer) return;
-
             PerformMovement();
-
-            // 움직임 후 네트워크 위치 업데이트
             NetworkPosition = transform.position;
             NetworkRotation = transform.rotation;
         }
 
         private void Update()
         {
-            // 에디터에서만 Update에서 실행 (즉시 반응을 위해)
-            // 자신의 플레이어가 아니면 입력 무시
             if (Object != null && Object.InputAuthority != Runner.LocalPlayer) return;
-
             PerformMovement();
         }
 
         private void PerformMovement()
         {
-            // 방향 키 입력 값 읽기
             if (arrowKeyAction == null) return;
 
             var input = arrowKeyAction.ReadValue<Vector2>();
             float deltaTime = Application.isEditor ? Time.deltaTime : (Object?.Runner?.DeltaTime ?? Time.deltaTime);
-            var move = Vector3.forward * input.y * moveSpeed * deltaTime;
 
-            // 앞뒤 이동 (로컬 좌표계 기준)
-            transform.Translate(move, Space.Self);
-
-            // 좌우 회전
-            var rotation = input.x * moveSpeed * 100f * deltaTime;
-            transform.Rotate(Vector3.up, rotation);
+            transform.Translate(Vector3.forward * input.y * moveSpeed * deltaTime, Space.Self);
+            transform.Rotate(Vector3.up, input.x * moveSpeed * 100f * deltaTime);
         }
 #endif
         
@@ -104,40 +90,18 @@ namespace Jamcat.Ingame.Player
             _pocket = networkRig.GetComponentInChildren<Pocket>();
             _pocket.gameObject.SetActive(false);
 
-            // HardwareRig는 NetworkRig에 직접 설정되었으므로, NetworkRig에서 가져옴
             if (hardwareRig == null && networkRig != null && playerRef.PlayerId == networkRig.PlayerId)
             {
                 hardwareRig = networkRig.hardwareRig;
-                Debug.Log($"[PlayerBody] Init - Using HardwareRig from NetworkRig: {hardwareRig?.name}");
             }
 
             if (hardwareRig != null)
             {
-                var grabbers = hardwareRig.GetComponentsInChildren<PlayerGrabber>();
-                foreach (var grabber in grabbers)
-                {
-                    grabber.onGrabbed += (_) =>
-                    {
-                        var item = grabber.GetComponent<Item.Item>();
-                        if (item == null || item.type == Item.Item.ITemType.Use) return;
-
-                        _pocket.gameObject.SetActive(true);
-                    };
-
-                    grabber.onUngrabbed += (_) =>
-                    {
-                        _pocket.gameObject.SetActive(false);
-                    };
-                }
-            }
-            else
-            {
-                Debug.LogWarning($"[PlayerBody] Init - No HardwareRig available for player: {playerRef.PlayerId}");
+                SetupGrabberEvents(hardwareRig);
             }
 
             character = GetComponent<BaseCharacter>();
 
-            // 로컬 플레이어인 경우에만 무기 정보 설정 후 호스트에 스폰 요청
             if (playerRef == InGame.Instance.Runner.LocalPlayer)
             {
                 var weapons = PlayerManager.GetWeapons();
@@ -145,153 +109,82 @@ namespace Jamcat.Ingame.Player
             }
         }
 
+        private void SetupGrabberEvents(HardwareRig hardwareRig)
+        {
+            var grabbers = hardwareRig.GetComponentsInChildren<PlayerGrabber>();
+            foreach (var grabber in grabbers)
+            {
+                grabber.onGrabbed += (_) =>
+                {
+                    var item = grabber.GetComponent<Item.Item>();
+                    if (item != null && item.type != Item.Item.ITemType.Use)
+                        _pocket.gameObject.SetActive(true);
+                };
+
+                grabber.onUngrabbed += (_) => _pocket.gameObject.SetActive(false);
+            }
+        }
+
         public override void Spawned()
         {
             base.Spawned();
-
-            // 초기 네트워크 위치 설정
             NetworkPosition = transform.position;
             NetworkRotation = transform.rotation;
 
-            // 오브젝트 이름 동기화 (모든 클라이언트에서 실행)
             if (Object.InputAuthority.PlayerId > 0)
             {
                 name = $"GamePlayer_{Object.InputAuthority.PlayerId}";
-                Debug.Log($"[PlayerBody] Object name synchronized: {name}");
             }
 
-            // 모든 클라이언트에서 자신의 로컬 플레이어인지 확인
             if (Object.InputAuthority == Runner.LocalPlayer)
             {
-                var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-                if (playerCamera != null)
-                {
-                    playerCamera.Init(_head);
-                }
-
-                // 자신의 NetworkRig를 찾아서 초기화
+                FindAnyObjectByType<PlayerFollowerCamera>()?.Init(_head);
                 StartCoroutine(FindAndInitializeMyNetworkRig());
             }
         }
 
         private System.Collections.IEnumerator FindAndInitializeMyNetworkRig()
         {
-            // 자신의 PlayerBody가 아니면 NetworkRig 초기화하지 않음
-            if (Object.InputAuthority != Runner.LocalPlayer)
-            {
-                Debug.Log($"[PlayerBody] FindAndInitializeMyNetworkRig - This is not my PlayerBody (InputAuthority: {Object.InputAuthority.PlayerId}, LocalPlayer: {Runner.LocalPlayer.PlayerId}). Skipping NetworkRig initialization.");
-                yield break;
-            }
+            if (Object.InputAuthority != Runner.LocalPlayer) yield break;
 
-            // NetworkRig가 스폰될 때까지 대기
             NetworkRig myNetworkRig = null;
-            int maxAttempts = 10;
-            int attempts = 0;
             int myPlayerId = Runner.LocalPlayer.PlayerId;
 
-            Debug.Log($"[PlayerBody] FindAndInitializeMyNetworkRig - Looking for MY NetworkRig for Player: {myPlayerId}");
-
-            while (myNetworkRig == null && attempts < maxAttempts)
+            for (int attempts = 0; attempts < 10 && myNetworkRig == null; attempts++)
             {
                 yield return new WaitForSeconds(0.1f);
-                attempts++;
 
-                // 씬에서 자신의 NetworkRig 찾기 (PlayerId와 InputAuthority 모두 확인)
-                var allNetworkRigs = FindObjectsByType<NetworkRig>(FindObjectsSortMode.None);
-                foreach (var rig in allNetworkRigs)
+                foreach (var rig in FindObjectsByType<NetworkRig>(FindObjectsSortMode.None))
                 {
-                    // 반드시 InputAuthority가 자신과 일치해야 함
-                    if (rig.Object != null && rig.Object.InputAuthority == Runner.LocalPlayer)
+                    if (rig.Object?.InputAuthority == Runner.LocalPlayer &&
+                        (rig.PlayerId == myPlayerId || rig.PlayerId == -1))
                     {
-                        // PlayerId도 일치하거나 아직 설정되지 않은 경우
-                        if (rig.PlayerId == myPlayerId || rig.PlayerId == -1)
-                        {
-                            myNetworkRig = rig;
-                            Debug.Log($"[PlayerBody] Found MY NetworkRig: {rig.name} for Player: {myPlayerId}, NetworkRig PlayerId: {rig.PlayerId}, InputAuthority: {rig.Object.InputAuthority.PlayerId}");
-                            break;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[PlayerBody] Found NetworkRig with matching InputAuthority but different PlayerId: {rig.name}, NetworkRig PlayerId: {rig.PlayerId}, My PlayerId: {myPlayerId}");
-                        }
+                        myNetworkRig = rig;
+                        break;
                     }
                 }
             }
 
-            if (myNetworkRig != null)
-            {
-                Debug.Log($"[PlayerBody] FindAndInitializeMyNetworkRig - Initializing MY NetworkRig: {myNetworkRig.name}");
-                // NetworkRig 초기화
-                InitializeNetworkRig(myNetworkRig);
-            }
-            else
-            {
-                Debug.LogError($"[PlayerBody] Could not find MY NetworkRig for Player: {Runner.LocalPlayer.PlayerId}");
-            }
+            if (myNetworkRig != null) InitializeNetworkRig(myNetworkRig);
         }
 
         private void InitializeNetworkRig(NetworkRig networkRig)
         {
-            Debug.Log($"[PlayerBody] InitializeNetworkRig - Starting initialization for NetworkRig: {networkRig.name}");
-
-            // 자신의 NetworkRig인지 확인
-            int myPlayerId = Runner.LocalPlayer.PlayerId;
-            if (networkRig.PlayerId != myPlayerId && networkRig.PlayerId != -1)
-            {
-                Debug.LogWarning($"[PlayerBody] InitializeNetworkRig - NetworkRig PlayerId ({networkRig.PlayerId}) does not match my PlayerId ({myPlayerId}). Skipping initialization.");
-                return;
-            }
-
-            // InputAuthority도 다시 한번 확인
-            if (networkRig.Object.InputAuthority != Runner.LocalPlayer)
-            {
-                Debug.LogWarning($"[PlayerBody] InitializeNetworkRig - NetworkRig InputAuthority ({networkRig.Object.InputAuthority.PlayerId}) does not match LocalPlayer ({Runner.LocalPlayer.PlayerId}). Skipping initialization.");
-                return;
-            }
-
             var playerCamera = FindAnyObjectByType<PlayerFollowerCamera>();
-
             if (playerCamera != null)
             {
-                Debug.Log($"[PlayerBody] InitializeNetworkRig - Found PlayerCamera for NetworkRig: {networkRig.name}");
                 var hardwareRig = playerCamera.GetComponentInChildren<HardwareRig>();
-
-                // NetworkRig가 지속적으로 플레이어 카메라를 따라가도록 설정
                 SetupNetworkRigCameraFollowing(networkRig, playerCamera);
 
-                // 클라이언트가 자신의 NetworkRig에 HardwareRig 직접 설정
                 if (hardwareRig != null)
                 {
-                    Debug.Log($"[PlayerBody] InitializeNetworkRig - Setting HardwareRig for MY NetworkRig: {networkRig.name}, HardwareRig: {hardwareRig.name}");
-
-                    // CustomNetworkRig인 경우 전용 메서드 사용
-                    var customNetworkRig = networkRig as CustomNetworkRig;
-                    if (customNetworkRig != null)
-                    {
-                        customNetworkRig.SetHardwareRig(hardwareRig);
-                        Debug.Log($"[PlayerBody] InitializeNetworkRig - CustomNetworkRig.SetHardwareRig called for: {networkRig.name}");
-                    }
-                    else
-                    {
+                    (networkRig as CustomNetworkRig)?.SetHardwareRig(hardwareRig);
+                    if (!(networkRig is CustomNetworkRig))
                         networkRig.hardwareRig = hardwareRig;
-                        Debug.Log($"[PlayerBody] InitializeNetworkRig - Direct hardwareRig assignment for: {networkRig.name}");
-                    }
                 }
-                else
-                {
-                    Debug.LogError($"[PlayerBody] InitializeNetworkRig - HardwareRig not found in PlayerCamera for: {networkRig.name}");
-                }
-            }
-            else
-            {
-                Debug.LogWarning($"[PlayerBody] InitializeNetworkRig - PlayerCamera not found for NetworkRig: {networkRig.name}");
             }
 
-            Debug.Log($"[PlayerBody] InitializeNetworkRig - Calling Init for NetworkRig: {networkRig.name}");
-            // 초기화 실행 (hardwareRig는 이제 NetworkRig에 설정되었으므로 null을 전달)
             Init(null, networkRig, Object.InputAuthority);
-
-            Debug.Log($"[PlayerBody] InitializeNetworkRig - NetworkRig initialization completed for: {networkRig.name}");
         }
         
 
@@ -300,31 +193,22 @@ namespace Jamcat.Ingame.Player
         private void SetupNetworkRigCameraFollowing(NetworkRig networkRig, PlayerFollowerCamera playerCamera)
         {
             if (networkRig == null || playerCamera == null) return;
-            
-            // NetworkRig에 카메라 따라가기 컴포넌트 추가 또는 가져오기
-            var cameraFollower = networkRig.GetComponent<NetworkRigCameraFollower>();
-            if (cameraFollower == null)
-            {
-                cameraFollower = networkRig.gameObject.AddComponent<NetworkRigCameraFollower>();
-            }
-            
-            // 카메라 따라가기 초기화
+
+            var cameraFollower = networkRig.GetComponent<NetworkRigCameraFollower>() ??
+                                networkRig.gameObject.AddComponent<NetworkRigCameraFollower>();
             cameraFollower.Init(playerCamera.transform);
-            
         }
         
         public override void Render()
         {
             base.Render();
 
-            // 원격 플레이어의 위치 동기화 (자신의 플레이어가 아닌 경우)
             if (Object.InputAuthority != Runner.LocalPlayer)
             {
                 transform.position = NetworkPosition;
                 transform.rotation = NetworkRotation;
             }
 
-            // 원격 플레이어의 무기 정보가 동기화되면 스폰
             if (!_weaponsSpawned && GunId >= 0 && MeleeId >= 0 && BoosterId >= 0)
             {
                 SpawnWeapons();
@@ -347,40 +231,31 @@ namespace Jamcat.Ingame.Player
         
         private void SpawnWeapons()
         {
-            if (_networkRig == null) return;
-            
-            // 호스트 권한이 있을 때만 스폰
-            if (!Object.HasStateAuthority)
-            {
-                return;
-            }
-            
+            if (_networkRig == null || !Object.HasStateAuthority) return;
+
             var leftHand = _networkRig.leftHand;
             var rightHand = _networkRig.rightHand;
             var leftController = leftHand.GetComponentInChildren<HandController>();
             var rightController = rightHand.GetComponentInChildren<HandController>();
-            
-            //TODO: 플레이어 정보 보고 gun / melee / booster 연결해야함
-            //왼손 <-> 오른손 바꿀 수 있게끔 해줄 필요 있음
-            
+
             // Gun 스폰
             var gunData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Gun, GunId);
             var gun = Runner.Spawn(gunData.weaponPrefab, leftHand.transform.position, leftHand.transform.rotation, _playerRef).GetComponent<Gun>();
             gun.transform.SetParent(leftHand.transform);
             gun.Init(character, leftController);
-            
+
             if (_hardwareRig != null)
             {
                 var position = _hardwareRig.leftHand.GetComponentInChildren<GunAttacher>().GetPosition(gunData.id);
                 gun.SetFirePoint(position);
             }
-            
+
             // Melee 스폰
             var meleeData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Melee, MeleeId);
             var meleeWeapon = Runner.Spawn(meleeData.weaponPrefab, rightHand.transform.position, rightHand.transform.rotation, _playerRef).GetComponent<Melee>();
             meleeWeapon.transform.SetParent(rightHand.transform);
             meleeWeapon.Init(character, rightController);
-            
+
             // Booster 스폰
             var boosterData = WeaponManager.GetWeaponData(WeaponData.WeaponType.Booster, BoosterId);
             var boosterAttacher = _networkRig.GetComponentInChildren<Attacher>();

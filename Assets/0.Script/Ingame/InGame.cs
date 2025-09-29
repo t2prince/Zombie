@@ -6,6 +6,7 @@ using Fusion.XR.Shared.Rig;
 using Jamcat.Core;
 using Jamcat.Effect.ScreenEffect;
 using Jamcat.Ingame.Player;
+using Jamcat.Ingame.Interface;
 using UnityEngine;
 
 
@@ -31,6 +32,7 @@ namespace Jamcat.Ingame
         public static MonsterController Monster => Instance._monsterController;
         
         private Dictionary<PlayerRef, (NetworkObject networkRig, NetworkObject gamePlayer)> _players = new(32);
+        private UserBoard _userBoard;
         
         private void Awake()
         {
@@ -40,14 +42,12 @@ namespace Jamcat.Ingame
         private void Start()
         {
             LoadController();
+            _userBoard = FindAnyObjectByType<UserBoard>();
         }
 
         public void OnPlayerJoined(NetworkRunner runner, PlayerRef playerRef)
         {
-            if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
-            {
-                return;
-            }
+            if (!runner.IsServer) return;
 
             var (networkRigObj, gamePlayerObj) = SpawnPlayer(playerRef);
 
@@ -58,61 +58,37 @@ namespace Jamcat.Ingame
             }
 
             _players.Add(playerRef, (networkRigObj, gamePlayerObj));
+            _userBoard?.AddUser($"Player_{playerRef.PlayerId}");
             EffectController.Instance.fadeInOut.FadeIn();
         }
 
         public void OnPlayerLeft(NetworkRunner runner, PlayerRef playerRef)
         {
-            if (runner.Topology == Topologies.ClientServer && runner.IsServer == false)
-                return;
+            if (!runner.IsServer) return;
 
             if (_players.TryGetValue(playerRef, out var playerObjects))
             {
-                Debug.Log($"[InGame] OnPlayerLeft - Despawning NetworkRig and GamePlayer for PlayerRef: {playerRef.PlayerId}");
-
-                // NetworkRig 디스폰
-                if (playerObjects.networkRig != null)
-                {
-                    Debug.Log($"[InGame] OnPlayerLeft - Despawning NetworkRig: {playerObjects.networkRig.name}");
-                    runner.Despawn(playerObjects.networkRig);
-                }
-
-                // GamePlayer 디스폰
-                if (playerObjects.gamePlayer != null)
-                {
-                    Debug.Log($"[InGame] OnPlayerLeft - Despawning GamePlayer: {playerObjects.gamePlayer.name}");
-                    runner.Despawn(playerObjects.gamePlayer);
-                }
-
+                runner.Despawn(playerObjects.networkRig);
+                runner.Despawn(playerObjects.gamePlayer);
                 _players.Remove(playerRef);
-                Debug.Log($"[InGame] OnPlayerLeft - Player cleanup completed for PlayerRef: {playerRef.PlayerId}");
-            }
-            else
-            {
-                Debug.LogWarning($"[InGame] OnPlayerLeft - Player not found in dictionary for PlayerRef: {playerRef.PlayerId}");
+                _userBoard?.RemoveUser($"Player_{playerRef.PlayerId}");
             }
         }
         
         private (NetworkObject networkRig, NetworkObject gamePlayer) SpawnPlayer(PlayerRef playerRef)
         {
-            var player = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer");
-            var rigPrefab = Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig");
             var spot = _mapController.GetSpawnPosition(playerRef.PlayerId - 1);
 
-            Debug.Log($"[InGame] SpawnPlayer - Spawning NetworkRig for PlayerRef: {playerRef.PlayerId} at position: {spot.position}");
-            // NetworkRig를 GamePlayer와 같은 스폰 위치에 스폰
-            var networkRigObject = Runner.Spawn(rigPrefab, spot.position, spot.rotation, inputAuthority: playerRef);
-            var networkRig = networkRigObject.GetComponent<NetworkRig>();
-            // 이름은 각 클라이언트에서 동기화되므로 호스트에서는 PlayerId만 설정
-            networkRig.PlayerId = playerRef.PlayerId;
+            var networkRigObj = Runner.Spawn(
+                Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "NetworkRig"),
+                spot.position, spot.rotation, inputAuthority: playerRef);
+            networkRigObj.GetComponent<NetworkRig>().PlayerId = playerRef.PlayerId;
 
-            var gamePlayerObject = Runner.Spawn(player, spot.position, spot.rotation, inputAuthority: playerRef);
-            var body = gamePlayerObject.GetComponent<PlayerBody>();
-            // 이름은 각 클라이언트에서 동기화되므로 호스트에서는 설정하지 않음
+            var gamePlayerObj = Runner.Spawn(
+                Loader.LoadPrefab<NetworkObject>(Loader.ResourceType.Avatars, "GamePlayer"),
+                spot.position, spot.rotation, inputAuthority: playerRef);
 
-            Debug.Log($"[InGame] SpawnPlayer - PlayerBody will find and initialize its own NetworkRig for PlayerRef: {playerRef.PlayerId}");
-
-            return (networkRigObject, gamePlayerObject);
+            return (networkRigObj, gamePlayerObj);
         }
 
         private void SpawnItems()
